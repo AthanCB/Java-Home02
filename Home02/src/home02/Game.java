@@ -31,7 +31,6 @@ public class Game {
         }
         Collections.shuffle(Shuffled_Chars);
         
-        System.out.println("Size of Shuffled: " + Shuffled_Chars.size());
         int count=0;
         for (int k = 0; k < Choice; k++) {
             for (int m = 0; m < Choice; m++) {

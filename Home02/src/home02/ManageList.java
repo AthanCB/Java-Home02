@@ -21,7 +21,7 @@ public class ManageList {
     public void ReadFile(){
         String Word = in.next();
         while(in.hasNext()){
-             Word = in.next();
+            Word = in.next();
             WordList.add(Word);
         }
         Collections.shuffle(WordList);
@@ -46,7 +46,7 @@ public class ManageList {
             extra=alphabet.charAt(j);
             TempWordList.add(Character.toString(extra));
         }
-        System.out.println(TempWordList);
+       
         
     }
     
