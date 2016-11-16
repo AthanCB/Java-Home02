@@ -8,17 +8,17 @@ public class Home02 {
     
     public static void main(String[] args) {
        Scanner in = new Scanner(System.in);
-        System.out.println("Hello user, give your name: ");
+        System.out.println("Γειά σου, δώσε το όνομα σου: ");
         String Name=in.next();
         User user = new User();
         user.setName(Name);
         boolean stat=true;
         int choice=0;
-        System.out.println("Give your array choice: 5x5 or 8x8 or 10x10");
+        System.out.println(user.getName() + " δώσε το μέγεθος του πίνακα: 5x5 or 8x8 or 10x10");
         while(stat==true){
             choice=in.nextInt();
             if(choice!=5 && choice!=8 && choice!=10)
-                System.out.println("Wrong number, write again");                        
+                System.out.println("Λάθος αριθμός, δώσε ξανά!");                        
             else 
                 stat=false;      
         }

@@ -1,18 +1,16 @@
 package home02;
 
-public class Letter {
+import java.awt.Color;
+
+public abstract class Letter {
     private int Value;
     private char Character;
-    private String Color;
-    public Letter(){}
+    private Color Color;
+    public Letter(){};
+    
+    public abstract int getValue();
 
-    public int getValue() {
-        return Value;
-    }
-
-    public void setValue(int value) {
-        this.Value = value;
-    }
+    public abstract void setValue(int value);
 
     public char getCharacter() {
         return Character;
@@ -22,12 +20,13 @@ public class Letter {
         this.Character = character;
     }
 
-    public String getColor() {
-        return Color;
-    }
+    public abstract Color getColor();
 
-    public void setColor(String color) {
-        this.Color = color;
+    public abstract void setColor(Color color);
+    
+    public String toString()
+    {
+        return (Character + ":");
     }
     
 }
