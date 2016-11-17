@@ -11,7 +11,9 @@ public class Game {
     private ManageList file = new ManageList();
     ArrayList<Letter> TempArray = new ArrayList();
     String Word = "";
-    
+    boolean stat=true;
+    int LettersCounter = 0;
+     
     public void StartGame(User user, int Choice) {
         Scanner in = new Scanner(System.in);
         Create_Table(Choice);
@@ -36,41 +38,60 @@ public class Game {
     public void LetsPlay(int Choice) {
 
         User_Menu(Choice);
-        int LettersCounter = 0;
+       
         System.out.println("Ας παίξουμε λοιπόν!");
         System.out.println("Επέλεξε γράμμα: ");
-        ChosenLetter(LettersCounter);
-        System.out.println("Επέλεξε γειτονικό γράμμα για να συνεχιστεί η λέξη: ");
-        ChosenLetter(LettersCounter);
-
+        ChosenLetter();
     }
 
-    public void ChosenLetter(int LettersCounter) {
+    public void ChosenLetter() {
         Scanner in = new Scanner(System.in);
         System.out.print("Επέλεξε γραμμή γράμματος: ");
         int l = in.nextInt()-1;
         while (l < 0 && l >= Array.length) {
             System.out.print("Δώσε έγκυρο αριθμό: ");
-            l = in.nextInt();
+            l = in.nextInt()-1;
         }
         System.out.print("Επέλεξε στήλη γράμματος: ");
         int r = in.nextInt()-1;
         while (r < 0 && r >= Array.length) {
             System.out.print("Δώσε έγκυρο αριθμό: ");
-            r = in.nextInt();
-        }
-        System.out.println(Array[l][r]);
-        
-        if (LettersCounter >0) {
-            CheckLetter(l,r);
+            r = in.nextInt()-1;
         }
         Word += Array[l][r].getCharacter();
         System.out.println("Ως τώρα η λέξη: " + Word);
-        LettersCounter++;
+       LettersCounter++;
+        if (LettersCounter >0) {
+            while(stat==true){
+                CheckLetter(l,r);
+            }
+        }    
     }
 
     private void CheckLetter(int l,int r) {
-        //if(l)
+        System.out.println("Επέλεξε γειτονικό γράμμα για να συνεχιστεί η λέξη: ");
+        Scanner in = new Scanner(System.in);
+        System.out.print("Επέλεξε γραμμή γράμματος: ");
+        int l2 = in.nextInt()-1;
+        while (Math.abs(l2-l) > 1) {
+            System.out.print("Δώσε έγκυρο αριθμό: ");
+            l2 = in.nextInt()-1;
+        }
+        System.out.print("Επέλεξε στήλη γράμματος: ");
+        int r2 = in.nextInt()-1;
+        while (Math.abs(r2-r) >1) {
+            System.out.print("Δώσε έγκυρο αριθμό: ");
+            r2 = in.nextInt()-1;
+        }
+        Word += Array[l2][r2].getCharacter();
+        System.out.println("Ως τώρα η λέξη: " + Word);
+        LettersCounter++;
+        if(LettersCounter>2){
+            System.out.println("Θές να συνεχίσεις;(y/n) ");
+             char inCh=in.next().charAt(0);
+             if(inCh=='n')
+                  stat=false;
+        }
     }
 
     public void User_Menu(int Choice) {
