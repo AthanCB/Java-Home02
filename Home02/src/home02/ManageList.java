@@ -37,6 +37,7 @@ public class ManageList {
             if (counter + WordList.get(i).length() < Choice * Choice) {
                 TempWordList.add(WordList.get(i));
                 counter += WordList.get(i).length();
+                WordList.remove(i);
             }
         }
         String alphabet = "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ";
@@ -48,7 +49,7 @@ public class ManageList {
             TempWordList.add(Character.toString(extra));
         }
         CharList();
-
+        
     }
 
     public void CharList() {
@@ -104,5 +105,7 @@ public class ManageList {
 
         return Value;
     }
+    
+    
 
 }

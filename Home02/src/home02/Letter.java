@@ -24,6 +24,7 @@ public abstract class Letter {
 
     public abstract void setColor(Color color);
     
+    @Override
     public String toString()
     {
         return (Character + ":");

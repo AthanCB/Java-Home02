@@ -20,10 +20,12 @@ public class RedLetter extends Letter {
         this.Value = 2 * value;
     }
 
+    @Override
     public Color getColor() {
         return Color;
     }
 
+    @Override
     public void setColor(Color color) {
         this.Color = Color;
     }
