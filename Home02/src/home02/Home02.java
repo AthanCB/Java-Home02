@@ -14,7 +14,7 @@ public class Home02 {
         user.setName(Name);
         boolean stat=true;
         int choice=0;
-        System.out.println(user.getName() + " δώσε το μέγεθος του πίνακα: 5x5 or 8x8 or 10x10");
+        System.out.println(user.getName() + " δώσε το μέγεθος του πίνακα: 5x5 or 8x8 or 10x10: ");
         while(stat==true){
             choice=in.nextInt();
             if(choice!=5 && choice!=8 && choice!=10)

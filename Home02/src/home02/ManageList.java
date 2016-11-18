@@ -8,6 +8,7 @@ import java.util.*;
 public class ManageList {
 
     private Scanner in;
+    ArrayList<String> AllWordsList = new ArrayList();
     ArrayList<String> WordList = new ArrayList();
     ArrayList<String> TempWordList = new ArrayList();
     ArrayList<Letter> Shuffled_Chars = new ArrayList();
@@ -26,6 +27,7 @@ public class ManageList {
         while (in.hasNext()) {
             Word = in.next();
             WordList.add(Word);
+            AllWordsList.add(Word);
         }
         Collections.shuffle(WordList);
         in.close();
@@ -82,6 +84,25 @@ public class ManageList {
         return letter;
 
     }
+    public Letter SetBalader(char Balader) {
+        Random rnd = new Random();
+        Letter letter = null;
+        int ch = rnd.nextInt(3) + 1;
+        if (ch == 1) {
+            letter = new WhiteLetter();
+            letter.setColor(Color.WHITE);
+        } else if (ch == 2) {
+            letter = new RedLetter();
+            letter.setColor(Color.RED);
+        } else if (ch == 3) {
+            letter = new BlueLetter();
+            letter.setColor(Color.BLUE);
+        }
+        letter.setCharacter(Balader);
+        letter.setValue(GivenValue(letter.getCharacter()));
+        return letter;
+
+    }
 
     public int GivenValue(char inchar) {
         int Value = 0;
@@ -98,13 +119,15 @@ public class ManageList {
         } else if (inchar == 'Ξ' || inchar == 'Χ' || inchar == 'Ψ') {
             Value = 10;
         } else if (inchar == '?') {
-            Value = 5;
+            Value = 0;
         } else {
             System.out.println("Κάτι πήγε λάθος.");
         }
 
         return Value;
     }
+    
+    
     
     
 

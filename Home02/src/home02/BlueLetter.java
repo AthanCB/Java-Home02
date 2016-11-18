@@ -27,7 +27,7 @@ public class BlueLetter extends Letter {
 
     @Override
     public void setColor(Color color) {
-
+        this.Color=color;
     }
 
     @Override
