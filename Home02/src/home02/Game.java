@@ -13,11 +13,11 @@ public class Game {
     private ManageList file = new ManageList();
     ArrayList<Letter> TempArray = new ArrayList();
     boolean stat = true, statPoints = false;
+    String Word="";
     int LettersCounter = 0;
     int Points = 0, AllPoints = 0, counterDismiss = 0;
 
     public void StartGame(User user, int Choice) {
-        String Word = "";
         Create_Table(Choice);
         LetsPlay(Choice, Word, user);
     }
@@ -47,11 +47,12 @@ public class Game {
         }
         System.out.println("Ας παίξουμε λοιπόν!");
         System.out.println("Επέλεξε γράμμα: ");
-        ChosenLetter(0, 0, Word, user, Choice);
+        ChosenLetter(0, 0, user, Choice);
     }
 
-    public void ChosenLetter(int l, int r, String Word, User user, int Choice) {
+    public void ChosenLetter(int l, int r, User user, int Choice) {
         Scanner in = new Scanner(System.in);
+        Display_Array();
         if (Points == 0) { //first letter
             System.out.print("Επέλεξε γραμμή πρώτου γράμματος: ");
             l = in.nextInt() - 1;
@@ -73,8 +74,8 @@ public class Game {
             if (Color.BLUE.equals(Array[l][r].getColor())) {
                 statPoints = true;
             }
-            Word = ManagePoints(l, r, Word, user, Choice);
-            ChosenLetter(l, r, Word, user, Choice);
+            Word = ManagePoints(l, r, user, Choice);
+            ChosenLetter(l, r, user, Choice);
         } else { // next letters
             int l2;
             int r2;
@@ -101,9 +102,9 @@ public class Game {
             if (Color.BLUE.equals(Array[l][r].getColor())) {
                 statPoints = true;
             }
-            Word = ManagePoints(l2, r2, Word, user, Choice);
+            Word = ManagePoints(l2, r2, user, Choice);
             while (stat == true) {
-                ChosenLetter(l2, r2, Word, user, Choice);
+                ChosenLetter(l2, r2, user, Choice);
             }
         }
         System.out.println("Θες να τελεώσει το παιχνίδι;(y/n) ");
@@ -114,8 +115,9 @@ public class Game {
 
     }
 
-    public String ManagePoints(int l, int r, String Word, User user, int Choice) {
+    public String ManagePoints(int l, int r, User user, int Choice) {
         Scanner in = new Scanner(System.in);
+        System.out.println(Array[l][r].getCharacter());
         System.out.println("Θες να ακυρώσεις μήπως τις επιλογές σου;(y/n)");
         if (in.next().charAt(0) == 'y') {
             for (int k = 0; k < ArrayPosition.length; k++) {
@@ -140,7 +142,7 @@ public class Game {
                 if (statPoints == true) {
                     Points = 2 * Points;
                 }
-                if (SearchWord(Word) == true) {
+                if (SearchWord() == true) {
                     AllPoints += Points;
                     System.out.println("Συνολικόι πόντοι λέξης: " + Points);
                     System.out.println("Συνολικόι πόντοι λέξεων: " + AllPoints);
@@ -153,16 +155,15 @@ public class Game {
         return Word;
     }
 
-    public boolean SearchWord(String Word) {
-        Scanner in = new Scanner(System.in);
+    public boolean SearchWord() {
         int counter = 0;
-        String testWord = Word;
-        System.out.println(Word + " " + Word.length());
         for (int i = 0; i < file.AllWordsList.size(); i++) {
-            if (testWord.equals(file.AllWordsList.get(i))) {
+            if (Word.equals(file.AllWordsList.get(i))) {
                 counter++;
                 System.out.println("Βρήκες την λέξη");
                 ReplaceWords();
+                Word="";
+                LettersCounter=0;
             }
         }
         if (counter == 0) {
@@ -226,6 +227,7 @@ public class Game {
             } else if (ch.equals("0")) {
                 stat = false;
             }
+            if (!ch.equals("0"))
             Display_Array();
             if (localCount == 5) {
                 System.out.println("Χρησιμοποίησες ήδη 5 φορές τις επιλογές. Δε γίνεται άλλο");
