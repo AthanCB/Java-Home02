@@ -1,4 +1,5 @@
 package home02;
+//icsd14134 Bonis Athanasios - icsd11039 Dimopoulos Georgios
 
 import java.awt.Color;
 import java.io.File;
@@ -7,7 +8,12 @@ import java.util.*;
 
 public class ManageList {
 
+    // καλούμε εκτός συναρτήσεων τον Scanner από την βιβλιοθήκη της Java
     private Scanner in;
+    
+    /* η AllWordsList αποθηκεύει από το αρχείο που έχουμε κάνει στον ίδιο φάκελο
+    όλες τις λέξεις που βρίσκει, όπου σε κάθε σειρά του αρχείου έχουμε βάλει μία λέξη
+    */
     ArrayList<String> AllWordsList = new ArrayList();
     ArrayList<String> WordList = new ArrayList();
     ArrayList<String> TempWordList = new ArrayList();
@@ -51,14 +57,13 @@ public class ManageList {
             TempWordList.add(Character.toString(extra));
         }
         CharList();
-        
     }
 
     public void CharList() {
-        
+
         for (int k = 0; k < TempWordList.size(); k++) {
-            for (int m = 0; m < TempWordList.get(k).length(); m++) {   
-                Shuffled_Chars.add(SetLetter(k, m)); 
+            for (int m = 0; m < TempWordList.get(k).length(); m++) {
+                Shuffled_Chars.add(SetLetter(k, m));
             }
         }
         Collections.shuffle(Shuffled_Chars);
@@ -81,9 +86,10 @@ public class ManageList {
         }
         letter.setCharacter(TempWordList.get(k).charAt(m));
         letter.setValue(GivenValue(letter.getCharacter()));
+        letter.setSituation(false);
         return letter;
-
     }
+
     public Letter SetBalader(char Balader) {
         Random rnd = new Random();
         Letter letter = null;
@@ -100,6 +106,7 @@ public class ManageList {
         }
         letter.setCharacter(Balader);
         letter.setValue(GivenValue(letter.getCharacter()));
+        letter.setSituation(false);
         return letter;
 
     }
@@ -126,9 +133,4 @@ public class ManageList {
 
         return Value;
     }
-    
-    
-    
-    
-
 }
