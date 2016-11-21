@@ -11,12 +11,14 @@ import java.util.*;
 
 public class Game {
 
-    public Game() {
-    }
-
+    // άδειος constructor
+    public Game() {}
+     
+    // πίνακας τύπου γράμματος/Letter 
     Letter Array[][];
 
-    private ManageList file = new ManageList();
+    // δημιουργία αντικειμένου τύπου κλάσσης ManageList για τη πρόσβαση μετά στις συναρτήσεις στη ManageList
+    ManageList file = new ManageList();
     ArrayList<Letter> TempArray = new ArrayList();
     private boolean stat = true, statPoints = false;
     private String Word = "";
