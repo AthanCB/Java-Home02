@@ -2,9 +2,9 @@ package home02;
 //icsd14134 Bonis Athanasios - icsd11039 Dimopoulos Georgios
 
 /*
-Εδώ το παιχνίδι, όπου δημιουργείται αντικείμενο τύπου ManageList
-και παιζεί ο χρήστης ουσιαστικά με τις επιλογές γραμμάτων για τη λέξη. 
-Υπάρχουν σε αυτή τη κλάσση με άλλα λόγια μέθοδοι
+ Εδώ το παιχνίδι, όπου δημιουργείται αντικείμενο τύπου ManageList
+ και παιζεί ο χρήστης ουσιαστικά με τις επιλογές γραμμάτων για τη λέξη. 
+ Υπάρχουν σε αυτή τη κλάσση με άλλα λόγια μέθοδοι
  */
 import java.awt.Color;
 import java.util.*;
@@ -19,7 +19,7 @@ public class Game {
     Letter Array[][];
 
     ManageList file = new ManageList();// δημιουργία αντικειμένου τύπου κλάσσης ManageList για τη πρόσβαση μετά στις συναρτήσεις στη ManageList
-    ArrayList<Letter> TempArray = new ArrayList();//λίστα που δέχεται αντικείμενα τύπου Letters
+    ArrayList<Letter> TempArray = new ArrayList();//λίστα που δέχεται αντικείμενα τύπου Letters, για διευκόλυνση του πίνακα χρησιμοποιείται 
     private boolean stat = true, statPoints = false;// μεταβλητές boolean για τις while και τον έλεγχο πόντων στο τέλος 
     private String Word = "";//η λέξη που αρχικοποιείται με κενό και γεμίζει με τα γράμματα που δίνει ο χρήστης
     private int LettersCounter = 0; //μετρητής των γραμμάτων
@@ -168,31 +168,32 @@ public class Game {
     //συνάρτηση για τη διαχείριση των πόντων στη λέξη και των επιλογών για τη λέξη σε κάθε φορά 
     public String ManagePoints(int l, int r, User user, int Choice) {
         Scanner in = new Scanner(System.in);
-        Array[l][r].setSituation(true);
+        Array[l][r].setSituation(true);//αλλάζει η κατάσταση του Letter έτσι ώστε να μη μπορεί να ξαναχρησιμοποιηθεί το γράμμα
         System.out.println(Array[l][r].getCharacter());
         System.out.println("Θες να ακυρώσεις μήπως τις επιλογές σου;(ν/ο)");
-        if (in.next().charAt(0) == 'ν') {
+        if (in.next().charAt(0) == 'ν') {//αν ακυρώσει τις επιλογές του όλα τα γράμματα πρέπει να μπορούν να χρησιμοποιηθούν πάλι ξανα
             for (int k = 0; k < Array.length; k++) {
                 for (int m = 0; m < Array[k].length; m++) {
-                    Array[k][m].setSituation(false);
+                    Array[k][m].setSituation(false);//έμμεση ελευθέρωση του γράμματος
                 }
             }
-            Word = "";
+            Word = "";// και αφού ξεκινάμε πάλι από την αρχή τη λέξη, την θέτουμε ως κενή
             LetsPlay(Choice, Word, user);
-        }
-        Word += Array[l][r].getCharacter();
+        }//else
+        Word += Array[l][r].getCharacter();//η λέξη αυξάνεται με το γράμμα επιλογής του χρήστη
         System.out.println("Ως τώρα η λέξη: " + Word);
-        LettersCounter++;
-        Points += Array[l][r].getValue();
+        LettersCounter++;//αυξάνεται ο αριθμός γραμμάτων
+        Points += Array[l][r].getValue();//οι πόντοι του γράμματος προσθέτονται στην λέξη
         System.out.println("Ως τώρα οι πόντοι: " + Points);
-        if (LettersCounter > 2) {
+        if (LettersCounter > 2) {//από τρία και πάνω γράμματα μπορείς ο χρήστης να ελέγξει την λε΄ξη που σχημάτησε
             System.out.println("Θές να ελέγξεις τη λέξη;(ν/ο) ");
             char inCh = in.next().charAt(0);
             if (inCh == 'y') {
                 stat = false;
-                if (statPoints == true) {
+                if (statPoints == true) {//αν υπήρξε γράμμα μπλε, τότε διπλασιάζεται η βαθμολογία της λέξης
                     Points = 2 * Points;
                 }
+                //παρουσιάζουμε τους πόντους της λέξης που έγραψε ο χρήστης αν τη βρούμε στο αρχείο μέσω της SearchWord
                 if (SearchWord() == true) {
                     AllPoints += Points;
                     WordCounter++;
@@ -200,55 +201,58 @@ public class Game {
                     System.out.println("Συνολικόι πόντοι λέξεων: " + AllPoints);
                     user.setPoints(AllPoints);
                     Points = 0;
-
                 }
             }
         }
         return Word;
     }
 
+    // εύρεση της δωσμένης από τον χρήστη λέξη στο αρχείο
     public boolean SearchWord() {
-        int counter = 0;
+        int counter = 0;//μετρητής για την εύρεση της λέξης
         for (int i = 0; i < file.AllWordsList.size(); i++) {
-            if (Word.equals(file.AllWordsList.get(i))) {
+            if (Word.equals(file.AllWordsList.get(i))) {//αν βρέθηκε η λέξη στο αρχείο
                 counter++;
                 System.out.println("Βρήκες την λέξη");
-                ReplaceWords();
-                Word = "";
-                LettersCounter = 0;
+                ReplaceWords();//αντικάτασταση της λέξης μέσω της μεθόδου αυτής
+                Word = "";// η λέξη γίνεται πάλι έμμεσα κενή για να γεμίσει ξανά από τα γράμματα της επόμενης λέξης
+                LettersCounter = 0;//αντίστοιχα ο μετρητής των γραμμάτων της λέξης μηδενίζεται και αυτός
             }
-        }
+        }// αν ο μετρητής δεν είναι θετικός τότε σημαίνει ότι δε βρέθηκε η λέξη
         if (counter == 0) {
             System.out.println("Δεν υπάρχει αυτή η λέξη στο αρχείο");
+            //ξαναθέτουμε όλα τις καταστάσεις των γράμματων σαν false για να είναι διαθέσιμα τα γράμματα όλα πάλι
             for (int k = 0; k < Array.length; k++) {
                 for (int m = 0; m < Array[k].length; m++) {
                     Array[k][m].setSituation(false);
                 }
             }
-            return false;
-        }
+            return false;//false επιστροφή αφού δε βρέθηκε η λέξη και μπήκε στην if
+        }//αλλιώς επιστροφή true αφού βρέθηκε η λέξη και δε μπήκε στην if πριν
         return true;
     }
 
+    //αντικατάσταση λέξεων οι οποίες βρήκε ο χρήστης
     public void ReplaceWords() {
-        int count = 0;
-        file.Selected_Words(Array.length);
-        for (int k = 0; k < Array.length; k++) {
+        int count = 0;//για την θέση του γράμματος που θα πάρουμε από την Shuffled_Chars για να το πετάξουμε στον πίνακα
+        file.Selected_Words(Array.length);//νέ
+        for (int k = 0; k < Array.length; k++) {//τρέχουμε όλα τα στοιχεία του πίνακα τύπου Letters
             for (int m = 0; m < Array[k].length; m++) {
+                //αν βρεθεί γράμμα που έχει χαρακτηριστεί false η κατάσταση του, δηλαδή χρησιμοποιήθηκε για λέξη αντικαθιστούμε με νέο γράμμα
                 if (Array[k][m].isSituation() == true) {
-                    Array[k][m] = file.Shuffled_Chars.get(count);
-                    count++;
-                    Array[k][m].setSituation(false);
+                    Array[k][m] = file.Shuffled_Chars.get(count);//το χρησιμοποιημένο γράμμα το αντικαθιστούμε με αυτό στην θέση count στην Shuffled_Chars 
+                    count++;//στην επόμενη θέση της Shuffled_Chars πάμε
+                    Array[k][m].setSituation(false);//και θέτουμε την κατάσταση του false για να μπορεί να χρησιμοποιηθεί
                 }
-
             }
         }
     }
 
+    //εμφάνιση μενού επιλογών για τη διαμορφωποίηση του πίνακα πριν ξεκινήσει ο χρήστης να επιλέγει γράμματα
     public void User_Menu(int Choice) {
         boolean stat = true;
-        int localCount = 0;
-        while (stat) {
+        int localCount = 0;//μετρητής για τις φόρες που επιλέγονται συνολικά οι επιλογές αφού ο χρήστης μπορεί ως 5 φόρες να τις επιλέξει
+        while (stat) {//όσο η μεταβλητή είναι true
             System.out.println("1) Αντάλλαξε 2 γράμματα.");
             System.out.println("2) Διαγραφή γραμμής και αντικατάσταση της.");
             System.out.println("3) Αναδιάταξη γραμμάτων.");
@@ -256,31 +260,31 @@ public class Game {
             System.out.println("5) Αναδιάταξη γραμμής.");
             System.out.println("Επέλεξε ένα απο τις παραπάνω κατηγορίες ή πληκτρολόγησε 0 για να συνεχίσεις.");
             Scanner in = new Scanner(System.in);
-            String ch = in.next();
+            String ch = in.next();//επιλογή διαδικασίας από τον χρήστη
             while (!ch.equals("0") && !ch.equals("1") && !ch.equals("2") && !ch.equals("3") && !ch.equals("4") && !ch.equals("5")) {
                 System.out.println("Δεν υπάρχει αυτή η επιλογή, ξαναδώσε.");
-                ch = in.next();
-            }
+                ch = in.next();//αν δώθηκε κάποιος άλλος από τους αριθμούς για τις επιλογές μας, ξαναδίνει ο χρήστης αριθμό
+            }//θεωρούμε ότι ο χρήστης δίνει αριθμό και όχι κάποιο χαρακτήρα πχ
             if (ch.equals("1")) {
                 localCount++;
-                Exchange_Letters();
+                Exchange_Letters();//μέθοδος ανταλλαγής γραμμάτων
             } else if (ch.equals("2")) {
                 localCount++;
-                RemakeLine(Choice);
+                RemakeLine(Choice);//μέθοδος αντικατάσταση γραμμής
             } else if (ch.equals("3")) {
                 localCount++;
-                Rearrangement(Choice);
+                Rearrangement(Choice);//μέθοδο αναδιάταξης όλων των γραμμάτων του πίνακα
             } else if (ch.equals("4")) {
                 localCount++;
-                RearrangementRow();
+                RearrangementRow();//μέθοδο αναδιάταξη όλων των γραμμάτων μιας σειράς
             } else if (ch.equals("5")) {
                 localCount++;
-                RearrangementLine();
+                RearrangementLine();//μέθοδο αναδιάταξη γραμμάτων μίας γραμμής
             } else if (ch.equals("0")) {
-                stat = false;
+                stat = false;//με την επιλογή 0 ο χρήστης προχωράει στην επιλογή γραμμάτων και φεύγει από το μενού
             }
             if (!ch.equals("0")) {
-                Display_Array();
+                Display_Array();//κάθε φόρα που επιλέγεται κάποια από τις παραπάνω επιλογές πέραν της τελευταίας εμφανίζεται ο πίνακας ξανά αλλαγμένος
             }
             if (localCount == 5) {
                 System.out.println("Χρησιμοποίησες ήδη 5 φορές τις επιλογές. Δε γίνεται άλλο");
@@ -289,6 +293,7 @@ public class Game {
         }
     }
 
+    //ανταλλαγή 2 γραμμάτων στον πίνακα από τον χρήστη
     public void Exchange_Letters() {
         boolean statt = true;
         while (statt) {
@@ -303,6 +308,7 @@ public class Game {
             int x2 = in.nextInt() - 1;
             System.out.print("Δώσε την θέση στην στήλη: ");
             int y2 = in.nextInt() - 1;
+            //όσο και οι δύο θέσεις για τα γράμματα είναι όντως στον πίνακα, και θετικές
             if (x1 < Array.length && x2 < Array.length && x1 >= 0 && x2 >= 0) {
                 if (y1 < Array[x1].length && y2 < Array[x2].length) {
                     Letter temp = Array[x1][y1];
@@ -317,30 +323,34 @@ public class Game {
 
     }
 
+    //αναδιάταξη γραμμάτων πρώτα της λίστας με τα γράμματα, απλά μέσω της έτοιμης εντολής από την βιβλιοθήκη shuffle
     public void Rearrangement(int Choice) {
         Collections.shuffle(file.Shuffled_Chars);
         int count = 0;
+        //μετά την αλλαγμένη λίστα πετάμε τα γράμματα στον πίνακα, ουσιαστικά ανακατέψαμε έμμεσα τον πίνακα 
+        //μέσω του ανακατέματος της λίστας που έχει ακριβώς τα ίδια γράμματα, αφού εκείνη έδωσε τα γράμματα στον πίνακα
         for (int k = 0; k < Array.length; k++) {
             for (int m = 0; m < Array.length; m++) {
                 Array[k][m] = file.Shuffled_Chars.get(count);
                 count++;
             }
-
         }
     }
 
+    //αντικατάσταση γραμμάτων μίας γραμμής που επιλέγει παρακάτω ο χρήστης
     public void RemakeLine(int Choice) {
         boolean statt = true;
         while (statt) {
             System.out.println("Επέλεξε γραμμή διαγραφής: ");
             Scanner in = new Scanner(System.in);
             int line = in.nextInt() - 1;
-            int count = 0;
-            file.Selected_Words(Choice);
-            if (line < Array.length && line >= 0) {
+            int count = 0;//για την θέση επιλογής του γράμματος από την Shuffled_Chars
+            file.Selected_Words(Choice);// για μία γραμμή παίρνουμε μέσω της Selected_Words νέα γράμματα 
+            if (line < Array.length && line >= 0) {//έλεγχος εγκυρότητας
                 for (int k = 0; k < Array.length; k++) {
+                    //γεμίζουμε την επιλεγμένη γραμμή με τα νέα γράμματα από την Shuffled_Chars
                     Array[line][k] = file.Shuffled_Chars.get(count);
-                    count++;
+                    count++;//στην επόμενη θέση/γράμμα της Shuffled_Chars
                 }
                 statt = false;
             } else {
@@ -349,50 +359,54 @@ public class Game {
         }
     }
 
+    //αναδιάταξη γραμμάτων μίας στήλης που επιλέγει παρακάτω ο χρήστης
     public void RearrangementRow() {
         boolean statt = true;
         while (statt) {
             System.out.println("Επέλεξε στήλη αναδιάταξης: ");
             Scanner in = new Scanner(System.in);
             int row = in.nextInt() - 1;
-            if (row >= 0 && row < Array.length) {
-                TempArray.clear();
+            if (row >= 0 && row < Array.length) {//αν είναι έγκυρος ο δωσμένος αριθμός από τον χρήστη
+                TempArray.clear();//καθαρίζεται εξ ολοκλήρου η λίστα temp
                 for (int k = 0; k < Array.length; k++) {
-                    TempArray.add(Array[k][row]);
+                    TempArray.add(Array[k][row]);// και πετάμε τα γράμματα της στήλης row του πίνακα στην λίστα μας
                 }
-                Collections.shuffle(TempArray);
+                Collections.shuffle(TempArray);//ανακατεύουμε την TempArray με τα γράμματα που μόλις δώσαμε
                 for (int k = 0; k < TempArray.size(); k++) {
-                    Array[k][row] = TempArray.get(k);
-                }
-                statt = false;
+                    Array[k][row] = TempArray.get(k);//και πίσω πάλι στον πίνακα στη στήλη row πετάμε τα γράμματης της TempArray
+                }//ουσιαστικά πετάξαμε και ανακατέψαμε τα γράμματα της στήλης του πίνακα σε μία λίστα και τα ξαναπήραμε ανακατεμένα πίσω στην στήλη
+                statt = false;//για να σταματήσει να τρέχει η while
             } else {
                 System.out.println("Δεν έχει τέτοια στήλη ο πίνακας ξαναπροσπάθησε");
             }
         }
     }
-
+    
+    //παρομοίως κάνουμε αναδιάταξη σε μία γραμμή που δίνει ο χρληστης
     public void RearrangementLine() {
         boolean statt = true;
         while (statt) {
             System.out.println("Επέλεξε γραμμή αναδιάταξης: ");
             Scanner in = new Scanner(System.in);
             int line = in.nextInt() - 1;
-            if (line >= 0 && line < Array.length) {
-                TempArray.clear();
+            if (line >= 0 && line < Array.length) {//έλεγχος εγκυρότητας αριθμού
+                TempArray.clear();//άδειασμα της TempArray λίστας
                 for (int k = 0; k < Array.length; k++) {
-                    TempArray.add(Array[line][k]);
+                    TempArray.add(Array[line][k]);//της προσθέτουμε τα γράμματα της επιθυμητής γραμμής
                 }
-                Collections.shuffle(TempArray);
+                Collections.shuffle(TempArray);//ανακατεύουμε τα γράμματα της TempArray
                 for (int k = 0; k < TempArray.size(); k++) {
-                    Array[line][k] = TempArray.get(k);
+                    Array[line][k] = TempArray.get(k);//και τα πετάμε πίσω στην γραμμή ανακατεμένα
                 }
-                statt = false;
+                statt = false;//σταματάει η επανάληψη έμεσα
             } else {
                 System.out.println("Δεν έχει τέτοια στήλη ο πίνακας ξαναπροσπάθησε");
             }
         }
     }
 
+    // εμφανιση των Letters του πίνακα μέσω κάλεσματος της toString που έχει γίνει overwrite στην κλάσση Letter 
+    //για την εμφάνιση των ιδιοτήτων της κλάσσης της
     public void Display_Array() {
         for (int k = 0; k < Array.length; k++) {
             for (int m = 0; m < Array.length; m++) {
