@@ -39,8 +39,7 @@ public class Game {
     //μέθοδος για τη δημιουργία του πίνακα μέσω συναρτήσεων που είναι στην κλασση ManageList και τη καλεί το αντικείμενο file
     public void Create_Table(int Choice) {
         Array = new Letter[Choice][Choice];// δημιουργία πίνακα με τις διαστάσεις που μας έδωσε ο χρήστης 
-
-        //παρακάω καλούμε τις μεθόδους για τη διαχείρηση του αρχείου και των λεξεών του 
+        //παρακάτω καλούμε τις μεθόδους για τη διαχείρηση του αρχείου και των λεξεών του 
         file.OpenFile();
         file.ReadFile();
         file.Selected_Words(Choice);
@@ -68,7 +67,7 @@ public class Game {
         ChosenLetter(0, 0, user, Choice);// καλείται η συνάρτηση αυτή για την επιλογή του γράμματος
     }
 
-    //
+    //συνάρτηση για τη σύγκριση γραμμάτων κλπ
     public void ChosenLetter(int l, int r, User user, int Choice) {
         Scanner in = new Scanner(System.in);//για την εισαγωγή γράμματος από τον χρήστη
         Display_Array();
@@ -116,6 +115,7 @@ public class Game {
                 }
                 if (l2 == l && r2 == r) {//αν πατήσει πάνω στο τελευταίο γράμμα που έγραψε τότε ακυρώνεται
                     System.out.println("Επέλεξες να ακυρώσεις το τελευταίο γράμμα");
+                    LettersCounter--;
                     Array[l2][r2].setSituation(false);// η κατάσταση γίνεται false έτσι ώστε το γράμμα να είναι ελέυθερο πάλι
                     //χρησιμοποιούμε StringBuilder γιατί μία συμβολοσειρά δεν μπορεί να μείωσει τους χαρακτήρες/μέγεθος της 
                     StringBuilder sb = new StringBuilder(Word);
@@ -170,8 +170,15 @@ public class Game {
         Scanner in = new Scanner(System.in);
         Array[l][r].setSituation(true);//αλλάζει η κατάσταση του Letter έτσι ώστε να μη μπορεί να ξαναχρησιμοποιηθεί το γράμμα
         System.out.println(Array[l][r].getCharacter());
-        System.out.println("Θες να ακυρώσεις μήπως τις επιλογές σου;(ν/ο)");
-        if (in.next().charAt(0) == 'ν') {//αν ακυρώσει τις επιλογές του όλα τα γράμματα πρέπει να μπορούν να χρησιμοποιηθούν πάλι ξανα
+        System.out.println("Θες να πας μήπως στο μενού των βοηθητικών επιλογών; Αν ναι πάτα 1");
+        System.out.println("Η θες να ακυρώσεις μήπως τις επιλογές σου; Αν ναι πάτα 2");
+        System.out.println("Διαφορετικά πάτα άλλο αριθμό");
+        char nextCho = in.next().charAt(0);
+        if (nextCho == '1')//πάμε στο μενού των βοηθητικών επιλογών 
+        {
+            System.out.println("Πάμε πίσω στο μενού επιλογών. Υπόψιν οποιαδήποτε αλλαγή θα αλλάξει και το χτύσιμο ως τώρα της λέξης");
+            User_Menu(Choice);
+        } else if (nextCho == '2') {//αν ακυρώσει τις επιλογές του όλα τα γράμματα πρέπει να μπορούν να χρησιμοποιηθούν πάλι ξανα
             for (int k = 0; k < Array.length; k++) {
                 for (int m = 0; m < Array[k].length; m++) {
                     Array[k][m].setSituation(false);//έμμεση ελευθέρωση του γράμματος
@@ -179,7 +186,7 @@ public class Game {
             }
             Word = "";// και αφού ξεκινάμε πάλι από την αρχή τη λέξη, την θέτουμε ως κενή
             LetsPlay(Choice, Word, user);
-        }//else
+        } //else 
         Word += Array[l][r].getCharacter();//η λέξη αυξάνεται με το γράμμα επιλογής του χρήστη
         System.out.println("Ως τώρα η λέξη: " + Word);
         LettersCounter++;//αυξάνεται ο αριθμός γραμμάτων
@@ -204,7 +211,7 @@ public class Game {
                 }
             }
         }
-        return Word;
+        return Word;//πρακτικά δε θα καλεστεί ποτέ αυτή η εντολή
     }
 
     // εύρεση της δωσμένης από τον χρήστη λέξη στο αρχείο
@@ -251,7 +258,13 @@ public class Game {
     //εμφάνιση μενού επιλογών για τη διαμορφωποίηση του πίνακα πριν ξεκινήσει ο χρήστης να επιλέγει γράμματα
     public void User_Menu(int Choice) {
         boolean stat = true;
-        int localCount = 0;//μετρητής για τις φόρες που επιλέγονται συνολικά οι επιλογές αφού ο χρήστης μπορεί ως 5 φόρες να τις επιλέξει
+        int localCount = 0; //μετρητής για τις φόρες που επιλέγονται οι επιλογές αφού ο χρήστης μπορεί ως 15 φόρες να τις επιλέξει
+        int FirstCount = 0;//μετρητής για τις φόρες που επιλέγεται η πρώτη επιλογή αφού ο χρήστης μπορεί ως 3 φόρες να τη επιλέξει
+        //ομοίως και για τις άλλες επιλογές, ως 3 φορές μπορούν να επιλεχθούν
+        int SecondCount = 0;
+        int ThirdCount = 0;
+        int FourthCount = 0;
+        int FifthCount = 0;
         while (stat) {//όσο η μεταβλητή είναι true
             System.out.println("1) Αντάλλαξε 2 γράμματα.");
             System.out.println("2) Διαγραφή γραμμής και αντικατάσταση της.");
@@ -266,28 +279,53 @@ public class Game {
                 ch = in.next();//αν δώθηκε κάποιος άλλος από τους αριθμούς για τις επιλογές μας, ξαναδίνει ο χρήστης αριθμό
             }//θεωρούμε ότι ο χρήστης δίνει αριθμό και όχι κάποιο χαρακτήρα πχ
             if (ch.equals("1")) {
-                localCount++;
-                Exchange_Letters();//μέθοδος ανταλλαγής γραμμάτων
+                if (FirstCount < 3) {
+                    localCount++;
+                    FirstCount++;
+                    Exchange_Letters();//μέθοδος ανταλλαγής γραμμάτων
+                } else {
+                    System.out.println("Επέλεξες ήδη 5 φορές αυτή την επιλογή δε γίνεται άλλο");
+                }
             } else if (ch.equals("2")) {
-                localCount++;
-                RemakeLine(Choice);//μέθοδος αντικατάσταση γραμμής
+                if (SecondCount < 3) {
+                    localCount++;
+                    SecondCount++;
+                    RemakeLine(Choice);//μέθοδος αντικατάσταση γραμμής
+                } else {
+                    System.out.println("Επέλεξες ήδη 5 φορές αυτή την επιλογή δε γίνεται άλλο");
+                }
             } else if (ch.equals("3")) {
-                localCount++;
-                Rearrangement(Choice);//μέθοδο αναδιάταξης όλων των γραμμάτων του πίνακα
+                if (ThirdCount < 3) {
+                    localCount++;
+                    ThirdCount++;
+                    Rearrangement(Choice);//μέθοδο αναδιάταξης όλων των γραμμάτων του πίνακα
+                } else {
+                    System.out.println("Επέλεξες ήδη 5 φορές αυτή την επιλογή δε γίνεται άλλο");
+                }
             } else if (ch.equals("4")) {
-                localCount++;
-                RearrangementRow();//μέθοδο αναδιάταξη όλων των γραμμάτων μιας σειράς
+                if (FourthCount < 3) {
+                    localCount++;
+                    FourthCount++;
+                    RearrangementRow();//μέθοδο αναδιάταξη όλων των γραμμάτων μιας σειράς
+                } else {
+                    System.out.println("Επέλεξες ήδη 5 φορές αυτή την επιλογή δε γίνεται άλλο");
+                }
             } else if (ch.equals("5")) {
-                localCount++;
-                RearrangementLine();//μέθοδο αναδιάταξη γραμμάτων μίας γραμμής
+                if (FifthCount < 3) {
+                    localCount++;
+                    FifthCount++;
+                    RearrangementLine();//μέθοδο αναδιάταξη γραμμάτων μίας γραμμής
+                } else {
+                    System.out.println("Επέλεξες ήδη 5 φορές αυτή την επιλογή δε γίνεται άλλο");
+                }
             } else if (ch.equals("0")) {
                 stat = false;//με την επιλογή 0 ο χρήστης προχωράει στην επιλογή γραμμάτων και φεύγει από το μενού
             }
             if (!ch.equals("0")) {
                 Display_Array();//κάθε φόρα που επιλέγεται κάποια από τις παραπάνω επιλογές πέραν της τελευταίας εμφανίζεται ο πίνακας ξανά αλλαγμένος
             }
-            if (localCount == 5) {
-                System.out.println("Χρησιμοποίησες ήδη 5 φορές τις επιλογές. Δε γίνεται άλλο");
+            if (localCount >= 15) {
+                System.out.println("Χρησιμοποίησες ήδη 15 φορές όλες τις επιλογές. Δε γίνεται περισσότερο");
                 stat = false;
             }
         }
@@ -320,7 +358,6 @@ public class Game {
                 System.out.println("Λάθος συντεταγμένες για τα γράμματα ξαναδώσε");
             }
         }
-
     }
 
     //αναδιάταξη γραμμάτων πρώτα της λίστας με τα γράμματα, απλά μέσω της έτοιμης εντολής από την βιβλιοθήκη shuffle
@@ -381,7 +418,7 @@ public class Game {
             }
         }
     }
-    
+
     //παρομοίως κάνουμε αναδιάταξη σε μία γραμμή που δίνει ο χρληστης
     public void RearrangementLine() {
         boolean statt = true;
