@@ -15,7 +15,6 @@ import javax.swing.JOptionPane;
 public class Home02 {
 
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);// εισαγωγλη τιμών μέσω πληκτρολογίου
         //System.out.println("Γειά σου, δώσε το όνομα σου: ");
         String Name = JOptionPane.showInputDialog("Γειά σου, δώσε το όνομα σου: ");  //String Name = in.next();// εισαγωγή ονόματος από τον χρήστη
         User user = new User(); // αντικείμενο τύπου User

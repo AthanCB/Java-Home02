@@ -8,6 +8,7 @@ package home02;
  */
 import java.awt.Color;
 import java.util.*;
+import javax.swing.JOptionPane;
 
 public class Game {
 
@@ -62,7 +63,7 @@ public class Game {
             counterDismiss++;
         }
         //αλλιώς ξεκινάει η επιλογή γραμμάτων από τον χρήστη για τη δημιουργία της λέξης
-        System.out.println("Ας παίξουμε λοιπόν!");
+        //System.out.println("Ας παίξουμε λοιπόν!");
         System.out.println("Επέλεξε γράμμα: ");
         ChosenLetter(0, 0, user, Choice);// καλείται η συνάρτηση αυτή για την επιλογή του γράμματος
     }
@@ -97,48 +98,9 @@ public class Game {
             //αναδρομικά καλούμε τη συνάρτηση πάλι για να πάει ο χρήστης στο δεύτερο γράμμα μέσω της ίδιας συνάρτησης
             //που θα δέχεται παράμετρο τις συντεταγμένες του προηγούμενος γράμματος για τη γειτνιαση και τον user και το μέγεθος του τετραγωνικού πίνακα
             ChosenLetter(l, r, user, Choice);
-        } else { // για το δεύτερο γράμμα και μετά
-            int l2, r2; //η σειρά και στήλη του γράμματος
-            do {// τρέχει η παρακάτω while όσο το γράμμα που δίνεται είναι ελεύθερο για να χρησιμοποιηθεί
-                System.out.println("Επέλεξε γειτονικό γράμμα για να συνεχιστεί η λέξη: ");
-                System.out.print("Επέλεξε γραμμή γράμματος: ");
-                l2 = in.nextInt() - 1;
-                while (Math.abs(l2 - l) > 1) {
-                    System.out.print("Δώσε έγκυρο αριθμό: ");
-                    l2 = in.nextInt() - 1;
-                }
-                System.out.print("Επέλεξε στήλη γράμματος: ");
-                r2 = in.nextInt() - 1;
-                while (Math.abs(r2 - r) > 1) {
-                    System.out.print("Δώσε έγκυρο αριθμό: ");
-                    r2 = in.nextInt() - 1;
-                }
-                if (l2 == l && r2 == r) {//αν πατήσει πάνω στο τελευταίο γράμμα που έγραψε τότε ακυρώνεται
-                    System.out.println("Επέλεξες να ακυρώσεις το τελευταίο γράμμα");
-                    LettersCounter--;
-                    Array[l2][r2].setSituation(false);// η κατάσταση γίνεται false έτσι ώστε το γράμμα να είναι ελέυθερο πάλι
-                    //χρησιμοποιούμε StringBuilder γιατί μία συμβολοσειρά δεν μπορεί να μείωσει τους χαρακτήρες/μέγεθος της 
-                    StringBuilder sb = new StringBuilder(Word);
-                    sb.deleteCharAt(Word.length() - 1);//σβήνουμε μέσω συνάρτησης έτοιμης της Stringbuilder το τελευταίο γράμμα
-                    Word = sb.toString();//και ξαναθέτουμε την λέξη από το Stringbuilder 
-                    ChosenLetter(l, r, user, Choice);//αναδρομή εδώ για να ξαναπάει στην συνάρτηση πάλι και να ελέγξει εκ νέου το γράμμα
-                }
-            } while (Array[l2][r2].isSituation() == true);
-            // για την περίπτωση που είναι ο χαρακτήρας του Letter μπαλαντερ
-            if (Array[l2][r2].getCharacter() == '?') {
-                System.out.print("Δώσε επιθυμητό γράμμα: ");
-                char balader = in.next().charAt(0);
-                Array[l2][r2] = file.SetBalader(balader);
-            }
-            if (Color.BLUE.equals(Array[l][r].getColor())) {
-                statPoints = true;// για τον διπλασιασμό της λέξης αν το γράμμα είναι μπλ
-            }
-            Word = ManagePoints(l2, r2, user, Choice); // για τους πόντους που πάνε στη λέξη κλπ καλούμε τη συνάστηση
-            while (stat == true) {
-                ChosenLetter(l2, r2, user, Choice); //αναδρομή έτσι ώστε να πηγαίνουμε στο επόμενο γράμμα κάθε φορά
-            }
+        } else {
+            CheckWords(Choice, user);
         }
-        CheckWords(Choice, user);
     }
 
     public void CheckWords(int Choice, User user) {
@@ -265,18 +227,22 @@ public class Game {
         int ThirdCount = 0;
         int FourthCount = 0;
         int FifthCount = 0;
+        
+            
         while (stat) {//όσο η μεταβλητή είναι true
-            System.out.println("1) Αντάλλαξε 2 γράμματα.");
-            System.out.println("2) Διαγραφή γραμμής και αντικατάσταση της.");
-            System.out.println("3) Αναδιάταξη γραμμάτων.");
-            System.out.println("4) Αναδιάταξη στήλης.");
-            System.out.println("5) Αναδιάταξη γραμμής.");
-            System.out.println("Επέλεξε ένα απο τις παραπάνω κατηγορίες ή πληκτρολόγησε 0 για να συνεχίσεις.");
-            Scanner in = new Scanner(System.in);
-            String ch = in.next();//επιλογή διαδικασίας από τον χρήστη
-            while (!ch.equals("0") && !ch.equals("1") && !ch.equals("2") && !ch.equals("3") && !ch.equals("4") && !ch.equals("5")) {
+//            System.out.println("1) Αντάλλαξε 2 γράμματα.");
+//            System.out.println("2) Διαγραφή γραμμής και αντικατάσταση της.");
+//            System.out.println("3) Αναδιάταξη γραμμάτων.");
+//            System.out.println("4) Αναδιάταξη στήλης.");
+//            System.out.println("5) Αναδιάταξη γραμμής.");
+//            System.out.println("Επέλεξε ένα απο τις παραπάνω κατηγορίες ή πληκτρολόγησε 0 για να συνεχίσεις.");
+            Menu menuUser = new Menu();
+            
+            int ch0 = menuUser.UserMenu_Display();
+            String ch = ch0 + "";
+            if (!ch.equals("0") && !ch.equals("1") && !ch.equals("2") && !ch.equals("3") && !ch.equals("4") && !ch.equals("5")) {
                 System.out.println("Δεν υπάρχει αυτή η επιλογή, ξαναδώσε.");
-                ch = in.next();//αν δώθηκε κάποιος άλλος από τους αριθμούς για τις επιλογές μας, ξαναδίνει ο χρήστης αριθμό
+            
             }//θεωρούμε ότι ο χρήστης δίνει αριθμό και όχι κάποιο χαρακτήρα πχ
             if (ch.equals("1")) {
                 if (FirstCount < 3) {
@@ -318,7 +284,7 @@ public class Game {
                 } else {
                     System.out.println("Επέλεξες ήδη 5 φορές αυτή την επιλογή δε γίνεται άλλο");
                 }
-            } else if (ch.equals("0")) {
+            } else if (ch.equals("10")) {
                 stat = false;//με την επιλογή 0 ο χρήστης προχωράει στην επιλογή γραμμάτων και φεύγει από το μενού
             }
             if (!ch.equals("0")) {
