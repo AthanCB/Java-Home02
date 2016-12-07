@@ -23,6 +23,10 @@ public class Home02 {
         //System.out.println(user.getName() + " δώσε το μέγεθος του πίνακα: 5x5 or 8x8 or 10x10: ");
         String Uchoice = JOptionPane.showInputDialog(" δώσε το μέγεθος του πίνακα: 5x5 or 8x8 or 10x10: ");
         // παρακάτω θα τρέχει η while όσο ο χρήστης δίνει μη συμβατό αριθμό για τις διαστάσεις του πίνακα
+        if(Uchoice.equals("")){
+                JOptionPane.showMessageDialog(null, "Δε δώθηκε κάτι", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;//end programm
+        }
         int choice=0;//initialize
         while (stat == true) {
             choice = Integer.parseInt(Uchoice); // είσοδο επιλογής μεγέθους πίνακα απ τον χρήστη
