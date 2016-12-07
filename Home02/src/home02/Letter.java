@@ -3,6 +3,7 @@ package home02;
 
 import java.awt.Color;
 
+
 /*
 δηιμιουργούμε μία abstract class Letter για τα γράμματα με τα οποία 
 θα παίζει ο χρήστης. Είναι abstract διότι θα υπάρχουν κάποιες υποκλάσεις της Letter
@@ -11,6 +12,7 @@ import java.awt.Color;
 */
 public abstract class Letter {
     // το κάθε Letter έχει 4 γνωρίσματα
+    
     private int Value; // αξία του Letter/γράμματος
     private char Character; // χαρακτήρας του Letter, Α ως Ω
     private boolean Situation; // boolean μεταβλητή για τη διαθεσιμότητα του γράμματος σε κάθε θέση στο παιχνίδι

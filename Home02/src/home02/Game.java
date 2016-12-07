@@ -18,7 +18,7 @@ public class Game {
 
     // πίνακας τύπου γράμματος/Letter 
     Letter Array[][];
-    Graphics gp = new Graphics();
+    GameGraphics gp;
     ManageList file = new ManageList();// δημιουργία αντικειμένου τύπου κλάσσης ManageList για τη πρόσβαση μετά στις συναρτήσεις στη ManageList
     ArrayList<Letter> TempArray = new ArrayList();//λίστα που δέχεται αντικείμενα τύπου Letters, για διευκόλυνση του πίνακα χρησιμοποιείται 
     private boolean stat = true, statPoints = false;// μεταβλητές boolean για τις while και τον έλεγχο πόντων στο τέλος 
@@ -45,7 +45,7 @@ public class Game {
         file.ReadFile();
         file.Selected_Words(Choice);
         int count = 0;//μετρητής για τη θέση του γράμματος στην Shuffled_Chars
-        gp.CreateArrayWindow(Choice, file.Shuffled_Chars);
+        GameGraphs gp = new GameGraphs(Choice, file.Shuffled_Chars);
 //        for (int k = 0; k < Choice; k++) {//για τα γράμματα που θα βάλουμε στις θέσεις στον πίνακα έχουμε διπλή for 
 //            // και η κάθε loop θα τρέχει μέχρι την επιλογή του χρήστη για τον τετραγωνικό πίνακα
 //            for (int m = 0; m < Choice; m++) {
@@ -55,7 +55,7 @@ public class Game {
 //                count++;//για το γράμμα στην επόμενη θέση στην λίστα
 //            }
 //        }
-        //Display_Array();//εμφάνιση του πίνακα μέσω συνάρτησης
+//        Display_Array();//εμφάνιση του πίνακα μέσω συνάρτησης
     }
 
     //συνάρτηση για την εμφάνιση του μενου τη πρώτη φορά ή για το ξεκίνημα επιλογής γραμμάτων από τον χρήστη
@@ -237,8 +237,8 @@ public class Game {
 //            System.out.println("4) Αναδιάταξη στήλης.");
 //            System.out.println("5) Αναδιάταξη γραμμής.");
 //            System.out.println("Επέλεξε ένα απο τις παραπάνω κατηγορίες ή πληκτρολόγησε 0 για να συνεχίσεις.");
-
-            int ch0 = gp.UserMenu_Display();
+            int ch0 = 0;
+            //ch0 = gp.UserMenu_Display();
             String ch = ch0 + "";
             if (!ch.equals("0") && !ch.equals("1") && !ch.equals("2") && !ch.equals("3") && !ch.equals("4") && !ch.equals("5")) {
                 System.out.println("Δεν υπάρχει αυτή η επιλογή, ξαναδώσε.");

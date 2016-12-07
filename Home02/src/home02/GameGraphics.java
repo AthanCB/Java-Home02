@@ -8,27 +8,36 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class Graphics extends JFrame {
+public class GameGraphics extends JFrame {
 
     JLabel lb1;
     JTextField tf;
+    Graphics g;
     JPanel row1, row2, row3, row4, row5, row6, row0;
     JButton b1, b2, b3, b4, b5, b6;
     int choice;
     boolean stat = false;
 
-    public Graphics() {
+    public GameGraphics() {
     };
     
+    public void Create_ArrayGraphics() {
+        //Card cg = new Card(0, 0, Color.RED, 10, 10, true);
+        setLocationRelativeTo(null);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Container pane = new Container();
+        
+        //pane.setLayout(l);
+    }
+
     public int UserMenu_Display() {
 
         setLocationRelativeTo(null);
         //setSize(100, 100);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         Container pane = new Container();
-
         GridLayout glayout = new GridLayout(7, 1);
         pane.setLayout(glayout);
         row1 = new JPanel();
@@ -63,7 +72,9 @@ public class Graphics extends JFrame {
         row5.add(b5);
         pane.add(row5);
 //-----------------------------------------------------------------------------------------------
-
+        b6 = new JButton("6) Συνέχεια στο παιχνίδι");
+        row6.add(b6);
+        pane.add(row6);
         do {
             b1.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -95,8 +106,13 @@ public class Graphics extends JFrame {
                     stat = true;
                 }
             });
-           
-            
+            b6.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    choice = 6;
+                    stat = false;
+                }
+            });
+            //CardGraphics cg = new CardGraphics(0,0,Color.RED,10,10,true);            
             setContentPane(pane);
             pack();
         } while (stat == false);
@@ -126,7 +142,9 @@ public class Graphics extends JFrame {
             }
             pane2.add(jp[k]);//add panel,row, in the pane
         }
+
         setContentPane(pane2);
+
         pack();
     }
 
