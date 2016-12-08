@@ -8,7 +8,6 @@ package home02;
  */
 import java.awt.Color;
 import java.util.*;
-import javax.swing.JOptionPane;
 
 public class Game {
 

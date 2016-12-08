@@ -20,29 +20,30 @@ public class Home02 {
         User user = new User(); // αντικείμενο τύπου User
         user.setName(Name); // σώζουμε το όνομα που έδωσε ο χρήστης μέσω της setter της User
         boolean stat = true; // για την while 
-        //System.out.println(user.getName() + " δώσε το μέγεθος του πίνακα: 5x5 or 8x8 or 10x10: ");
-        String Uchoice = JOptionPane.showInputDialog(" δώσε το μέγεθος του πίνακα: 5x5 or 8x8 or 10x10: ");
+        String opt[] = {"5x5", "8x8", "10x10"};
+        int choice = JOptionPane.showOptionDialog(null, null, " δώσε το μέγεθος του πίνακα:", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, opt, opt[1]);
         // παρακάτω θα τρέχει η while όσο ο χρήστης δίνει μη συμβατό αριθμό για τις διαστάσεις του πίνακα
-        if(Uchoice.equals("")){
-                JOptionPane.showMessageDialog(null, "Δε δώθηκε κάτι", "ERROR", JOptionPane.ERROR_MESSAGE);
-                return;//end programm
-        }
-        int choice=0;//initialize
+        int size=0;
         while (stat == true) {
-            choice = Integer.parseInt(Uchoice); // είσοδο επιλογής μεγέθους πίνακα απ τον χρήστη
-            //choice = in.nextInt();
-            if (choice != 5 && choice != 8 && choice != 10) // αν δώσει αριθμό πέρα από 5 8 ή 10
-            {
-                //System.out.println("Λάθος αριθμός, δώσε ξανά!");
-                JOptionPane.showMessageDialog(null, "Λάθος αριθμός, δώσε ξανά!", "WRONG", JOptionPane.ERROR_MESSAGE);
-                Uchoice = JOptionPane.showInputDialog(" δώσε το μέγεθος του πίνακα: 5x5 or 8x8 or 10x10: ");
-            } else {
-                JOptionPane.showMessageDialog(null, "Ο πίνακας που δημιούργησες είναι: " + choice + " γραμμών και στήλων");
+            if (choice == 1) {
+                size=8;
                 stat = false;
+                JOptionPane.showMessageDialog(null, "Ο πίνακας που δημιούργησες είναι: 8 γραμμών και στήλων");
+            } else if (choice == 2) {
+                size=10;
+                stat = false;
+                JOptionPane.showMessageDialog(null, "Ο πίνακας που δημιούργησες είναι: 10 γραμμών και στήλων");
+            } else if (choice == 0) {
+                size=5;
+                JOptionPane.showMessageDialog(null, "Ο πίνακας που δημιούργησες είναι 5 γραμμών και στήλων");
+                stat = false;
+            } else// αν δώσει αριθμό πέρα από 5 8 ή 10
+            {
+                JOptionPane.showMessageDialog(null, "Λάθος αριθμός, δώσε ξανά!", "WRONG", JOptionPane.ERROR_MESSAGE);
+                choice = JOptionPane.showOptionDialog(null, null, " δώσε το μέγεθος του πίνακα: 5x5 or 8x8 or 10x10: ", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, opt, opt[1]);
             }
         }
         Game game = new Game(); // δημιουργία αντικειμένου τύπου Game 
-        game.StartGame(user, choice);// κάλεσμα της συνάρτησης StartGame της κλάσσης game 
+        game.StartGame(user, size);// κάλεσμα της συνάρτησης StartGame της κλάσσης game 
     }
-
 }
