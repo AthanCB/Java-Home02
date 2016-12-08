@@ -21,8 +21,7 @@ public class GameGraphs extends JFrame {
             for (int j = 0; j < dimension; j++) {
                
                 Color c = Shuffled_Chars.get(counter).getColor();
-                 
-                jf.getContentPane().add(new Card(Shuffled_Chars.get(counter).getCharacter(), Shuffled_Chars.get(counter).getValue(), Color.RED,x,y));
+                jf.getContentPane().add(new Card(Shuffled_Chars.get(counter).getCharacter(), Shuffled_Chars.get(counter).getValue(), c,x,y));
                 jf.setVisible(true);
                  counter++;
                  x+=105;

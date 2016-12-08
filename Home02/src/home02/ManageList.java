@@ -147,6 +147,7 @@ public class ManageList {
                 letter.setColor(Color.WHITE);
             }
         }
+       
         return letter;
     }
 

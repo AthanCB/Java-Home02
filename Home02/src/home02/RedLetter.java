@@ -33,7 +33,7 @@ public class RedLetter extends Letter {
     @Override
     //setter του χρώματος 
     public void setColor(Color color) {
-        this.Color = Color;
+        this.Color = color;
     }
 
     @Override

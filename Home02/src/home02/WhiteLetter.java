@@ -34,7 +34,7 @@ public class WhiteLetter extends Letter {
     @Override
     //setter για το χρώμα του Letter, δηλαδή το θέτει το χρώμα άσπρο
     public void setColor(Color color) {
-        this.Color = Color;
+        this.Color = color;
     }
 
     @Override
