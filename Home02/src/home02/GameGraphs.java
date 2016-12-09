@@ -2,10 +2,6 @@ package home02;
 
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.GridLayout;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
