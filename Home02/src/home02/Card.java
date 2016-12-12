@@ -11,9 +11,9 @@ import javax.swing.JComponent;
 
 public class Card extends JComponent implements MouseListener {
 
-    int repaintCounter = 0;
+    static int repaintCounter = 0;
     final int rectLength = 100;
-    private Polygon rect;
+    private Polygon rect, rect2;
     Graphics gp;
     private boolean statRight = true, statLeft = true;
     private char Character;
@@ -29,14 +29,9 @@ public class Card extends JComponent implements MouseListener {
         return statRight;
     }
 
-    //empty constructor
-//    public Card() {
-//        Character ='a';
-//        Value = Value;
-//        ColorC = Color.WHITE;
-//        xCoord = 0;
-//        yCoord = 0;
-//    }
+    public Card() {
+    }
+
     public Card(char Character, int Value, Color color, int x, int y) {
         this.Character = Character;
         this.Value = Value;
@@ -52,22 +47,6 @@ public class Card extends JComponent implements MouseListener {
         addMouseListener(this);
     }
 
-    public void setLeftClick(boolean stat) {
-		statLeft = stat;
-	}
-
-	public boolean getLeftClick() {
-		return statLeft;
-	}
-
-	public void setRightClick(boolean st) {
-		statRight = st;
-	}
-
-	public boolean getRightClick() {
-		return statRight;
-	}
-    
     public void setRect(Polygon rect) {
         this.rect = rect;
     }
@@ -81,13 +60,17 @@ public class Card extends JComponent implements MouseListener {
         super.paintComponent(g);
         String Letter = "" + Character;
         String valueS = "" + Value;
+
         g.setColor(Color.BLACK);
         g.drawRect(xCoord, yCoord, rectLength, rectLength); // rectLength=100
+
         g.setColor(ColorC);
         g.fillRect(xCoord, yCoord, rectLength, rectLength);
+
         g.setColor(Color.BLACK);
         g.setFont(new Font("Courier", Font.BOLD, 71));
         g.drawString(Letter, 25 + xCoord, 75 + yCoord);
+
         g.setFont(new Font("Courier", Font.BOLD, 12));
         g.drawString(valueS, 80 + xCoord, 80 + yCoord);
         g.drawPolygon(rect);
@@ -95,39 +78,48 @@ public class Card extends JComponent implements MouseListener {
 
     @Override
     public void repaint() {
-        System.out.println("repaint: " + repaintCounter);
-        repaintCounter++;
     }
 
     public void Myrepaint(Graphics g, MouseEvent me) {
-        System.out.println("\nMyrepaint: ");
-//		if(rect.contains(getMousePosition()))
-//			System.out.println("WORKS");
-        if (statLeft == false) {// left button, chosen letter
-            g.setColor(Color.yellow);
-            g.fillRect(xCoord, yCoord, rectLength, rectLength);
-        }
-        if (statRight == false) { // right button
-            
+        Point point = me.getPoint();
+        int X = 5, Y = 5;
+        if (me.getButton() == MouseEvent.BUTTON1) {
+            for (int i = 0; i < 5; i++) {
+                for (int j = 0; j < 5; j++) {
+                    rect2 = new Polygon();
+                    rect2.addPoint(X, Y);
+                    rect2.addPoint(X, Y + rectLength);
+                    rect2.addPoint(X + rectLength, Y + rectLength);
+                    rect2.addPoint(X + rectLength, Y);
+                    setRect(rect);
+                    if (rect2.contains(point)) {
+                        if (me.getButton() == MouseEvent.BUTTON1) {
+                            g.setColor(Color.YELLOW);
+                            g.fillRect(X, Y, rectLength, rectLength);
+                        }
+                        if (me.getButton() == MouseEvent.BUTTON3) {
+                            g.setColor(Color.GREEN);
+                            g.fillRect(X, Y, rectLength, rectLength);
+                        }
+//                        String Letter = "" + Character;
+//                        String valueS = "" + Value;
+//                        g.setColor(Color.BLACK);
+//                        g.setFont(new Font("Courier", Font.BOLD, 71));
+//                        g.drawString(Letter, 25 + X, 75 + Y);
+//                        g.setFont(new Font("Courier", Font.BOLD, 12));
+//                        g.drawString(valueS, 80 + X, 80 + Y);
+                    }
+                    X += 105;
+                }
+                X = 5;
+                Y += 105;
+            }
         }
     }
 
     @Override
     public void mouseClicked(MouseEvent me) {
-        Point point = me.getPoint();
-        System.out.println("POINT: " + point);
-        if (this.contains(point)) {
-            System.out.println("Contains");
-            if (me.getButton() == MouseEvent.BUTTON1) {
-                setLeftClick(false);// gia na allaksei to xrwma tou tetragwnou               
-                System.out.println("left");
-                Myrepaint(this.getGraphics(),me);
-            } else if (me.getButton() == MouseEvent.BUTTON3) {
-                setRightClick(false);
-                System.out.println("right");
-                Myrepaint(this.getGraphics(),me);
-            }
-        }
+        Myrepaint(getGraphics(), me);
     }
 
     public void mousePressed(MouseEvent me) {
@@ -141,4 +133,5 @@ public class Card extends JComponent implements MouseListener {
 
     public void mouseExited(MouseEvent me) {
     }
+
 }
