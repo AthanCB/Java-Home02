@@ -17,7 +17,7 @@ public class Game {
 
     // πίνακας τύπου γράμματος/Letter 
     Letter Array[][];
-    GameGraphics gp;
+    GameGraphs gp;
     ManageList file = new ManageList();// δημιουργία αντικειμένου τύπου κλάσσης ManageList για τη πρόσβαση μετά στις συναρτήσεις στη ManageList
     ArrayList<Letter> TempArray = new ArrayList();//λίστα που δέχεται αντικείμενα τύπου Letters, για διευκόλυνση του πίνακα χρησιμοποιείται 
     private boolean stat = true, statPoints = false;// μεταβλητές boolean για τις while και τον έλεγχο πόντων στο τέλος 
@@ -43,18 +43,10 @@ public class Game {
         file.OpenFile();
         file.ReadFile();
         file.Selected_Words(Choice);
-        int count = 0;//μετρητής για τη θέση του γράμματος στην Shuffled_Chars
+        //int count = 0;//μετρητής για τη θέση του γράμματος στην Shuffled_Chars
         GameGraphs gp = new GameGraphs(Choice, file.Shuffled_Chars);
-//        for (int k = 0; k < Choice; k++) {//για τα γράμματα που θα βάλουμε στις θέσεις στον πίνακα έχουμε διπλή for 
-//            // και η κάθε loop θα τρέχει μέχρι την επιλογή του χρήστη για τον τετραγωνικό πίνακα
-//            for (int m = 0; m < Choice; m++) {
-//                //στη κάθε θέση του πίνακα, γραμμή k και στήλη m βάζουμε το γράμμα που είναι στην θέση count στη λίστα Shuffled_Chars
-//                Array[k][m] = file.Shuffled_Chars.get(count);
-//                
-//                count++;//για το γράμμα στην επόμενη θέση στην λίστα
-//            }
-//        }
-//        Display_Array();//εμφάνιση του πίνακα μέσω συνάρτησης
+        gp.setsuccessPoints(50);
+        gp.setsuccessWords(5);
     }
 
     //συνάρτηση για την εμφάνιση του μενου τη πρώτη φορά ή για το ξεκίνημα επιλογής γραμμάτων από τον χρήστη
@@ -72,7 +64,6 @@ public class Game {
     //συνάρτηση για τη σύγκριση γραμμάτων κλπ
     public void ChosenLetter(int l, int r, User user, int Choice) {
         Scanner in = new Scanner(System.in);//για την εισαγωγή γράμματος από τον χρήστη
-        Display_Array();
         //αφού έχουμε 0 πόντους σημαίνει ότι είμαστε στο πρώτο γράμμα, που δεν έχει κάποιο γειτονικό για να έχουμε κάποιον έλεγχο γειτνίασης
         if (Points == 0) {
             System.out.print("Επέλεξε γραμμή πρώτου γράμματος: ");
@@ -287,7 +278,7 @@ public class Game {
                 stat = false;//με την επιλογή 0 ο χρήστης προχωράει στην επιλογή γραμμάτων και φεύγει από το μενού
             }
             if (!ch.equals("0")) {
-                Display_Array();//κάθε φόρα που επιλέγεται κάποια από τις παραπάνω επιλογές πέραν της τελευταίας εμφανίζεται ο πίνακας ξανά αλλαγμένος
+                //Display_Array();//κάθε φόρα που επιλέγεται κάποια από τις παραπάνω επιλογές πέραν της τελευταίας εμφανίζεται ο πίνακας ξανά αλλαγμένος
             }
             if (localCount >= 15) {
                 System.out.println("Χρησιμοποίησες ήδη 15 φορές όλες τις επιλογές. Δε γίνεται περισσότερο");
@@ -405,18 +396,5 @@ public class Game {
                 System.out.println("Δεν έχει τέτοια στήλη ο πίνακας ξαναπροσπάθησε");
             }
         }
-    }
-
-    // εμφανιση των Letters του πίνακα μέσω κάλεσματος της toString που έχει γίνει overwrite στην κλάσση Letter 
-    //για την εμφάνιση των ιδιοτήτων της κλάσσης της
-    public void Display_Array() {
-        for (int k = 0; k < Array.length; k++) {
-            for (int m = 0; m < Array.length; m++) {
-                System.out.print(Array[k][m].toString() + " ");
-            }
-            System.out.println("\n");
-
-        }
-
     }
 }

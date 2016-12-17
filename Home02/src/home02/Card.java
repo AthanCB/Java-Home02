@@ -5,11 +5,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashMap;
@@ -22,16 +22,15 @@ import javax.swing.JPanel;
 
 public class Card extends JComponent implements MouseListener {
 
-    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    GraphicsDevice defaultScreen = ge.getDefaultScreenDevice();
-
+    GameGraphs gg = new GameGraphs();
     int Points = 0, AllPoints = 0;
     static int dimension;
-    static HashMap<Point, Character> lettersMap = new HashMap<Point, Character>();
-    static HashMap<Point, Integer> valuesMap = new HashMap<Point, Integer>();
+    static HashMap<Point, Character> lettersMap = new HashMap<>();
+    static HashMap<Point, Integer> valuesMap = new HashMap<>();
     //static ArrayList<Integer> ValueList = new ArrayList<Integer>();
     FlowLayout fl = new FlowLayout();
-    GridLayout gl;
+    GridLayout gl = new GridLayout(11, 1);
+    JButton bExit = new JButton("Διακοπή παιχνιδιού");
     JButton b1 = new JButton("1)Αντικατάσταση γραμμάτων γραμμής");
     JButton b2 = new JButton("2)Αναδιάταξη γραμμής");
     JButton b3 = new JButton("3)Αναδιάταξη στήλης");
@@ -53,11 +52,10 @@ public class Card extends JComponent implements MouseListener {
     JFrame jf2 = new JFrame();
     JLabel JMadeWord = new JLabel();// for row1
     JLabel JYourPoints = new JLabel();
-    private static String MadeWord = "";
+    private static String MadeWord = "", LetterChar = "", LetterPoints = "";
     private final int rectLength = 100;
     private Polygon rect, rect2;
     Graphics gp;
-    private boolean statRight = true, statLeft = true;
     private char Character;
     private int Value;
     private Color ColorC;
@@ -69,14 +67,6 @@ public class Card extends JComponent implements MouseListener {
 
     public void setCharacter(char character) {
         Character = character;
-    }
-
-    public void setStatClick(boolean st) {
-        statRight = st;
-    }
-
-    public boolean getStatClick() {
-        return statRight;
     }
 
     public Card() {
@@ -97,7 +87,10 @@ public class Card extends JComponent implements MouseListener {
         Point LetterPoint = new Point(x, y);
         lettersMap.put(LetterPoint, Character);
         valuesMap.put(LetterPoint, Value);
-        System.out.println(LetterPoint + " " + Character);
+        //System.out.println(LetterPoint + " " + Character);
+        if (GameGraphs.counter == 0) {
+            SecondWindow("", 0);
+        }
         addMouseListener(this);
     }
 
@@ -165,8 +158,8 @@ public class Card extends JComponent implements MouseListener {
                                     if (CurrentPoint2 == CurrentPoint) {
                                         value = entry.getValue();
                                         Points = entry2.getValue();
-                                        String LetterPoints = "" + Points;
-                                        String LetterChar = "" + value;
+                                        LetterPoints = "" + Points;
+                                        LetterChar = "" + value;
                                         g.setColor(Color.BLACK);
                                         g.setFont(new Font("Courier", Font.BOLD, 71));
                                         g.drawString(LetterChar, 25 + X, 75 + Y);
@@ -175,8 +168,7 @@ public class Card extends JComponent implements MouseListener {
                                         g.drawString(LetterPoints, 80 + X, 80 + Y);
                                     }
                                 }
-                                System.out.println("ChangeTheWord");
-                                ChangeTheWord(value, Points);
+                                SecondWindow(LetterChar, Points);
                             }
                         }
                     }
@@ -191,35 +183,37 @@ public class Card extends JComponent implements MouseListener {
         }
     }
 
-    private void ChangeTheWord(char cLetter, int Points) {
-        gl = new GridLayout(11, 1);
+    protected void SecondWindow(String letter, int points) {
         jf2.setLayout(gl);
         jf2.setSize(800, 1000);
         jf2.setLocation(1000, 5);
         jf2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf2.setVisible(true);
 
-        AllPoints += Points;
-        MadeWord += cLetter;
-        setCharacter(cLetter);
+        AllPoints += points;
+        MadeWord += letter;
+        if (letter.length() == 1) {
+            char L = letter.charAt(0);
+            setCharacter(L);
+        }
 
-        JMadeWord.setForeground(Color.blue);
-        JMadeWord.setFont(new Font("Courier", Font.BOLD, 40));
         JMadeWord.setVisible(true);
         JMadeWord.setText("Η λέξη ως τώρα: " + MadeWord);
+        JMadeWord.setForeground(Color.BLUE);
+        JMadeWord.setFont(new Font("Courier", Font.BOLD, 40));
 
-        JYourPoints.setForeground(Color.RED);
-        JYourPoints.setFont(new Font("Courier", Font.BOLD, 40));
         JYourPoints.setVisible(true);
         JYourPoints.setText("Οι πόντοι σου ως τώρα: " + AllPoints);
+        JYourPoints.setForeground(Color.RED);
+        JYourPoints.setFont(new Font("Courier", Font.BOLD, 40));
 
         options.setText("Πρόσθετες επιλογές:");
         options.setFont(new Font("Courier", Font.BOLD, 22));
 
-        info1.setText("Στόχος λέξεων:");
+        info1.setText("Στόχος λέξεων: " + gg.getsuccessWords());
         info1.setFont(new Font("Courier", Font.BOLD, 15));
 
-        info2.setText("Στόχος πόντων:");
+        info2.setText("Στόχος πόντων: " + gg.getsuccessPoints());
         info2.setFont(new Font("Courier", Font.BOLD, 15));
 
         b1.setPreferredSize(new Dimension(250, 50));
@@ -227,6 +221,11 @@ public class Card extends JComponent implements MouseListener {
         b3.setPreferredSize(new Dimension(200, 50));
         b4.setPreferredSize(new Dimension(200, 50));
         b5.setPreferredSize(new Dimension(200, 50));
+        bExit.setPreferredSize(new Dimension(250, 50));
+        bExit.setBackground(Color.RED);
+        bExit.setForeground(Color.white);
+        ButtonHandler bh = new  ButtonHandler();
+        bExit.addActionListener(bh);
 
         jp1.add(JMadeWord);
         jf2.add(jp1);
@@ -252,12 +251,11 @@ public class Card extends JComponent implements MouseListener {
         jp8.add(b5);
         jf2.add(jp8);
 
-        jp9.add(info1);
+        jp9.add(bExit);
         jf2.add(jp9);
-
+        jp10.add(info1);
         jp10.add(info2);
         jf2.add(jp10);
-
     }
 
     @Override
@@ -277,4 +275,16 @@ public class Card extends JComponent implements MouseListener {
     public void mouseExited(MouseEvent me) {
     }
 
+    class ButtonHandler implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            if(ae.getSource()==bExit)
+            {
+                System.exit(0);
+            }
+        }
+        
+    }
+    
 }
