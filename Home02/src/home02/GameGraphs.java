@@ -13,12 +13,15 @@ public class GameGraphs extends JFrame {
     private int x = 5, y = 5;
     Container pane = new Container();
     JFrame jf = new JFrame();
-    JButton button1,button3,button2;
-    JPanel row1,row2;
+    JButton button1, button3, button2;
+    JPanel row1, row2;
     JLabel label;
+    Card card;
 
     GameGraphs(int dimension, ArrayList<Letter> Shuffled_Chars) {
         super("Window");
+        card = new Card();
+        card.setArrayDimension(dimension);
         jf.setSize(dimension * 110, dimension * 115);
         int counter = 0;
         for (int i = 0; i < dimension; i++) {
