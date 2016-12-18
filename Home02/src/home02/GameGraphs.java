@@ -10,7 +10,8 @@ import javax.swing.JPanel;
 
 public class GameGraphs extends JFrame {
 
-    static int successPoints,successWords;
+    static int successPoints, successWords;
+    int PointsOfWords = 0, NumberOfWords = 1;
     private int x = 5, y = 5;
     Container pane = new Container();
     JFrame jf = new JFrame();
@@ -18,28 +19,44 @@ public class GameGraphs extends JFrame {
     JPanel row1, row2;
     JLabel label;
     Card card;
+    Game game;
     static int counter;
 
-    public void setsuccessPoints(int sp)
-    {
-        successPoints=sp;
+    public void setNumberOfWords(int n) {
+        NumberOfWords = n;
     }
-    public int getsuccessPoints()
-    {
+
+    public int getNumberOfWords() {
+        return NumberOfWords;
+    }
+
+    public void setPointsOfWords(int p) {
+        PointsOfWords += p;
+    }
+
+    public int getPointsOfWords() {
+        return PointsOfWords;
+    }
+
+    public void setsuccessPoints(int sp) {
+        successPoints = sp;
+    }
+
+    public int getsuccessPoints() {
         return successPoints;
     }
-    
-    public void setsuccessWords(int sw)
-    {
-        successWords=sw;
+
+    public void setsuccessWords(int sw) {
+        successWords = sw;
     }
-    public int getsuccessWords()
-    {
+
+    public int getsuccessWords() {
         return successWords;
     }
-    
-    public GameGraphs(){}
-            
+
+    public GameGraphs() {
+    }
+
     public GameGraphs(int dimension, ArrayList<Letter> Shuffled_Chars) {
         super("Window");
         card = new Card();
@@ -59,6 +76,6 @@ public class GameGraphs extends JFrame {
             x = 5;
             y += 105;
         }
-    //card.SecondWindow("", 0);
+        //card.SecondWindow("", 0);
     }
 }

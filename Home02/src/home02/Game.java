@@ -43,10 +43,11 @@ public class Game {
         file.OpenFile();
         file.ReadFile();
         file.Selected_Words(Choice);
-        //int count = 0;//μετρητής για τη θέση του γράμματος στην Shuffled_Chars
         GameGraphs gp = new GameGraphs(Choice, file.Shuffled_Chars);
         gp.setsuccessPoints(50);
         gp.setsuccessWords(5);
+        gp.setPointsOfWords(0);
+        gp.setNumberOfWords(1);
     }
 
     //συνάρτηση για την εμφάνιση του μενου τη πρώτη φορά ή για το ξεκίνημα επιλογής γραμμάτων από τον χρήστη
@@ -57,7 +58,7 @@ public class Game {
         }
         //αλλιώς ξεκινάει η επιλογή γραμμάτων από τον χρήστη για τη δημιουργία της λέξης
         //System.out.println("Ας παίξουμε λοιπόν!");
-        System.out.println("Επέλεξε γράμμα: ");
+        //System.out.println("Επέλεξε γράμμα: ");
         ChosenLetter(0, 0, user, Choice);// καλείται η συνάρτηση αυτή για την επιλογή του γράμματος
     }
 

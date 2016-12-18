@@ -18,12 +18,14 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Card extends JComponent implements MouseListener {
 
+    Game game = new Game();
     GameGraphs gg = new GameGraphs();
-    int Points = 0, AllPoints = 0;
+    int Points = 0, WordPoints = 0, PointsOfLetter = 0;
     static int dimension;
     static HashMap<Point, Character> lettersMap = new HashMap<>();
     static HashMap<Point, Integer> valuesMap = new HashMap<>();
@@ -31,6 +33,7 @@ public class Card extends JComponent implements MouseListener {
     FlowLayout fl = new FlowLayout();
     GridLayout gl = new GridLayout(11, 1);
     JButton bExit = new JButton("Διακοπή παιχνιδιού");
+    JButton bCheckWord = new JButton("ΕΛΕΓΧΟΣ ΛΕΞΗΣ");
     JButton b1 = new JButton("1)Αντικατάσταση γραμμάτων γραμμής");
     JButton b2 = new JButton("2)Αναδιάταξη γραμμής");
     JButton b3 = new JButton("3)Αναδιάταξη στήλης");
@@ -45,6 +48,7 @@ public class Card extends JComponent implements MouseListener {
     JPanel jp8 = new JPanel();
     JPanel jp9 = new JPanel();
     JPanel jp10 = new JPanel();
+    JPanel jp11 = new JPanel();
     JPanel jp3 = new JPanel();
     JLabel options = new JLabel();
     JLabel info2 = new JLabel();
@@ -106,6 +110,15 @@ public class Card extends JComponent implements MouseListener {
         return rect;
     }
 
+    public void setPointsOfLetter(int p) {
+        PointsOfLetter = p;
+        System.out.println(PointsOfLetter);
+    }
+
+    public int getPointsOfLetter() {
+        return PointsOfLetter;
+    }
+
     @Override
     public void paint(Graphics g) {
         super.paintComponent(g);
@@ -158,6 +171,7 @@ public class Card extends JComponent implements MouseListener {
                                     if (CurrentPoint2 == CurrentPoint) {
                                         value = entry.getValue();
                                         Points = entry2.getValue();
+                                        setPointsOfLetter(Points);
                                         LetterPoints = "" + Points;
                                         LetterChar = "" + value;
                                         g.setColor(Color.BLACK);
@@ -190,7 +204,7 @@ public class Card extends JComponent implements MouseListener {
         jf2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf2.setVisible(true);
 
-        AllPoints += points;
+        WordPoints += points;
         MadeWord += letter;
         if (letter.length() == 1) {
             char L = letter.charAt(0);
@@ -203,29 +217,44 @@ public class Card extends JComponent implements MouseListener {
         JMadeWord.setFont(new Font("Courier", Font.BOLD, 40));
 
         JYourPoints.setVisible(true);
-        JYourPoints.setText("Οι πόντοι σου ως τώρα: " + AllPoints);
+        JYourPoints.setText("Οι πόντοι της λέξης ως τώρα: " + WordPoints);
         JYourPoints.setForeground(Color.RED);
         JYourPoints.setFont(new Font("Courier", Font.BOLD, 40));
 
         options.setText("Πρόσθετες επιλογές:");
         options.setFont(new Font("Courier", Font.BOLD, 22));
 
-        info1.setText("Στόχος λέξεων: " + gg.getsuccessWords());
+        info1.setText("Τωρινή λέξη: " + gg.getNumberOfWords() + ", στόχος λέξεων: " + gg.getsuccessWords());
         info1.setFont(new Font("Courier", Font.BOLD, 15));
+        info1.setForeground(Color.DARK_GRAY);
 
-        info2.setText("Στόχος πόντων: " + gg.getsuccessPoints());
+        gg.setPointsOfWords(getPointsOfLetter());
+        if (gg.getPointsOfWords() > gg.getsuccessPoints()) {
+            JOptionPane.showMessageDialog(null, "Μάζεψες τους απαιτούμενους πόντους, ΝΙΚΗΣΕΣ!");
+            System.exit(0);
+        }
+
+        info2.setText("Πόντοι συνολικά: " + gg.getPointsOfWords() + ", Στόχος: " + gg.getsuccessPoints());
         info2.setFont(new Font("Courier", Font.BOLD, 15));
+        info2.setForeground(Color.DARK_GRAY);
 
         b1.setPreferredSize(new Dimension(250, 50));
         b2.setPreferredSize(new Dimension(200, 50));
         b3.setPreferredSize(new Dimension(200, 50));
         b4.setPreferredSize(new Dimension(200, 50));
         b5.setPreferredSize(new Dimension(200, 50));
+
         bExit.setPreferredSize(new Dimension(250, 50));
         bExit.setBackground(Color.RED);
         bExit.setForeground(Color.white);
-        ButtonHandler bh = new  ButtonHandler();
+
+        bCheckWord.setPreferredSize(new Dimension(250, 50));
+        bCheckWord.setBackground(Color.BLUE);
+        bCheckWord.setForeground(Color.white);
+
+        ButtonHandler bh = new ButtonHandler();
         bExit.addActionListener(bh);
+        bCheckWord.addActionListener(bh);
 
         jp1.add(JMadeWord);
         jf2.add(jp1);
@@ -252,10 +281,13 @@ public class Card extends JComponent implements MouseListener {
         jf2.add(jp8);
 
         jp9.add(bExit);
+        jp9.add(bCheckWord);
         jf2.add(jp9);
         jp10.add(info1);
-        jp10.add(info2);
         jf2.add(jp10);
+
+        jp11.add(info2);
+        jf2.add(jp11);
     }
 
     @Override
@@ -263,28 +295,41 @@ public class Card extends JComponent implements MouseListener {
         Myrepaint(getGraphics(), me);
     }
 
+    @Override
     public void mousePressed(MouseEvent me) {
     }
 
+    @Override
     public void mouseReleased(MouseEvent me) {
     }
 
+    @Override
     public void mouseEntered(MouseEvent me) {
     }
 
+    @Override
     public void mouseExited(MouseEvent me) {
     }
 
-    class ButtonHandler implements ActionListener{
+    class ButtonHandler implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent ae) {
-            if(ae.getSource()==bExit)
-            {
+            if (ae.getSource() == bExit) {
                 System.exit(0);
+            } else if (ae.getSource() == bCheckWord) {
+                game.SearchWord();
+            } else if (ae.getSource() == b1) {
+                game.RemakeLine(dimension);
+            } else if (ae.getSource() == b2) {
+                game.RearrangementLine();
+            } else if (ae.getSource() == b3) {
+                game.RearrangementRow();
+            } else if (ae.getSource() == b4) {
+                game.Rearrangement(dimension);
+            } else if (ae.getSource() == b5) {
+                game.Exchange_Letters();
             }
         }
-        
     }
-    
 }
