@@ -2,8 +2,7 @@ package home02;
 //icsd14134 Bonis Athanasios - icsd11039 Dimopoulos Georgios
 
 import java.awt.Color;
-
-
+import java.awt.Point;
 /*
 δηιμιουργούμε μία abstract class Letter για τα γράμματα με τα οποία 
 θα παίζει ο χρήστης. Είναι abstract διότι θα υπάρχουν κάποιες υποκλάσεις της Letter
@@ -14,10 +13,21 @@ public abstract class Letter {
     // το κάθε Letter έχει 4 γνωρίσματα
     
     private int Value; // αξία του Letter/γράμματος
+    private Point id;
     private char Character; // χαρακτήρας του Letter, Α ως Ω
     private boolean Situation; // boolean μεταβλητή για τη διαθεσιμότητα του γράμματος σε κάθε θέση στο παιχνίδι
     private Color Color; // χρώμα γράμματος, το οποίο χρώμα δίνει και διαφορετικό Value στο γράμμα
     public Letter(){};//empty Constructor
+    
+    
+    public void setPoint(Point id)
+    {
+        this.id=id;
+    }
+    public Point getPoint()
+    {
+        return id;
+    }
     
     // getter της Value, χωρίς σώμα, γιατί διαφορετική Value επιστρέφει σε κάθε getValue() στις υποκλάσεις
     public abstract int getValue();

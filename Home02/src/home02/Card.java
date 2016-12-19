@@ -64,6 +64,7 @@ public class Card extends JComponent implements MouseListener {
     private int Value;
     private Color ColorC;
     private int xCoord, yCoord;
+    Point LetterPoint;
 
     public char getCharacter() {
         return Character;
@@ -75,11 +76,33 @@ public class Card extends JComponent implements MouseListener {
 
     public Card() {
     }
-
-    public Card(char Character, int Value, Color color, int x, int y) {
-        this.Character = Character;
-        this.Value = Value;
-        this.ColorC = color;
+//    public Card(char Character, int Value, Color color, int x, int y) {
+//        this.Character = Character;
+//        this.Value = Value;
+//        this.ColorC = color;
+//        this.xCoord = x;
+//        this.yCoord = y;
+//        rect = new Polygon();
+//        rect.addPoint(xCoord, yCoord);
+//        rect.addPoint(xCoord, yCoord + rectLength);
+//        rect.addPoint(xCoord + rectLength, yCoord + rectLength);
+//        rect.addPoint(xCoord + rectLength, yCoord);
+//        setRect(rect);
+//        LetterPoint = new Point(x, y);
+//        letter.setPoint(LetterPoint);
+//        setPoint(LetterPoint);
+//        lettersMap.put(LetterPoint, Character);
+//        valuesMap.put(LetterPoint, Value);
+//        //System.out.println(LetterPoint + " " + Character);
+//        if (GameGraphs.counter == 0) {
+//            SecondWindow("", 0);
+//        }
+//        addMouseListener(this);
+//    }
+    public Card(Letter letter, int x, int y) {
+        this.Character = letter.getCharacter();
+        this.Value = letter.getValue();
+        this.ColorC = letter.getColor();
         this.xCoord = x;
         this.yCoord = y;
         rect = new Polygon();
@@ -88,10 +111,10 @@ public class Card extends JComponent implements MouseListener {
         rect.addPoint(xCoord + rectLength, yCoord + rectLength);
         rect.addPoint(xCoord + rectLength, yCoord);
         setRect(rect);
-        Point LetterPoint = new Point(x, y);
+        LetterPoint = new Point(x, y);
+        letter.setPoint(LetterPoint);
         lettersMap.put(LetterPoint, Character);
         valuesMap.put(LetterPoint, Value);
-        //System.out.println(LetterPoint + " " + Character);
         if (GameGraphs.counter == 0) {
             SecondWindow("", 0);
         }
@@ -225,7 +248,7 @@ public class Card extends JComponent implements MouseListener {
         options.setFont(new Font("Courier", Font.BOLD, 22));
 
         info1.setText("Τωρινή λέξη: " + gg.getNumberOfWords() + ", στόχος λέξεων: " + gg.getsuccessWords());
-        info1.setFont(new Font("Courier", Font.BOLD, 15));
+        info1.setFont(new Font("Courier", Font.ITALIC, 25));
         info1.setForeground(Color.DARK_GRAY);
 
         gg.setPointsOfWords(getPointsOfLetter());
@@ -235,7 +258,7 @@ public class Card extends JComponent implements MouseListener {
         }
 
         info2.setText("Πόντοι συνολικά: " + gg.getPointsOfWords() + ", Στόχος: " + gg.getsuccessPoints());
-        info2.setFont(new Font("Courier", Font.BOLD, 15));
+        info2.setFont(new Font("Courier", Font.ITALIC, 25));
         info2.setForeground(Color.DARK_GRAY);
 
         b1.setPreferredSize(new Dimension(250, 50));

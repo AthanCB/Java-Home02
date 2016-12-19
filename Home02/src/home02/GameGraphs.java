@@ -2,6 +2,7 @@ package home02;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Point;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,6 +14,7 @@ public class GameGraphs extends JFrame {
     static int successPoints, successWords;
     int PointsOfWords = 0, NumberOfWords = 1;
     private int x = 5, y = 5;
+    ArrayList<Letter> letterList = new ArrayList<>();
     Container pane = new Container();
     JFrame jf = new JFrame();
     JButton button1, button3, button2;
@@ -63,12 +65,14 @@ public class GameGraphs extends JFrame {
         card.setArrayDimension(dimension);
         jf.setSize(dimension * 110, dimension * 115);
         counter = 0;
-        for (int i = 0;
-                i < dimension;
-                i++) {
+        for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                Color c = Shuffled_Chars.get(counter).getColor();
-                jf.getContentPane().add(new Card(Shuffled_Chars.get(counter).getCharacter(), Shuffled_Chars.get(counter).getValue(), c, x, y));
+                Letter currentLetter = Shuffled_Chars.get(counter);
+                Color c = currentLetter.getColor();
+                //jf.getContentPane().add(new Card(currentLetter.getCharacter(), Shuffled_Chars.get(counter).getValue(), c, x, y));
+                jf.getContentPane().add(new Card(currentLetter, x, y));
+                currentLetter.setSituation(false);
+                letterList.add(currentLetter);
                 jf.setVisible(true);
                 counter++;
                 x += 105;
@@ -76,6 +80,5 @@ public class GameGraphs extends JFrame {
             x = 5;
             y += 105;
         }
-        //card.SecondWindow("", 0);
     }
 }
