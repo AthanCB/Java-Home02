@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashMap;
-import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -25,6 +24,7 @@ public class Card extends JComponent implements MouseListener {
 
     Game game = new Game();
     GameGraphs gg = new GameGraphs();
+    String tempChar;
     int Points = 0, WordPoints = 0, PointsOfLetter = 0;
     static int dimension;
     static HashMap<Point, Character> lettersMap = new HashMap<>();
@@ -56,13 +56,15 @@ public class Card extends JComponent implements MouseListener {
     JFrame jf2 = new JFrame();
     JLabel JMadeWord = new JLabel();// for row1
     JLabel JYourPoints = new JLabel();
-    private static String MadeWord = "", LetterChar = "", LetterPoints = "";
+    private static String MadeWord = "";
     private final int rectLength = 100;
     private Polygon rect, rect2;
     Graphics gp;
+    private boolean doubleWordValue = false;
     private char Character;
     private int Value;
     private Color ColorC;
+    int LastX = 0, LastY = 0;
     private int xCoord, yCoord;
     Point LetterPoint;
 
@@ -99,6 +101,7 @@ public class Card extends JComponent implements MouseListener {
 //        }
 //        addMouseListener(this);
 //    }
+
     public Card(Letter letter, int x, int y) {
         this.Character = letter.getCharacter();
         this.Value = letter.getValue();
@@ -116,7 +119,7 @@ public class Card extends JComponent implements MouseListener {
         lettersMap.put(LetterPoint, Character);
         valuesMap.put(LetterPoint, Value);
         if (GameGraphs.counter == 0) {
-            SecondWindow("", 0);
+            SecondWindow(null);
         }
         addMouseListener(this);
     }
@@ -169,9 +172,8 @@ public class Card extends JComponent implements MouseListener {
     }
 
     public void Myrepaint(Graphics g, MouseEvent me) {
-        Point point = me.getPoint();
+        Point currentPoint = me.getPoint();
         int X = 5, Y = 5;
-        char value = 'a';
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 rect2 = new Polygon();
@@ -180,37 +182,17 @@ public class Card extends JComponent implements MouseListener {
                 rect2.addPoint(X + rectLength, Y + rectLength);
                 rect2.addPoint(X + rectLength, Y);
                 setRect(rect2);
-                if (rect2.contains(point)) {
+                if (rect2.contains(currentPoint)) {
                     if (me.getButton() == MouseEvent.BUTTON1) {
-                        //System.out.println("Rect has X: " + rect2.getBounds().x + " Y: " + rect2.getBounds().y);
-                        for (Map.Entry<Point, Character> entry : lettersMap.entrySet()) {
-                            Point CurrentPoint = entry.getKey();
-                            if (CurrentPoint.getX() == rect2.getBounds().x && CurrentPoint.getY() == rect2.getBounds().y) {
-                                System.out.println("In coords:" + CurrentPoint + " found the letter: " + value);
-                                g.setColor(Color.yellow);
-                                g.fillRect(X, Y, 100, 100);
-                                for (Map.Entry<Point, Integer> entry2 : valuesMap.entrySet()) {
-                                    Point CurrentPoint2 = entry2.getKey();
-                                    if (CurrentPoint2 == CurrentPoint) {
-                                        value = entry.getValue();
-                                        Points = entry2.getValue();
-                                        setPointsOfLetter(Points);
-                                        LetterPoints = "" + Points;
-                                        LetterChar = "" + value;
-                                        g.setColor(Color.BLACK);
-                                        g.setFont(new Font("Courier", Font.BOLD, 71));
-                                        g.drawString(LetterChar, 25 + X, 75 + Y);
-
-                                        g.setFont(new Font("Courier", Font.BOLD, 12));
-                                        g.drawString(LetterPoints, 80 + X, 80 + Y);
-                                    }
-                                }
-                                SecondWindow(LetterChar, Points);
+                        for (Letter letterFromList : GameGraphs.letterList) {
+                            if (rect2.contains(letterFromList.getPoint())) {
+                                LetterChecks(g, letterFromList, X, Y);
                             }
                         }
                     }
                     if (me.getButton() == MouseEvent.BUTTON3) {
-                        System.out.println("RIGHT BUTTON IN PROGRESS");
+                        JOptionPane.showMessageDialog(null, "Επέλεξες ακύρωση της τωρινής λέξης");
+                        WordPoints = 0;
                     }
                 }
                 X += 105;
@@ -220,18 +202,62 @@ public class Card extends JComponent implements MouseListener {
         }
     }
 
-    protected void SecondWindow(String letter, int points) {
+    public void LetterChecks(Graphics g, Letter l, int X, int Y) {
+        if (l.getCharacter() == '?') {
+            tempChar = JOptionPane.showInputDialog("Επέλεξε εσύ το γράμμα επιθυμίας σου");
+            if (tempChar.length() > 0) {
+                l.setCharacter(tempChar.charAt(0));
+            } else {
+                tempChar = JOptionPane.showInputDialog("Επέλεξε ξανά το γράμμα επιθυμίας σου");
+            }
+        }
+        if (l.isSituation() == false) { // letter available
+            if ((LastX == 0 && LastY == 0) || (!(Math.abs(LastX - X) > 105) && !(Math.abs(LastY - Y) > 105))) {
+                l.setSituation(true);
+                LastX = X;
+                LastY = Y;
+                if (l.getColor() == Color.blue) {
+                    doubleWordValue = true;
+                }
+                System.out.println("Γράμμα με συντεταγμένες: " + l.getPoint() + ", " + l.getCharacter());
+                ReDrawLetter(g, l, X, Y);
+                SecondWindow(l);
+            } else {
+                JOptionPane.showMessageDialog(null, "Δεν είναι γειτονικό αυτό το γράμμα");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Χρησιμοποιήθηκε αυτό το γράμμα");
+        }
+
+    }
+
+    public void ReDrawLetter(Graphics g, Letter l, int X, int Y) {
+        String LetterPoints = "" + l.getValue();
+        String LetterChar = "" + l.getCharacter();
+        g.setColor(Color.yellow);
+        g.fillRect(X, Y, 100, 100);
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Courier", Font.BOLD, 71));
+        g.drawString(LetterChar, 25 + X, 75 + Y);
+        g.setFont(new Font("Courier", Font.BOLD, 12));
+        g.drawString(LetterPoints, 80 + X, 80 + Y);
+    }
+
+    protected void SecondWindow(Letter letter) {
         jf2.setLayout(gl);
         jf2.setSize(800, 1000);
         jf2.setLocation(1000, 5);
         jf2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf2.setVisible(true);
 
-        WordPoints += points;
-        MadeWord += letter;
-        if (letter.length() == 1) {
-            char L = letter.charAt(0);
-            setCharacter(L);
+        if (GameGraphs.counter == 0) {
+            WordPoints = 0;
+            MadeWord = "";
+            gg.setPointsOfWords(0);
+        } else {
+            WordPoints += letter.getValue();
+            MadeWord += letter.getCharacter();
+            gg.setPointsOfWords(letter.getValue());
         }
 
         JMadeWord.setVisible(true);
@@ -251,7 +277,6 @@ public class Card extends JComponent implements MouseListener {
         info1.setFont(new Font("Courier", Font.ITALIC, 25));
         info1.setForeground(Color.DARK_GRAY);
 
-        gg.setPointsOfWords(getPointsOfLetter());
         if (gg.getPointsOfWords() > gg.getsuccessPoints()) {
             JOptionPane.showMessageDialog(null, "Μάζεψες τους απαιτούμενους πόντους, ΝΙΚΗΣΕΣ!");
             System.exit(0);
@@ -341,6 +366,9 @@ public class Card extends JComponent implements MouseListener {
             if (ae.getSource() == bExit) {
                 System.exit(0);
             } else if (ae.getSource() == bCheckWord) {
+                if (doubleWordValue == true) {
+                    WordPoints *= 2;
+                }
                 game.SearchWord();
             } else if (ae.getSource() == b1) {
                 game.RemakeLine(dimension);

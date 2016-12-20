@@ -2,7 +2,6 @@ package home02;
 
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Point;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,7 +13,7 @@ public class GameGraphs extends JFrame {
     static int successPoints, successWords;
     int PointsOfWords = 0, NumberOfWords = 1;
     private int x = 5, y = 5;
-    ArrayList<Letter> letterList = new ArrayList<>();
+    static ArrayList<Letter> letterList = new ArrayList<>();
     Container pane = new Container();
     JFrame jf = new JFrame();
     JButton button1, button3, button2;
