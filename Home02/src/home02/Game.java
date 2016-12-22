@@ -8,6 +8,7 @@ package home02;
  */
 import java.awt.Color;
 import java.util.*;
+import javax.swing.JOptionPane;
 
 public class Game {
 
@@ -56,9 +57,6 @@ public class Game {
             User_Menu(Choice);
             counterDismiss++;
         }
-        //αλλιώς ξεκινάει η επιλογή γραμμάτων από τον χρήστη για τη δημιουργία της λέξης
-        //System.out.println("Ας παίξουμε λοιπόν!");
-        //System.out.println("Επέλεξε γράμμα: ");
         ChosenLetter(0, 0, user, Choice);// καλείται η συνάρτηση αυτή για την επιλογή του γράμματος
     }
 
@@ -156,7 +154,7 @@ public class Game {
                     Points = 2 * Points;
                 }
                 //παρουσιάζουμε τους πόντους της λέξης που έγραψε ο χρήστης αν τη βρούμε στο αρχείο μέσω της SearchWord
-                if (SearchWord() == true) {
+                if (SearchWord(Word) == true) {
                     AllPoints += Points;
                     WordCounter++;
                     System.out.println("Συνολικόι πόντοι λέξης: " + Points);
@@ -170,12 +168,14 @@ public class Game {
     }
 
     // εύρεση της δωσμένης από τον χρήστη λέξη στο αρχείο
-    public boolean SearchWord() {
+    public boolean SearchWord(String word) {
         int counter = 0;//μετρητής για την εύρεση της λέξης
         for (int i = 0; i < file.AllWordsList.size(); i++) {
-            if (Word.equals(file.AllWordsList.get(i))) {//αν βρέθηκε η λέξη στο αρχείο
+            if (word.equals(file.AllWordsList.get(i))) {//αν βρέθηκε η λέξη στο αρχείο
+            //if (Word.equals(file.AllWordsList.get(i))) {
                 counter++;
-                System.out.println("Βρήκες την λέξη");
+                //System.out.println("Βρήκες την λέξη");
+                JOptionPane.showConfirmDialog(null,"Βρήκες την λέξη");
                 ReplaceWords();//αντικάτασταση της λέξης μέσω της μεθόδου αυτής
                 Word = "";// η λέξη γίνεται πάλι έμμεσα κενή για να γεμίσει ξανά από τα γράμματα της επόμενης λέξης
                 LettersCounter = 0;//αντίστοιχα ο μετρητής των γραμμάτων της λέξης μηδενίζεται και αυτός

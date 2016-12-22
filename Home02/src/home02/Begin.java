@@ -7,13 +7,16 @@ package home02;
  αντικειμένου τύπου Game η συνάρτηση StartGame αυτής της κλάσσης Game και το παιχνίδι ξεκινάει και 
  υλοποιείται στην άλλη κλάσση
  */
-import java.util.*;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class Begin {
 
+    JFrame firstFrame = new JFrame("Begin");
+    JFileChooser jfc;
+
     public static void main(String[] args) {
-        //System.out.println("Γειά σου, δώσε το όνομα σου: ");
         String Name = JOptionPane.showInputDialog("Γειά σου, δώσε το όνομα σου: ");  //String Name = in.next();// εισαγωγή ονόματος από τον χρήστη//String Name = in.next();// εισαγωγή ονόματος από τον χρήστη
         while (Name.length() == 0) {
             Name = JOptionPane.showInputDialog("Κάτι πήγε λάθος, δώσε το όνομα σου σωστά: ");
@@ -47,6 +50,12 @@ public class Begin {
                 choice = JOptionPane.showOptionDialog(null, null, " δώσε το μέγεθος του πίνακα: 5x5 or 8x8 or 10x10: ", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, opt, opt[1]);
             }
         }
+        GameGraphs gg = new GameGraphs();
+        gg.SecondWindow(null);
+//        firstFrame.setSize(400, 400);
+//        firstFrame.setVisible(true);
+//        firstFrame.setLocationRelativeTo(null);
+//        firstFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Game game = new Game(); // δημιουργία αντικειμένου τύπου Game 
         game.StartGame(user, size);// κάλεσμα της συνάρτησης StartGame της κλάσσης game 
     }
