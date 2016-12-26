@@ -51,7 +51,7 @@ public class Begin {
             }
         }
         GameGraphs gg = new GameGraphs();
-        gg.SecondWindow(null);
+        //gg.SecondWindow(null, false);
 //        firstFrame.setSize(400, 400);
 //        firstFrame.setVisible(true);
 //        firstFrame.setLocationRelativeTo(null);

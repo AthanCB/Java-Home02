@@ -12,16 +12,17 @@ import java.util.HashMap;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
-public class CardGraphs extends JComponent implements MouseListener{
+public class CardGraphs extends JComponent implements MouseListener {
 
     Game game = new Game();
     GameGraphs gg = new GameGraphs();
     String tempChar;
-    int Points = 0, WordPoints = 0, PointsOfLetter = 0;
+    int Points = 0, PointsOfLetter = 0;
     static int dimension;
     static HashMap<Point, Character> lettersMap = new HashMap<>();
     static HashMap<Point, Integer> valuesMap = new HashMap<>();
     ArrayList<Point> chosenLettersList = new ArrayList<>();
+    ArrayList<Point> lastXYlist = new ArrayList<>();
     private final int rectLength = 100;
     private Polygon rect, rect2;
     Graphics gp;
@@ -30,9 +31,26 @@ public class CardGraphs extends JComponent implements MouseListener{
     private int Value;
     private Color ColorC;
     int LastX = 0, LastY = 0;
+    boolean STAT;
     private int xCoord, yCoord;
     Point LetterPoint;
     StringBuilder sb;
+
+    public boolean getStatBlackColor() {
+        return statBlackColor;
+    }
+
+    public void setStatBlackColor(boolean statBlackColor) {
+        this.statBlackColor = statBlackColor;
+    }
+
+    public boolean getDoubleWordValue() {
+        return doubleWordValue;
+    }
+
+    public void setDoubleWordValue(boolean doubleWordValue) {
+        this.doubleWordValue = doubleWordValue;
+    }
 
     public char getCharacter() {
         return Character;
@@ -126,17 +144,20 @@ public class CardGraphs extends JComponent implements MouseListener{
                     if (me.getButton() == MouseEvent.BUTTON1) {
                         for (Letter letterFromList : GameGraphs.letterList) {
                             if (rect2.contains(letterFromList.getPoint())) {
-                                if (LetterChecks(g, letterFromList, X, Y)) {
-                                    Point tempPoint = new Point(X, Y);
-                                    chosenLettersList.add(tempPoint);
+                                if (LetterChecks(g, letterFromList, X, Y) == true) {
+                                    chosenLettersList.add(new Point(X, Y));
                                 }
                             }
                         }
                     }
                     if (me.getButton() == MouseEvent.BUTTON3) {
-                        JOptionPane.showMessageDialog(null, "Επέλεξες ακύρωση της τωρινής λέξης");
-                        WordPoints = 0;
-                        //make all black all again
+                        int answer = JOptionPane.showConfirmDialog(null, "Θες να ακυρώσεις τη τωρινή λέξη");
+                        if (answer == 0) {
+                            gg.WordPoints = 0;
+                            gg.setMadeWord("");
+                            ClearAllLetters(g);
+                            chosenLettersList.clear();
+                        }
                     }
                 }
                 X += 105;
@@ -146,36 +167,77 @@ public class CardGraphs extends JComponent implements MouseListener{
         }
     }
 
-    public boolean LetterChecks(Graphics g, Letter l, int X, int Y) {
-        if (l.getCharacter() == '?') {
-            tempChar = JOptionPane.showInputDialog("Επέλεξε εσύ το γράμμα επιθυμίας σου");
-            if (tempChar.length() > 0) {
-                l.setCharacter(tempChar.charAt(0));
-            } else {
-                tempChar = JOptionPane.showInputDialog("Επέλεξε ξανά το γράμμα επιθυμίας σου");
+    public void ClearAllLetters(Graphics g) {
+        int X = 5, Y = 5;
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+                Point tP = new Point(X, Y);
+                for (Letter letterFromList : GameGraphs.letterList) {
+                    if ((letterFromList.getPoint().x == tP.x) && (letterFromList.getPoint().y == tP.y)) {
+                        if (letterFromList.isSituation() == true) { // if used
+                            letterFromList.setSituation(false);
+                            setStatBlackColor(true);
+                            g.setColor(letterFromList.getColor());
+                            g.fillRect(X, Y, 100, 100);
+
+                            g.setColor(Color.BLACK);
+                            g.setFont(new Font("Courier", Font.BOLD, 71));
+                            g.drawString("" + letterFromList.getCharacter(), 25 + X, 75 + Y);
+                            g.setFont(new Font("Courier", Font.BOLD, 12));
+                            g.drawString("" + letterFromList.getValue(), 80 + X, 80 + Y);
+                        }
+                    }
+                }
+                X += 105;
             }
+            X = 5;
+            Y += 105;
         }
+        JOptionPane.showMessageDialog(null, "ΞΑΝΑ ΑΠΌ ΤΗΝ ΑΡΧΉ Η ΛΈΞΗ ΛΟΙΠΟΝ");
+        X = 5;
+        Y = 5;
+        LastX = 0;
+        LastY = 0;
+        gg.counter = 0;
+        gg.manageWindow(null, false);
+    }
+
+    public boolean LetterChecks(Graphics g, Letter l, int X, int Y) {
         if (LastX == X && LastY == Y) {//last letter
             int ch = JOptionPane.showConfirmDialog(null, "Θες να ακυρώσεις το τελευταίο γράμμα");
             if (ch == 0) {
-                l.setSituation(false);
-                statBlackColor = true;
-                ReBlackLetter(g, l, X, Y);
-                gg.SecondWindow(l);
+                l.setSituation(false);//available again
+                setStatBlackColor(true);
+                STAT = getStatBlackColor();
+                ReDrawLetter(g, l, X, Y, STAT);
+                gg.manageWindow(l, STAT);
                 chosenLettersList.remove(0);
+                lastXYlist.remove(0);
+                return false;
             }
         } else if (l.isSituation() == false) { // letter available
             if ((LastX == 0 && LastY == 0) || (!(Math.abs(LastX - X) > 105) && !(Math.abs(LastY - Y) > 105))) {
-                //ChosenLetters.add(Y);
-                l.setSituation(true);
+                if (l.getCharacter() == '?') {
+                    tempChar = JOptionPane.showInputDialog("Επέλεξε εσύ το γράμμα επιθυμίας σου");
+                    if (tempChar.length() > 0) {
+                        l.setCharacter(tempChar.charAt(0));
+                    } else {
+                        tempChar = JOptionPane.showInputDialog("Επέλεξε ξανά το γράμμα επιθυμίας σου");
+                    }
+                }
+                lastXYlist.add(new Point(X, Y));
                 LastX = X;
                 LastY = Y;
                 if (l.getColor() == Color.blue) {
-                    doubleWordValue = true;
+                    setDoubleWordValue(true);
+                    JOptionPane.showMessageDialog(null, "Γράμμα για διπλασιαμός πόντων στη λέξη");
                 }
-                System.out.println("Γράμμα με συντεταγμένες: " + l.getPoint() + ", " + l.getCharacter());
-                ReDrawLetter(g, l, X, Y);
-                gg.SecondWindow(l);
+                System.out.println("Γράμμα με συντεταγμένες: " + l.getPoint() + ", " + l.getCharacter() + ", " + l.getValue());
+                l.setSituation(true);
+                setStatBlackColor(false);
+                STAT = getStatBlackColor();
+                ReDrawLetter(g, l, X, Y, STAT);
+                gg.manageWindow(l, STAT);
                 return true;
             } else {
                 JOptionPane.showMessageDialog(null, "Δεν είναι γειτονικό αυτό το γράμμα");
@@ -188,29 +250,25 @@ public class CardGraphs extends JComponent implements MouseListener{
         return true; // never runned
     }
 
-    public void ReBlackLetter(Graphics g, Letter l, int X, int Y) {
+    public void ReDrawLetter(Graphics g, Letter l, int X, int Y, boolean stat) {
         String LetterPoints = "" + l.getValue();
         String LetterChar = "" + l.getCharacter();
-        g.setColor(Color.white);
-        g.fillRect(X, Y, 100, 100);
+        if (stat == true) {
+            g.setColor(l.getColor());
+            //g.setColor(Color.white);
+            g.fillRect(X, Y, 100, 100);
+        } else {
+            g.setColor(Color.yellow);
+            g.fillRect(X, Y, 100, 100);
+        }
         g.setColor(Color.BLACK);
         g.setFont(new Font("Courier", Font.BOLD, 71));
         g.drawString(LetterChar, 25 + X, 75 + Y);
+
         g.setFont(new Font("Courier", Font.BOLD, 12));
         g.drawString(LetterPoints, 80 + X, 80 + Y);
     }
 
-    public void ReDrawLetter(Graphics g, Letter l, int X, int Y) {
-        String LetterPoints = "" + l.getValue();
-        String LetterChar = "" + l.getCharacter();
-        g.setColor(Color.yellow);
-        g.fillRect(X, Y, 100, 100);
-        g.setColor(Color.BLACK);
-        g.setFont(new Font("Courier", Font.BOLD, 71));
-        g.drawString(LetterChar, 25 + X, 75 + Y);
-        g.setFont(new Font("Courier", Font.BOLD, 12));
-        g.drawString(LetterPoints, 80 + X, 80 + Y);
-    }
     @Override
     public void mouseClicked(MouseEvent me) {
         Myrepaint(getGraphics(), me);

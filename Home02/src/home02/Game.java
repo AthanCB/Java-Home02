@@ -46,7 +46,7 @@ public class Game {
         file.Selected_Words(Choice);
         GameGraphs gp = new GameGraphs(Choice, file.Shuffled_Chars);
         gp.setsuccessPoints(50);
-        gp.setsuccessWords(5);
+        //gp.setsuccessWords(5);
         gp.setPointsOfWords(0);
         gp.setNumberOfWords(1);
     }
@@ -175,14 +175,12 @@ public class Game {
             //if (Word.equals(file.AllWordsList.get(i))) {
                 counter++;
                 //System.out.println("Βρήκες την λέξη");
-                JOptionPane.showConfirmDialog(null,"Βρήκες την λέξη");
                 ReplaceWords();//αντικάτασταση της λέξης μέσω της μεθόδου αυτής
                 Word = "";// η λέξη γίνεται πάλι έμμεσα κενή για να γεμίσει ξανά από τα γράμματα της επόμενης λέξης
                 LettersCounter = 0;//αντίστοιχα ο μετρητής των γραμμάτων της λέξης μηδενίζεται και αυτός
             }
         }// αν ο μετρητής δεν είναι θετικός τότε σημαίνει ότι δε βρέθηκε η λέξη
         if (counter == 0) {
-            System.out.println("Δεν υπάρχει αυτή η λέξη στο αρχείο");
             //ξαναθέτουμε όλα τις καταστάσεις των γράμματων σαν false για να είναι διαθέσιμα τα γράμματα όλα πάλι
             for (int k = 0; k < Array.length; k++) {
                 for (int m = 0; m < Array[k].length; m++) {
