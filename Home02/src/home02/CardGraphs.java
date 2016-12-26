@@ -17,15 +17,13 @@ public class CardGraphs extends JComponent implements MouseListener {
     Game game = new Game();
     GameGraphs gg = new GameGraphs();
     String tempChar;
-    int Points = 0, PointsOfLetter = 0;
+    int Points = 0, counter = 1, PointsOfLetter = 0;
     static int dimension;
     static HashMap<Point, Character> lettersMap = new HashMap<>();
     static HashMap<Point, Integer> valuesMap = new HashMap<>();
     ArrayList<Point> chosenLettersList = new ArrayList<>();
-    ArrayList<Point> lastXYlist = new ArrayList<>();
     private final int rectLength = 100;
     private Polygon rect, rect2;
-    Graphics gp;
     private boolean doubleWordValue = false, statBlackColor = false;
     private char Character;
     private int Value;
@@ -61,6 +59,7 @@ public class CardGraphs extends JComponent implements MouseListener {
     }
 
     public CardGraphs() {
+        //gg.manageWindow(null, true);
     }
 
     public CardGraphs(Letter letter, int x, int y) {
@@ -79,6 +78,7 @@ public class CardGraphs extends JComponent implements MouseListener {
         letter.setPoint(LetterPoint);
         lettersMap.put(LetterPoint, Character);
         valuesMap.put(LetterPoint, Value);
+        gg.setCounter(counter++);
         addMouseListener(this);
     }
 
@@ -146,6 +146,8 @@ public class CardGraphs extends JComponent implements MouseListener {
                             if (rect2.contains(letterFromList.getPoint())) {
                                 if (LetterChecks(g, letterFromList, X, Y) == true) {
                                     chosenLettersList.add(new Point(X, Y));
+                                } else {
+                                    System.out.println("Δε προστέθηκε κάτι τώρα");
                                 }
                             }
                         }
@@ -198,8 +200,8 @@ public class CardGraphs extends JComponent implements MouseListener {
         Y = 5;
         LastX = 0;
         LastY = 0;
-        gg.counter = 0;
-        gg.manageWindow(null, false);
+        gg.setCounter(0);
+        gg.manageWindow(null, true);
     }
 
     public boolean LetterChecks(Graphics g, Letter l, int X, int Y) {
@@ -211,8 +213,16 @@ public class CardGraphs extends JComponent implements MouseListener {
                 STAT = getStatBlackColor();
                 ReDrawLetter(g, l, X, Y, STAT);
                 gg.manageWindow(l, STAT);
-                chosenLettersList.remove(0);
-                lastXYlist.remove(0);
+                chosenLettersList.remove(chosenLettersList.size() - 1);
+                if (chosenLettersList.size() > 0) {
+                    LastX = chosenLettersList.get(chosenLettersList.size() - 1).x;
+                    LastY = chosenLettersList.get(chosenLettersList.size() - 1).y;
+                } else { //chosenLettersList.size() == 0
+                    JOptionPane.showMessageDialog(null, "Κανένα διαθέσιμο γράμμα πλέον");
+                    //chosenLettersList.clear(); //for safety
+                    LastX = 0;
+                    LastY = 0;
+                }
                 return false;
             }
         } else if (l.isSituation() == false) { // letter available
@@ -225,7 +235,6 @@ public class CardGraphs extends JComponent implements MouseListener {
                         tempChar = JOptionPane.showInputDialog("Επέλεξε ξανά το γράμμα επιθυμίας σου");
                     }
                 }
-                lastXYlist.add(new Point(X, Y));
                 LastX = X;
                 LastY = Y;
                 if (l.getColor() == Color.blue) {
@@ -234,6 +243,8 @@ public class CardGraphs extends JComponent implements MouseListener {
                 }
                 System.out.println("Γράμμα με συντεταγμένες: " + l.getPoint() + ", " + l.getCharacter() + ", " + l.getValue());
                 l.setSituation(true);
+                counter++;
+                gg.setCounter(counter);
                 setStatBlackColor(false);
                 STAT = getStatBlackColor();
                 ReDrawLetter(g, l, X, Y, STAT);

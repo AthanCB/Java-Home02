@@ -25,7 +25,7 @@ public class Begin {
         user.setName(Name); // σώζουμε το όνομα που έδωσε ο χρήστης μέσω της setter της User
         boolean stat = true; // για την while 
         String opt[] = {"5x5", "8x8", "10x10", "EXIT"};
-        int choice = JOptionPane.showOptionDialog(null, null, " δώσε το μέγεθος του πίνακα:", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, opt, opt[1]);
+        int choice = JOptionPane.showOptionDialog(null, null, user.getName() + " δώσε το μέγεθος του πίνακα:", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, opt, opt[1]);
         // παρακάτω θα τρέχει η while όσο ο χρήστης δίνει μη συμβατό αριθμό για τις διαστάσεις του πίνακα
         int size = 0;
         while (stat == true) {
@@ -50,13 +50,7 @@ public class Begin {
                 choice = JOptionPane.showOptionDialog(null, null, " δώσε το μέγεθος του πίνακα: 5x5 or 8x8 or 10x10: ", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, opt, opt[1]);
             }
         }
-        GameGraphs gg = new GameGraphs();
-        //gg.SecondWindow(null, false);
-//        firstFrame.setSize(400, 400);
-//        firstFrame.setVisible(true);
-//        firstFrame.setLocationRelativeTo(null);
-//        firstFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Game game = new Game(); // δημιουργία αντικειμένου τύπου Game 
-        game.StartGame(user, size);// κάλεσμα της συνάρτησης StartGame της κλάσσης game 
+        game.CreateTable(user, size);// κάλεσμα της συνάρτησης StartGame της κλάσσης game 
     }
 }

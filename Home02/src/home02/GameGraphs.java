@@ -31,6 +31,9 @@ public class GameGraphs extends JFrame {
     ArrayList<Point> chosenLettersList = new ArrayList<>();
     FlowLayout fl = new FlowLayout();
     GridLayout gl = new GridLayout(13, 1);
+//    JPanel panels[] = new JPanel[20];
+//    JLabel labels[] = new JLabel[5];
+//    JButton buttons[] = new JButton[10];
     JButton bExit = new JButton("Διακοπή παιχνιδιού");
     JButton bRestart = new JButton("Επανεκκίνηση παιχνιδιού");
     JButton bCheckWord = new JButton("ΕΛΕΓΧΟΣ ΛΕΞΗΣ");
@@ -76,7 +79,7 @@ public class GameGraphs extends JFrame {
     JLabel label;
     CardGraphs card;
     Game game;
-    static int counter = 0;
+    int counter = 0;
 
     public void setMadeWord(String w) {
         MadeWord = w;
@@ -95,7 +98,7 @@ public class GameGraphs extends JFrame {
     }
 
     public void setPointsOfWords(int p) {
-        PointsOfWords += p;
+        PointsOfWords = p;
     }
 
     public int getPointsOfWords() {
@@ -121,18 +124,16 @@ public class GameGraphs extends JFrame {
     public GameGraphs() {
     }
 
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public GameGraphs(int dimension, ArrayList<Letter> Shuffled_Chars) {
         super("Window");
         card = new CardGraphs();
         card.setArrayDimension(dimension);
         jf.setSize(dimension * 110, dimension * 115);
-        counter = 0;
-        manageWindow(null, true);
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 Letter currentLetter = Shuffled_Chars.get(counter);
                 Color c = currentLetter.getColor();
-                //jf.getContentPane().add(new Card(currentLetter.getCharacter(), Shuffled_Chars.get(counter).getValue(), c, x, y));
                 jf.getContentPane().add(new CardGraphs(currentLetter, x, y));
                 currentLetter.setSituation(false);
                 letterList.add(currentLetter);
@@ -143,29 +144,40 @@ public class GameGraphs extends JFrame {
             x = 5;
             y += 105;
         }
+        setCounter(counter);
     }
 
+//    public void createComponents() {
+//        for(int i=0;i<labels.length;i++)
+//        {
+//            labels[i]= new JLabel();
+//        }
+//    }
     public void manageWindow(Letter letter, boolean stBC) {
         jf2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf2.setVisible(true);
         jf2.setLayout(gl);
         jf2.setSize(800, 1000);
         jf2.setLocation(1000, 5);
-        if (counter == 0 && stBC == true) { // first letter
+        if (getCounter() == 0) { // first letter
+            //System.out.println("begin");
             WordPoints = 0;
             setMadeWord("");
             setPointsOfWords(0);
-        } else if (stBC == true && counter != 0) {//remove last letter
-            WordPoints -= letter.getValue();
-            sb = new StringBuilder(MadeWord);
-            sb.deleteCharAt(MadeWord.length() - 1);
-            setMadeWord(sb.toString());
         } else {
-            WordPoints += letter.getValue();
-            MadeWord += letter.getCharacter();
-            setPointsOfWords(WordPoints);
+            if (stBC == true && getCounter() != 0) {//remove last letter
+                //System.out.println("remove last letter");
+                WordPoints -= letter.getValue();
+                sb = new StringBuilder(MadeWord);
+                sb.deleteCharAt(MadeWord.length() - 1);
+                setMadeWord(sb.toString());
+            } else {// (stBC == false && counter != 0) 
+                //System.out.println("just a letter");
+                WordPoints += letter.getValue();
+                MadeWord += letter.getCharacter();
+                setPointsOfWords(WordPoints);
+            }
         }
-
         JMadeWord.setVisible(true);
         JMadeWord.setText("Η λέξη ως τώρα: " + getMadeWord());
         JMadeWord.setForeground(Color.BLUE);
@@ -294,7 +306,7 @@ public class GameGraphs extends JFrame {
             scan.close();
         } catch (FileNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "Το αρχείο με τους χρήστες δε βρέθηκε", "File error", JOptionPane.ERROR_MESSAGE);
-        }        
+        }
     }
 
     class ButtonHandler implements ActionListener {
@@ -307,7 +319,7 @@ public class GameGraphs extends JFrame {
                 if (card.getDoubleWordValue() == true) {
                     WordPoints *= 2;
                 }
-                setPointsOfWords(WordPoints);
+                //setPointsOfWords(WordPoints);
                 if (MadeWord.length() >= 3) {
                     if (JOptionPane.showConfirmDialog(null, "Επέλεξες να ελέγξεις τη λέξη σου") == 0) {
                         if (game.SearchWord(MadeWord)) {
@@ -321,7 +333,7 @@ public class GameGraphs extends JFrame {
                     JOptionPane.showMessageDialog(null, "Δεν μπορείς να ελέγξεις τη λέξη, πρέπει το λιγότερο 3 γράμματα να διαλέξεις ", "File error", JOptionPane.ERROR_MESSAGE);
                 }
             } else if (ae.getSource() == b1) {
-                if (JOptionPane.showConfirmDialog(null, "Επέλεξες να αντικατασήσεις μια σειρά") == 0) {
+                if (JOptionPane.showConfirmDialog(null, "Επέλεξε να αντικατασήσεις μια σειρά") == 0) {
                     game.RemakeLine(dimension);
                 }
             } else if (ae.getSource() == b2) {

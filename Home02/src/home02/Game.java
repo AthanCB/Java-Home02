@@ -15,7 +15,6 @@ public class Game {
     // άδειος constructor
     public Game() {
     }
-
     // πίνακας τύπου γράμματος/Letter 
     Letter Array[][];
     GameGraphs gp;
@@ -31,24 +30,20 @@ public class Game {
     private int Points = 0, AllPoints = 0, counterDismiss = 0;
     // μεταβλητές των πόντων της λέξης, όλων των πόντων του χρήστη και μετρητής για την εμφάνιση του μενού αν είναι 0
 
-    //η συνάρτηση αυτή καλείται από την κλάσση Home02 όπου και παίρνει παράμετρο τον χρήστη και την επιλογή μεγέθους για τον πίνακα
-    public void StartGame(User user, int Choice) {
-        Create_Table(Choice);//ξεκίνημα παιχνιδιού με τοκάλεσμα της συνάρτησης για τη δημιουργία και τις ενέργεις που κάνουμε στον πίνακα 
-        LetsPlay(Choice, Word, user);// αφού δημιουργήθηκαν οι λίστες στην άλλη κλάσση ξεκινάει ο χρήστης και παίζει μέσω του καλέσματος της LetsPlay()
-    }
-
     //μέθοδος για τη δημιουργία του πίνακα μέσω συναρτήσεων που είναι στην κλασση ManageList και τη καλεί το αντικείμενο file
-    public void Create_Table(int Choice) {
+    public void CreateTable(User user, int Choice) {
         Array = new Letter[Choice][Choice];// δημιουργία πίνακα με τις διαστάσεις που μας έδωσε ο χρήστης 
         //παρακάτω καλούμε τις μεθόδους για τη διαχείρηση του αρχείου και των λεξεών του 
         file.OpenFile();
         file.ReadFile();
         file.Selected_Words(Choice);
-        GameGraphs gp = new GameGraphs(Choice, file.Shuffled_Chars);
-        gp.setsuccessPoints(50);
-        //gp.setsuccessWords(5);
-        gp.setPointsOfWords(0);
-        gp.setNumberOfWords(1);
+        GameGraphs gameG = new GameGraphs(Choice, file.Shuffled_Chars);
+        gameG.setsuccessPoints(50);
+        gameG.setPointsOfWords(0);
+        gameG.setNumberOfWords(1);
+        gameG.setCounter(0);
+        gameG.manageWindow(null, false);
+        //LetsPlay(Choice, Word, user);
     }
 
     //συνάρτηση για την εμφάνιση του μενου τη πρώτη φορά ή για το ξεκίνημα επιλογής γραμμάτων από τον χρήστη
@@ -172,7 +167,7 @@ public class Game {
         int counter = 0;//μετρητής για την εύρεση της λέξης
         for (int i = 0; i < file.AllWordsList.size(); i++) {
             if (word.equals(file.AllWordsList.get(i))) {//αν βρέθηκε η λέξη στο αρχείο
-            //if (Word.equals(file.AllWordsList.get(i))) {
+                //if (Word.equals(file.AllWordsList.get(i))) {
                 counter++;
                 //System.out.println("Βρήκες την λέξη");
                 ReplaceWords();//αντικάτασταση της λέξης μέσω της μεθόδου αυτής
@@ -333,12 +328,11 @@ public class Game {
     public void RemakeLine(int Choice) {
         boolean statt = true;
         while (statt) {
-            System.out.println("Επέλεξε γραμμή διαγραφής: ");
-            Scanner in = new Scanner(System.in);
-            int line = in.nextInt() - 1;
+            String InputChoice = JOptionPane.showInputDialog(null, "Επέλεξε γραμμή διαγραφής: ");
+            int line = Integer.parseInt(InputChoice) - 1;
             int count = 0;//για την θέση επιλογής του γράμματος από την Shuffled_Chars
             file.Selected_Words(Choice);// για μία γραμμή παίρνουμε μέσω της Selected_Words νέα γράμματα 
-            if (line < Array.length && line >= 0) {//έλεγχος εγκυρότητας
+            if ((line < Choice) && (line >= 0)) {//έλεγχος εγκυρότητας
                 for (int k = 0; k < Array.length; k++) {
                     //γεμίζουμε την επιλεγμένη γραμμή με τα νέα γράμματα από την Shuffled_Chars
                     Array[line][k] = file.Shuffled_Chars.get(count);
@@ -346,7 +340,7 @@ public class Game {
                 }
                 statt = false;
             } else {
-                System.out.println("Δεν έχει τέτοια γραμμή ο πίνακας ξαναπροσπάθησε");
+                JOptionPane.showMessageDialog(null, "Δεν έχει τέτοια γραμμή ο πίνακας ξαναπροσπάθησε");
             }
         }
     }
