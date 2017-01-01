@@ -8,9 +8,10 @@ package home02;
  */
 import java.awt.Color;
 import java.util.*;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class Game {
+public class Game extends JFrame {
 
     // άδειος constructor
     public Game() {
@@ -42,7 +43,7 @@ public class Game {
         gameG.setPointsOfWords(0);
         gameG.setNumberOfWords(1);
         gameG.setCounter(0);
-        gameG.manageWindow(null, false);
+        //gameG.manageWindow(null, false);
         //LetsPlay(Choice, Word, user);
     }
 
@@ -213,7 +214,7 @@ public class Game {
         int ThirdCount = 0;
         int FourthCount = 0;
         int FifthCount = 0;
-
+        System.out.println("WORKS");
         while (stat) {//όσο η μεταβλητή είναι true
 //            System.out.println("1) Αντάλλαξε 2 γράμματα.");
 //            System.out.println("2) Διαγραφή γραμμής και αντικατάσταση της.");
@@ -221,12 +222,10 @@ public class Game {
 //            System.out.println("4) Αναδιάταξη στήλης.");
 //            System.out.println("5) Αναδιάταξη γραμμής.");
 //            System.out.println("Επέλεξε ένα απο τις παραπάνω κατηγορίες ή πληκτρολόγησε 0 για να συνεχίσεις.");
-            int ch0 = 0;
             //ch0 = gp.UserMenu_Display();
-            String ch = ch0 + "";
+            String ch = Choice + "";
             if (!ch.equals("0") && !ch.equals("1") && !ch.equals("2") && !ch.equals("3") && !ch.equals("4") && !ch.equals("5")) {
-                System.out.println("Δεν υπάρχει αυτή η επιλογή, ξαναδώσε.");
-
+                ch = JOptionPane.showInputDialog(null, "Δεν υπάρχει αυτή η επιλογή, ξαναδώσε");
             }//θεωρούμε ότι ο χρήστης δίνει αριθμό και όχι κάποιο χαρακτήρα πχ
             if (ch.equals("1")) {
                 if (FirstCount < 3) {
@@ -349,9 +348,8 @@ public class Game {
     public void RearrangementRow() {
         boolean statt = true;
         while (statt) {
-            System.out.println("Επέλεξε στήλη αναδιάταξης: ");
-            Scanner in = new Scanner(System.in);
-            int row = in.nextInt() - 1;
+            String InputChoice = JOptionPane.showInputDialog(null, "Επέλεξε στήλη διαγραφής: ");
+            int row = Integer.parseInt(InputChoice) - 1;
             if (row >= 0 && row < Array.length) {//αν είναι έγκυρος ο δωσμένος αριθμός από τον χρήστη
                 TempArray.clear();//καθαρίζεται εξ ολοκλήρου η λίστα temp
                 for (int k = 0; k < Array.length; k++) {
@@ -372,9 +370,8 @@ public class Game {
     public void RearrangementLine() {
         boolean statt = true;
         while (statt) {
-            System.out.println("Επέλεξε γραμμή αναδιάταξης: ");
-            Scanner in = new Scanner(System.in);
-            int line = in.nextInt() - 1;
+            String InputChoice = JOptionPane.showInputDialog(null, "Επέλεξε γραμμή διαγραφής: ");
+            int line = Integer.parseInt(InputChoice) - 1;
             if (line >= 0 && line < Array.length) {//έλεγχος εγκυρότητας αριθμού
                 TempArray.clear();//άδειασμα της TempArray λίστας
                 for (int k = 0; k < Array.length; k++) {

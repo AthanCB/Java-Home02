@@ -78,7 +78,7 @@ public class GameGraphs extends JFrame {
     JPanel row1, row2;
     JLabel label;
     CardGraphs card;
-    Game game;
+    Game game = new Game();
     int counter = 0;
 
     public void setMadeWord(String w) {
@@ -130,6 +130,7 @@ public class GameGraphs extends JFrame {
         card = new CardGraphs();
         card.setArrayDimension(dimension);
         jf.setSize(dimension * 110, dimension * 115);
+        setCounter(0);
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 Letter currentLetter = Shuffled_Chars.get(counter);
@@ -334,23 +335,28 @@ public class GameGraphs extends JFrame {
                 }
             } else if (ae.getSource() == b1) {
                 if (JOptionPane.showConfirmDialog(null, "Επέλεξε να αντικατασήσεις μια σειρά") == 0) {
-                    game.RemakeLine(dimension);
+                    game.User_Menu(2);
+                    //game.RemakeLine(dimension);
                 }
             } else if (ae.getSource() == b2) {
                 if (JOptionPane.showConfirmDialog(null, "Επέλεξες να ανακατέψεις μια σειρά") == 0) {
-                    game.RearrangementLine();
+                    game.User_Menu(5);
+                    //game.RearrangementLine();
                 }
             } else if (ae.getSource() == b3) {
                 if (JOptionPane.showConfirmDialog(null, "Επέλεξες να ανακατέψεις μια στήλη") == 0) {
-                    game.RearrangementRow();
+                    game.User_Menu(4);
+                    //game.RearrangementRow();
                 }
             } else if (ae.getSource() == b4) {
                 if (JOptionPane.showConfirmDialog(null, "Επέλεξες να ανακατέψεις όλα τα γράμματα") == 0) {
-                    game.Rearrangement(dimension);
+                    game.User_Menu(3);
+                    //game.Rearrangement(dimension);
                 }
             } else if (ae.getSource() == b5) {
                 if (JOptionPane.showConfirmDialog(null, "Επέλεξες να ανταλλάξεις δύο γράμματα μεταξύ τους") == 0) {
-                    game.Exchange_Letters();
+                    game.User_Menu(1);
+                    //game.Exchange_Letters();
                 }
             } else if (ae.getSource() == bUsers) {
                 if (JOptionPane.showConfirmDialog(null, "Επέλεξες να δεις τους χρήστες της εργασίας") == 0) {

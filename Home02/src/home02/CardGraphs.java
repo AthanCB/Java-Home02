@@ -59,7 +59,7 @@ public class CardGraphs extends JComponent implements MouseListener {
     }
 
     public CardGraphs() {
-        //gg.manageWindow(null, true);
+        gg.manageWindow(null, true);
     }
 
     public CardGraphs(Letter letter, int x, int y) {
