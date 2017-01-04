@@ -24,7 +24,7 @@ public class CardGraphs extends JComponent implements MouseListener {
     ArrayList<Point> chosenLettersList = new ArrayList<>();
     private final int rectLength = 100;
     private Polygon rect, rect2;
-    private boolean doubleWordValue = false, statBlackColor = false;
+    private boolean doubleWordValue = false, statBlackColor = false,begin=false;
     private char Character;
     private int Value;
     private Color ColorC;
@@ -59,7 +59,9 @@ public class CardGraphs extends JComponent implements MouseListener {
     }
 
     public CardGraphs() {
+        begin=true;
         gg.manageWindow(null, true);
+        //LetterChecks(null, null, 0, 0);
     }
 
     public CardGraphs(Letter letter, int x, int y) {
@@ -205,6 +207,10 @@ public class CardGraphs extends JComponent implements MouseListener {
     }
 
     public boolean LetterChecks(Graphics g, Letter l, int X, int Y) {
+//        if(begin==true)
+//        {
+//            gg.manageWindow(null, true);
+//        }
         if (LastX == X && LastY == Y) {//last letter
             int ch = JOptionPane.showConfirmDialog(null, "Θες να ακυρώσεις το τελευταίο γράμμα");
             if (ch == 0) {

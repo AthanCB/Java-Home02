@@ -62,6 +62,7 @@ public class GameGraphs extends JFrame {
     JLabel info1 = new JLabel();
     JLabel JMadeWord = new JLabel();// for row1
     JLabel JYourPoints = new JLabel();
+    boolean tempcheck = true;
     private static String MadeWord = "";
     Graphics gp;
     int LastX = 0, LastY = 0, answer;
@@ -79,7 +80,8 @@ public class GameGraphs extends JFrame {
     JLabel label;
     CardGraphs card;
     Game game = new Game();
-    int counter = 0;
+    int counter;
+    //counter = 0;
 
     public void setMadeWord(String w) {
         MadeWord = w;
@@ -98,7 +100,7 @@ public class GameGraphs extends JFrame {
     }
 
     public void setPointsOfWords(int p) {
-        PointsOfWords = p;
+        PointsOfWords += p;
     }
 
     public int getPointsOfWords() {
@@ -148,12 +150,6 @@ public class GameGraphs extends JFrame {
         setCounter(counter);
     }
 
-//    public void createComponents() {
-//        for(int i=0;i<labels.length;i++)
-//        {
-//            labels[i]= new JLabel();
-//        }
-//    }
     public void manageWindow(Letter letter, boolean stBC) {
         jf2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf2.setVisible(true);
@@ -176,7 +172,7 @@ public class GameGraphs extends JFrame {
                 //System.out.println("just a letter");
                 WordPoints += letter.getValue();
                 MadeWord += letter.getCharacter();
-                setPointsOfWords(WordPoints);
+                //setPointsOfWords(WordPoints);
             }
         }
         JMadeWord.setVisible(true);
@@ -201,7 +197,7 @@ public class GameGraphs extends JFrame {
             System.exit(0);
         }
 
-        info2.setText("Πόντοι συνολικά: " + getPointsOfWords() + ", Στόχος: " + getsuccessPoints());
+        info2.setText("Εξασφαλισμένοι πόντοι συνολικά: " + getPointsOfWords() + ", Στόχος: " + getsuccessPoints());
         info2.setFont(new Font("Courier", Font.ITALIC, 25));
         info2.setForeground(Color.DARK_GRAY);
 
@@ -280,7 +276,7 @@ public class GameGraphs extends JFrame {
         //for( JButton buttons : )
     }
 
-    public void instructions() {
+    public void Instructions() {
         FileWord = "";
         try {
             scan = new Scanner(new File("Instructions.txt"));
@@ -310,6 +306,24 @@ public class GameGraphs extends JFrame {
         }
     }
 
+    public void CheckWord() {
+        if (MadeWord.length() > 2) {
+            JOptionPane.showMessageDialog(null, "Θα ελέγξουμε τη λέξη " + MadeWord);
+//                if (card.getDoubleWordValue() == true) {
+//                    WordPoints *= 2;
+//                }
+            if (game.SearchWord(MadeWord) == true) {
+                game.ReplaceWords();
+                card.ClearAllLetters(gp);// everytime
+                setMadeWord("");
+                setPointsOfWords(WordPoints);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Δεν μπορείς να ελέγξεις τη λέξη, πρέπει το λιγότερο 3 γράμματα να διαλέξεις ", "File error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+
     class ButtonHandler implements ActionListener {
 
         @Override
@@ -317,22 +331,10 @@ public class GameGraphs extends JFrame {
             if (ae.getSource() == bExit) {
                 System.exit(0);
             } else if (ae.getSource() == bCheckWord) {
-                if (card.getDoubleWordValue() == true) {
-                    WordPoints *= 2;
+                if (tempcheck == true) {
+                    CheckWord();
                 }
-                //setPointsOfWords(WordPoints);
-                if (MadeWord.length() >= 3) {
-                    if (JOptionPane.showConfirmDialog(null, "Επέλεξες να ελέγξεις τη λέξη σου") == 0) {
-                        if (game.SearchWord(MadeWord)) {
-                            setMadeWord("");
-                            JOptionPane.showMessageDialog(null, "Βρήκες την λέξη");
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Δε βρήκες την λέξη");
-                        }
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Δεν μπορείς να ελέγξεις τη λέξη, πρέπει το λιγότερο 3 γράμματα να διαλέξεις ", "File error", JOptionPane.ERROR_MESSAGE);
-                }
+                tempcheck = false;
             } else if (ae.getSource() == b1) {
                 if (JOptionPane.showConfirmDialog(null, "Επέλεξε να αντικατασήσεις μια σειρά") == 0) {
                     game.User_Menu(2);
@@ -360,12 +362,11 @@ public class GameGraphs extends JFrame {
                 }
             } else if (ae.getSource() == bUsers) {
                 if (JOptionPane.showConfirmDialog(null, "Επέλεξες να δεις τους χρήστες της εργασίας") == 0) {
-                    System.out.println("ReadUsersFile");
                     ReadUsersFile();
                 }
             } else if (ae.getSource() == bGameHelp) {
                 if (JOptionPane.showConfirmDialog(null, "Οδηγίες για το πως παίζεται το παιχνίδι") == 0) {
-                    instructions();
+                    Instructions();
                 }
             }
         }

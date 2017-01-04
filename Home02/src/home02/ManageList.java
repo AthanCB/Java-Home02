@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
+import javax.swing.JOptionPane;
 
 public class ManageList {
 
@@ -45,6 +46,8 @@ public class ManageList {
             AllWordsList.add(Word); // τη λέξη την προσθέτουμε και στην AllWordList που κρατά όλες τις λέξεις του αρχείου μόνιμα
         }
         Collections.shuffle(WordList);// ανακατεύουμε τις λέξεις της Wordlist για να μην επιλεχθούν μετά με τη σειρά τα γραμματά τους
+//        for(int i=0;i<WordList.size();i++)
+//            System.out.println(WordList.get(i));
         in.close(); //ασφαλές κλείσιμο του Scanner
     }
 
@@ -74,7 +77,6 @@ public class ManageList {
             // η οποία επειδή είναι τύπου String κάνουμε casting το γράμα από χαρακτήρα σε συμβολοσειρά τον τύπο του
             TempWordList.add(Character.toString(extra));
         }
-        CharList();//καλούμε την συναρτηση CharList 
     }
 
     public void CharList() {

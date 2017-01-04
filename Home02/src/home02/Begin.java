@@ -17,10 +17,17 @@ public class Begin {
     JFileChooser jfc;
 
     public static void main(String[] args) {
-        String Name = JOptionPane.showInputDialog("Γειά σου, δώσε το όνομα σου: ");  //String Name = in.next();// εισαγωγή ονόματος από τον χρήστη//String Name = in.next();// εισαγωγή ονόματος από τον χρήστη
-        while (Name.length() == 0) {
-            Name = JOptionPane.showInputDialog("Κάτι πήγε λάθος, δώσε το όνομα σου σωστά: ");
+        String Name=""; 
+        try{
+        Name = JOptionPane.showInputDialog("Γειά σου, δώσε το όνομα σου: ");  //String Name = in.next();// εισαγωγή ονόματος από τον χρήστη//String Name = in.next();// εισαγωγή ονόματος από τον χρήστη        
         }
+        catch (NullPointerException ne)
+        {
+            JOptionPane.showMessageDialog(null, "Κάτι πήγε λάθος, δώσε το όνομα σου σωστά: ");
+        }
+//        while (Name.length() == 0) {
+//            Name = JOptionPane.showInputDialog("Κάτι πήγε λάθος, δώσε το όνομα σου σωστά: ");
+//        }
         User user = new User(); // αντικείμενο τύπου User
         user.setName(Name); // σώζουμε το όνομα που έδωσε ο χρήστης μέσω της setter της User
         boolean stat = true; // για την while 
@@ -32,14 +39,11 @@ public class Begin {
             if (choice == 1) {
                 size = 8;
                 stat = false;
-                JOptionPane.showMessageDialog(null, user.getName() + " ο πίνακας που δημιούργησες είναι: 8 γραμμών και στήλων");
             } else if (choice == 2) {
                 size = 10;
                 stat = false;
-                JOptionPane.showMessageDialog(null, user.getName() + " ο πίνακας που δημιούργησες είναι: 10 γραμμών και στήλων");
             } else if (choice == 0) {
                 size = 5;
-                JOptionPane.showMessageDialog(null, user.getName() + " ο πίνακας που δημιούργησες είναι 5 γραμμών και στήλων");
                 stat = false;
             } else if (choice == 3) {
                 System.exit(0);
@@ -50,7 +54,9 @@ public class Begin {
                 choice = JOptionPane.showOptionDialog(null, null, " δώσε το μέγεθος του πίνακα: 5x5 or 8x8 or 10x10: ", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, opt, opt[1]);
             }
         }
+        JOptionPane.showMessageDialog(null, user.getName() + " ο πίνακας που δημιούργησες είναι " + size + " γραμμών και στήλων");
         Game game = new Game(); // δημιουργία αντικειμένου τύπου Game 
-        game.CreateTable(user, size);// κάλεσμα της συνάρτησης StartGame της κλάσσης game 
+        game.setArraySize(size);
+        game.CreateTable(user);// κάλεσμα της συνάρτησης StartGame της κλάσσης game 
     }
 }

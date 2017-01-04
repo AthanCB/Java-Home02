@@ -16,10 +16,12 @@ public class Game extends JFrame {
     // άδειος constructor
     public Game() {
     }
+
     // πίνακας τύπου γράμματος/Letter 
     Letter Array[][];
     GameGraphs gp;
-    ManageList file = new ManageList();// δημιουργία αντικειμένου τύπου κλάσσης ManageList για τη πρόσβαση μετά στις συναρτήσεις στη ManageList
+    static int size;
+    ManageList managefile = new ManageList();// δημιουργία αντικειμένου τύπου κλάσσης ManageList για τη πρόσβαση μετά στις συναρτήσεις στη ManageList
     ArrayList<Letter> TempArray = new ArrayList();//λίστα που δέχεται αντικείμενα τύπου Letters, για διευκόλυνση του πίνακα χρησιμοποιείται 
     private boolean stat = true, statPoints = false;// μεταβλητές boolean για τις while και τον έλεγχο πόντων στο τέλος 
     private String Word = "";//η λέξη που αρχικοποιείται με κενό και γεμίζει με τα γράμματα που δίνει ο χρήστης
@@ -31,19 +33,27 @@ public class Game extends JFrame {
     private int Points = 0, AllPoints = 0, counterDismiss = 0;
     // μεταβλητές των πόντων της λέξης, όλων των πόντων του χρήστη και μετρητής για την εμφάνιση του μενού αν είναι 0
 
+    public void setArraySize(int size) {
+        this.size = size;
+    }
+
+    public int getArraySize() {
+        return size;
+    }
+
     //μέθοδος για τη δημιουργία του πίνακα μέσω συναρτήσεων που είναι στην κλασση ManageList και τη καλεί το αντικείμενο file
-    public void CreateTable(User user, int Choice) {
-        Array = new Letter[Choice][Choice];// δημιουργία πίνακα με τις διαστάσεις που μας έδωσε ο χρήστης 
+    public void CreateTable(User user) {
+        Array = new Letter[size][size];// δημιουργία πίνακα με τις διαστάσεις που μας έδωσε ο χρήστης 
         //παρακάτω καλούμε τις μεθόδους για τη διαχείρηση του αρχείου και των λεξεών του 
-        file.OpenFile();
-        file.ReadFile();
-        file.Selected_Words(Choice);
-        GameGraphs gameG = new GameGraphs(Choice, file.Shuffled_Chars);
+        managefile.OpenFile();
+        managefile.ReadFile();
+        managefile.Selected_Words(size);
+        managefile.CharList();
+        GameGraphs gameG = new GameGraphs(size, managefile.Shuffled_Chars);
         gameG.setsuccessPoints(50);
         gameG.setPointsOfWords(0);
         gameG.setNumberOfWords(1);
         gameG.setCounter(0);
-        //gameG.manageWindow(null, false);
         //LetsPlay(Choice, Word, user);
     }
 
@@ -76,7 +86,7 @@ public class Game extends JFrame {
             if (Array[l][r].getCharacter() == '?') {// για την περίπτωση που είναι ο χαρακτήρας του Letter μπαλαντερ
                 System.out.print("Δώσε επιθυμητό γράμμα: ");
                 char balader = in.next().charAt(0);//διαβάζεται μεν String αλλά το πρώτο γράμμα, άρα σαν να διαβάζει char, δεν υπάρχει nextChar()
-                Array[l][r] = file.SetBalader(balader);// βάζουμε στη θέση του πίνακα το γράμμα που αντικατέστησε τον balader στη συνάρτηση που καλούμε 
+                Array[l][r] = managefile.SetBalader(balader);// βάζουμε στη θέση του πίνακα το γράμμα που αντικατέστησε τον balader στη συνάρτηση που καλούμε 
             }
             if (Color.BLUE.equals(Array[l][r].getColor())) {//αν βρεθεί γράμμα μπλε τότε αλλάζει η boolean για να διπλασιαστεί η λέξη 
                 statPoints = true;
@@ -165,38 +175,35 @@ public class Game extends JFrame {
 
     // εύρεση της δωσμένης από τον χρήστη λέξη στο αρχείο
     public boolean SearchWord(String word) {
-        int counter = 0;//μετρητής για την εύρεση της λέξης
-        for (int i = 0; i < file.AllWordsList.size(); i++) {
-            if (word.equals(file.AllWordsList.get(i))) {//αν βρέθηκε η λέξη στο αρχείο
-                //if (Word.equals(file.AllWordsList.get(i))) {
-                counter++;
-                //System.out.println("Βρήκες την λέξη");
-                ReplaceWords();//αντικάτασταση της λέξης μέσω της μεθόδου αυτής
-                Word = "";// η λέξη γίνεται πάλι έμμεσα κενή για να γεμίσει ξανά από τα γράμματα της επόμενης λέξης
-                LettersCounter = 0;//αντίστοιχα ο μετρητής των γραμμάτων της λέξης μηδενίζεται και αυτός
+        boolean counter = true;//μετρητής για την εύρεση της λέξης
+        for (int i = 0; i < managefile.AllWordsList.size(); i++) {
+            if (word.equals(managefile.AllWordsList.get(i))) {//αν βρέθηκε η λέξη στο αρχείο
+                counter = false;
+                //Word = "";// η λέξη γίνεται πάλι έμμεσα κενή για να γεμίσει ξανά από τα γράμματα της επόμενης λέξης
+                //LettersCounter = 0;//αντίστοιχα ο μετρητής των γραμμάτων της λέξης μηδενίζεται και αυτός
             }
-        }// αν ο μετρητής δεν είναι θετικός τότε σημαίνει ότι δε βρέθηκε η λέξη
-        if (counter == 0) {
+        }
+        // δε βρέθηκε η λέξη
+        if (counter == true) {
             //ξαναθέτουμε όλα τις καταστάσεις των γράμματων σαν false για να είναι διαθέσιμα τα γράμματα όλα πάλι
-            for (int k = 0; k < Array.length; k++) {
-                for (int m = 0; m < Array[k].length; m++) {
-                    Array[k][m].setSituation(false);
-                }
-            }
+            JOptionPane.showMessageDialog(null, "Δε βρήκες την λέξη, συνέχισε τη προσπάθεια");
             return false;//false επιστροφή αφού δε βρέθηκε η λέξη και μπήκε στην if
         }//αλλιώς επιστροφή true αφού βρέθηκε η λέξη και δε μπήκε στην if πριν
+        else {
+            JOptionPane.showMessageDialog(null, "Βρήκες την λέξη");
+        }
         return true;
     }
 
     //αντικατάσταση λέξεων οι οποίες βρήκε ο χρήστης
     public void ReplaceWords() {
         int count = 0;//για την θέση του γράμματος που θα πάρουμε από την Shuffled_Chars για να το πετάξουμε στον πίνακα
-        file.Selected_Words(Array.length);//νέ
+        managefile.Selected_Words(Array.length);//νέ
         for (int k = 0; k < Array.length; k++) {//τρέχουμε όλα τα στοιχεία του πίνακα τύπου Letters
             for (int m = 0; m < Array[k].length; m++) {
                 //αν βρεθεί γράμμα που έχει χαρακτηριστεί false η κατάσταση του, δηλαδή χρησιμοποιήθηκε για λέξη αντικαθιστούμε με νέο γράμμα
                 if (Array[k][m].isSituation() == true) {
-                    Array[k][m] = file.Shuffled_Chars.get(count);//το χρησιμοποιημένο γράμμα το αντικαθιστούμε με αυτό στην θέση count στην Shuffled_Chars 
+                    Array[k][m] = managefile.Shuffled_Chars.get(count);//το χρησιμοποιημένο γράμμα το αντικαθιστούμε με αυτό στην θέση count στην Shuffled_Chars 
                     count++;//στην επόμενη θέση της Shuffled_Chars πάμε
                     Array[k][m].setSituation(false);//και θέτουμε την κατάσταση του false για να μπορεί να χρησιμοποιηθεί
                 }
@@ -214,15 +221,7 @@ public class Game extends JFrame {
         int ThirdCount = 0;
         int FourthCount = 0;
         int FifthCount = 0;
-        System.out.println("WORKS");
         while (stat) {//όσο η μεταβλητή είναι true
-//            System.out.println("1) Αντάλλαξε 2 γράμματα.");
-//            System.out.println("2) Διαγραφή γραμμής και αντικατάσταση της.");
-//            System.out.println("3) Αναδιάταξη γραμμάτων.");
-//            System.out.println("4) Αναδιάταξη στήλης.");
-//            System.out.println("5) Αναδιάταξη γραμμής.");
-//            System.out.println("Επέλεξε ένα απο τις παραπάνω κατηγορίες ή πληκτρολόγησε 0 για να συνεχίσεις.");
-            //ch0 = gp.UserMenu_Display();
             String ch = Choice + "";
             if (!ch.equals("0") && !ch.equals("1") && !ch.equals("2") && !ch.equals("3") && !ch.equals("4") && !ch.equals("5")) {
                 ch = JOptionPane.showInputDialog(null, "Δεν υπάρχει αυτή η επιλογή, ξαναδώσε");
@@ -231,41 +230,41 @@ public class Game extends JFrame {
                 if (FirstCount < 3) {
                     localCount++;
                     FirstCount++;
-                    Exchange_Letters();//μέθοδος ανταλλαγής γραμμάτων
+                    Exchange_Letters(size);//μέθοδος ανταλλαγής γραμμάτων
                 } else {
-                    System.out.println("Επέλεξες ήδη 5 φορές αυτή την επιλογή δε γίνεται άλλο");
+                    JOptionPane.showMessageDialog(null, "Επέλεξες ήδη 3 φορές αυτή την επιλογή δε γίνεται άλλο");
                 }
             } else if (ch.equals("2")) {
                 if (SecondCount < 3) {
                     localCount++;
                     SecondCount++;
-                    RemakeLine(Choice);//μέθοδος αντικατάσταση γραμμής
+                    RemakeLine(size);//μέθοδος αντικατάσταση γραμμής
                 } else {
-                    System.out.println("Επέλεξες ήδη 5 φορές αυτή την επιλογή δε γίνεται άλλο");
+                    JOptionPane.showMessageDialog(null, "Επέλεξες ήδη 3 φορές την επιλογή RemakeLine, δε γίνεται άλλο");
                 }
             } else if (ch.equals("3")) {
                 if (ThirdCount < 3) {
                     localCount++;
                     ThirdCount++;
-                    Rearrangement(Choice);//μέθοδο αναδιάταξης όλων των γραμμάτων του πίνακα
+                    Rearrangement(size);//μέθοδο αναδιάταξης όλων των γραμμάτων του πίνακα
                 } else {
-                    System.out.println("Επέλεξες ήδη 5 φορές αυτή την επιλογή δε γίνεται άλλο");
+                    JOptionPane.showMessageDialog(null, "Επέλεξες ήδη 3 φορές την επιλογή Rearrangement, δε γίνεται άλλο");
                 }
             } else if (ch.equals("4")) {
                 if (FourthCount < 3) {
                     localCount++;
                     FourthCount++;
-                    RearrangementRow();//μέθοδο αναδιάταξη όλων των γραμμάτων μιας σειράς
+                    RearrangementRow(size);//μέθοδο αναδιάταξη όλων των γραμμάτων μιας σειράς
                 } else {
-                    System.out.println("Επέλεξες ήδη 5 φορές αυτή την επιλογή δε γίνεται άλλο");
+                    JOptionPane.showMessageDialog(null, "Επέλεξες ήδη 3 φορές την επιλογή RearrangementRow, δε γίνεται άλλο");
                 }
             } else if (ch.equals("5")) {
                 if (FifthCount < 3) {
                     localCount++;
                     FifthCount++;
-                    RearrangementLine();//μέθοδο αναδιάταξη γραμμάτων μίας γραμμής
+                    RearrangementLine(size);//μέθοδο αναδιάταξη γραμμάτων μίας γραμμής
                 } else {
-                    System.out.println("Επέλεξες ήδη 5 φορές αυτή την επιλογή δε γίνεται άλλο");
+                    JOptionPane.showMessageDialog(null, "Επέλεξες ήδη 3 φορές την επιλογή RearrangementLine, δε γίνεται άλλο");
                 }
             } else if (ch.equals("10")) {
                 stat = false;//με την επιλογή 0 ο χρήστης προχωράει στην επιλογή γραμμάτων και φεύγει από το μενού
@@ -274,50 +273,49 @@ public class Game extends JFrame {
                 //Display_Array();//κάθε φόρα που επιλέγεται κάποια από τις παραπάνω επιλογές πέραν της τελευταίας εμφανίζεται ο πίνακας ξανά αλλαγμένος
             }
             if (localCount >= 15) {
-                System.out.println("Χρησιμοποίησες ήδη 15 φορές όλες τις επιλογές. Δε γίνεται περισσότερο");
+                JOptionPane.showMessageDialog(null, "Επέλεξες ήδη 15 φορές τις επιλογές, δε γίνεται άλλο");
                 stat = false;
             }
         }
     }
 
     //ανταλλαγή 2 γραμμάτων στον πίνακα από τον χρήστη
-    public void Exchange_Letters() {
+    public void Exchange_Letters(int size) {
         boolean statt = true;
         while (statt) {
-            System.out.println("Πρώτο Γράμμα: ");
-            Scanner in = new Scanner(System.in);
-            System.out.print("Δώσε την θέση στην γραμμή: ");
-            int x1 = in.nextInt() - 1;
-            System.out.print("Δώσε την θέση στην στήλη: ");
-            int y1 = in.nextInt() - 1;
-            System.out.println("Δεύτερο Γράμμα: ");
-            System.out.print("Δώσε την θέση στην γραμμή: ");
-            int x2 = in.nextInt() - 1;
-            System.out.print("Δώσε την θέση στην στήλη: ");
-            int y2 = in.nextInt() - 1;
+            String InputChoiceLine = JOptionPane.showInputDialog(null, "Πρώτο Γράμμα: γραμμή: ");
+            String InputChoiceRow = JOptionPane.showInputDialog(null, "Πρώτο Γράμμα: στήλη: ");
+            String InputChoice2Line = JOptionPane.showInputDialog(null, "Δεύτερο Γράμμα: γραμμή: ");
+            String InputChoice2Row = JOptionPane.showInputDialog(null, "Δεύτερο Γράμμα: στήλη: ");
+            int x1 = Integer.parseInt(InputChoiceLine);
+            int y1 = Integer.parseInt(InputChoiceRow);
+            int x2 = Integer.parseInt(InputChoice2Line);
+            int y2 = Integer.parseInt(InputChoice2Row);
             //όσο και οι δύο θέσεις για τα γράμματα είναι όντως στον πίνακα, και θετικές
-            if (x1 < Array.length && x2 < Array.length && x1 >= 0 && x2 >= 0) {
-                if (y1 < Array[x1].length && y2 < Array[x2].length) {
+            if (x1 < size && x2 < size && x1 >= 0 && x2 >= 0) {
+                //if (y1 < Array[x1].length && y2 < Array[x2].length) {
+                if (y1 < size && y2 < size) {
                     Letter temp = Array[x1][y1];
                     Array[x1][y1] = Array[x2][y2];
                     Array[x2][y2] = temp;
                     statt = false;
                 }
             } else {
-                System.out.println("Λάθος συντεταγμένες για τα γράμματα ξαναδώσε");
+                JOptionPane.showMessageDialog(null, "Λάθος συντεταγμένες για τα γράμματα");
             }
         }
     }
 
     //αναδιάταξη γραμμάτων πρώτα της λίστας με τα γράμματα, απλά μέσω της έτοιμης εντολής από την βιβλιοθήκη shuffle
-    public void Rearrangement(int Choice) {
-        Collections.shuffle(file.Shuffled_Chars);
+    public void Rearrangement(int SIZE) {
+        Collections.shuffle(managefile.Shuffled_Chars);
         int count = 0;
         //μετά την αλλαγμένη λίστα πετάμε τα γράμματα στον πίνακα, ουσιαστικά ανακατέψαμε έμμεσα τον πίνακα 
         //μέσω του ανακατέματος της λίστας που έχει ακριβώς τα ίδια γράμματα, αφού εκείνη έδωσε τα γράμματα στον πίνακα
-        for (int k = 0; k < Array.length; k++) {
-            for (int m = 0; m < Array.length; m++) {
-                Array[k][m] = file.Shuffled_Chars.get(count);
+        for (int k = 0; k < SIZE; k++) {
+            for (int m = 0; m < SIZE; m++) {
+                System.out.println(Array[k][m]);
+                //Array[k][m] = managefile.Shuffled_Chars.get(count);
                 count++;
             }
         }
@@ -330,11 +328,12 @@ public class Game extends JFrame {
             String InputChoice = JOptionPane.showInputDialog(null, "Επέλεξε γραμμή διαγραφής: ");
             int line = Integer.parseInt(InputChoice) - 1;
             int count = 0;//για την θέση επιλογής του γράμματος από την Shuffled_Chars
-            file.Selected_Words(Choice);// για μία γραμμή παίρνουμε μέσω της Selected_Words νέα γράμματα 
+            managefile.Selected_Words(Choice);// για μία γραμμή παίρνουμε μέσω της Selected_Words νέα γράμματα 
             if ((line < Choice) && (line >= 0)) {//έλεγχος εγκυρότητας
-                for (int k = 0; k < Array.length; k++) {
+                JOptionPane.showMessageDialog(null, "ΟΚ έγκυρος αριθμός");
+                for (int k = 0; k < Choice; k++) {
                     //γεμίζουμε την επιλεγμένη γραμμή με τα νέα γράμματα από την Shuffled_Chars
-                    Array[line][k] = file.Shuffled_Chars.get(count);
+                    Array[line][k] = managefile.Shuffled_Chars.get(count);
                     count++;//στην επόμενη θέση/γράμμα της Shuffled_Chars
                 }
                 statt = false;
@@ -345,14 +344,15 @@ public class Game extends JFrame {
     }
 
     //αναδιάταξη γραμμάτων μίας στήλης που επιλέγει παρακάτω ο χρήστης
-    public void RearrangementRow() {
+    public void RearrangementRow(int size) {
         boolean statt = true;
         while (statt) {
             String InputChoice = JOptionPane.showInputDialog(null, "Επέλεξε στήλη διαγραφής: ");
             int row = Integer.parseInt(InputChoice) - 1;
-            if (row >= 0 && row < Array.length) {//αν είναι έγκυρος ο δωσμένος αριθμός από τον χρήστη
+            if (row >= 0 && row < size) {//αν είναι έγκυρος ο δωσμένος αριθμός από τον χρήστη
+                JOptionPane.showMessageDialog(null, "ΟΚ έγκυρος αριθμός");
                 TempArray.clear();//καθαρίζεται εξ ολοκλήρου η λίστα temp
-                for (int k = 0; k < Array.length; k++) {
+                for (int k = 0; k < size; k++) {
                     TempArray.add(Array[k][row]);// και πετάμε τα γράμματα της στήλης row του πίνακα στην λίστα μας
                 }
                 Collections.shuffle(TempArray);//ανακατεύουμε την TempArray με τα γράμματα που μόλις δώσαμε
@@ -361,18 +361,19 @@ public class Game extends JFrame {
                 }//ουσιαστικά πετάξαμε και ανακατέψαμε τα γράμματα της στήλης του πίνακα σε μία λίστα και τα ξαναπήραμε ανακατεμένα πίσω στην στήλη
                 statt = false;//για να σταματήσει να τρέχει η while
             } else {
-                System.out.println("Δεν έχει τέτοια στήλη ο πίνακας ξαναπροσπάθησε");
+                JOptionPane.showMessageDialog(null, "Δεν έχει τέτοια στήλη ο πίνακας ξαναπροσπάθησε");
             }
         }
     }
 
     //παρομοίως κάνουμε αναδιάταξη σε μία γραμμή που δίνει ο χρληστης
-    public void RearrangementLine() {
+    public void RearrangementLine(int size) {
         boolean statt = true;
         while (statt) {
-            String InputChoice = JOptionPane.showInputDialog(null, "Επέλεξε γραμμή διαγραφής: ");
+            String InputChoice = JOptionPane.showInputDialog(null, size + " γραμμές, επέλεξε γραμμή διαγραφής: ");
             int line = Integer.parseInt(InputChoice) - 1;
-            if (line >= 0 && line < Array.length) {//έλεγχος εγκυρότητας αριθμού
+            if (line >= 0 && line < size) {//έλεγχος εγκυρότητας αριθμού
+                JOptionPane.showMessageDialog(null, "ΟΚ έγκυρος αριθμός");
                 TempArray.clear();//άδειασμα της TempArray λίστας
                 for (int k = 0; k < Array.length; k++) {
                     TempArray.add(Array[line][k]);//της προσθέτουμε τα γράμματα της επιθυμητής γραμμής
@@ -383,7 +384,7 @@ public class Game extends JFrame {
                 }
                 statt = false;//σταματάει η επανάληψη έμεσα
             } else {
-                System.out.println("Δεν έχει τέτοια στήλη ο πίνακας ξαναπροσπάθησε");
+                JOptionPane.showMessageDialog(null, "Δεν έχει τέτοια γραμμή ο πίνακας ξαναπροσπάθησε");
             }
         }
     }
