@@ -26,9 +26,6 @@ public class GameGraphs extends JFrame {
     String tempChar, FileWord = "";
     int Points = 0, WordPoints = 0, PointsOfLetter = 0;
     static int dimension;
-    static HashMap<Point, Character> lettersMap = new HashMap<>();
-    static HashMap<Point, Integer> valuesMap = new HashMap<>();
-    ArrayList<Point> chosenLettersList = new ArrayList<>();
     FlowLayout fl = new FlowLayout();
     GridLayout gl = new GridLayout(13, 1);
 //    JPanel panels[] = new JPanel[20];
@@ -321,7 +318,6 @@ public class GameGraphs extends JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "Δεν μπορείς να ελέγξεις τη λέξη, πρέπει το λιγότερο 3 γράμματα να διαλέξεις ", "File error", JOptionPane.ERROR_MESSAGE);
         }
-
     }
 
     class ButtonHandler implements ActionListener {

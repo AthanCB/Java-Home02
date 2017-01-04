@@ -17,20 +17,23 @@ public class Begin {
     JFileChooser jfc;
 
     public static void main(String[] args) {
-        String Name=""; 
-        try{
-        Name = JOptionPane.showInputDialog("Γειά σου, δώσε το όνομα σου: ");  //String Name = in.next();// εισαγωγή ονόματος από τον χρήστη//String Name = in.next();// εισαγωγή ονόματος από τον χρήστη        
+        String Name = "";
+        boolean stat = true;
+        while (stat == true) {
+            try {
+                Name = JOptionPane.showInputDialog("Γειά σου, δώσε το όνομα σου ή 0 για έξοδο ");  //String Name = in.next();// εισαγωγή ονόματος από τον χρήστη//String Name = in.next();// εισαγωγή ονόματος από τον χρήστη        
+                if (Name.equals("0")) {
+                    System.exit(0);
+                } else {
+                    stat = false;
+                }
+            } catch (NullPointerException ne) {
+                JOptionPane.showMessageDialog(null, "Κάτι πήγε λάθος, δώσε το όνομα σου σωστά ");
+            }
         }
-        catch (NullPointerException ne)
-        {
-            JOptionPane.showMessageDialog(null, "Κάτι πήγε λάθος, δώσε το όνομα σου σωστά: ");
-        }
-//        while (Name.length() == 0) {
-//            Name = JOptionPane.showInputDialog("Κάτι πήγε λάθος, δώσε το όνομα σου σωστά: ");
-//        }
         User user = new User(); // αντικείμενο τύπου User
         user.setName(Name); // σώζουμε το όνομα που έδωσε ο χρήστης μέσω της setter της User
-        boolean stat = true; // για την while 
+        stat = true; // για την while 
         String opt[] = {"5x5", "8x8", "10x10", "EXIT"};
         int choice = JOptionPane.showOptionDialog(null, null, user.getName() + " δώσε το μέγεθος του πίνακα:", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, opt, opt[1]);
         // παρακάτω θα τρέχει η while όσο ο χρήστης δίνει μη συμβατό αριθμό για τις διαστάσεις του πίνακα

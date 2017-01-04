@@ -7,6 +7,7 @@ package home02;
  Υπάρχουν σε αυτή τη κλάσση με άλλα λόγια μέθοδοι
  */
 import java.awt.Color;
+import java.awt.Point;
 import java.util.*;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -23,6 +24,7 @@ public class Game extends JFrame {
     static int size;
     ManageList managefile = new ManageList();// δημιουργία αντικειμένου τύπου κλάσσης ManageList για τη πρόσβαση μετά στις συναρτήσεις στη ManageList
     ArrayList<Letter> TempArray = new ArrayList();//λίστα που δέχεται αντικείμενα τύπου Letters, για διευκόλυνση του πίνακα χρησιμοποιείται 
+    HashMap<Point, Letter> tempMap = new HashMap<>();
     private boolean stat = true, statPoints = false;// μεταβλητές boolean για τις while και τον έλεγχο πόντων στο τέλος 
     private String Word = "";//η λέξη που αρχικοποιείται με κενό και γεμίζει με τα γράμματα που δίνει ο χρήστης
     private int LettersCounter = 0; //μετρητής των γραμμάτων
@@ -330,7 +332,6 @@ public class Game extends JFrame {
             int count = 0;//για την θέση επιλογής του γράμματος από την Shuffled_Chars
             managefile.Selected_Words(Choice);// για μία γραμμή παίρνουμε μέσω της Selected_Words νέα γράμματα 
             if ((line < Choice) && (line >= 0)) {//έλεγχος εγκυρότητας
-                JOptionPane.showMessageDialog(null, "ΟΚ έγκυρος αριθμός");
                 for (int k = 0; k < Choice; k++) {
                     //γεμίζουμε την επιλεγμένη γραμμή με τα νέα γράμματα από την Shuffled_Chars
                     Array[line][k] = managefile.Shuffled_Chars.get(count);
@@ -346,14 +347,21 @@ public class Game extends JFrame {
     //αναδιάταξη γραμμάτων μίας στήλης που επιλέγει παρακάτω ο χρήστης
     public void RearrangementRow(int size) {
         boolean statt = true;
+        int x = 5, y = 5;
         while (statt) {
             String InputChoice = JOptionPane.showInputDialog(null, "Επέλεξε στήλη διαγραφής: ");
-            int row = Integer.parseInt(InputChoice) - 1;
-            if (row >= 0 && row < size) {//αν είναι έγκυρος ο δωσμένος αριθμός από τον χρήστη
-                JOptionPane.showMessageDialog(null, "ΟΚ έγκυρος αριθμός");
-                TempArray.clear();//καθαρίζεται εξ ολοκλήρου η λίστα temp
-                for (int k = 0; k < size; k++) {
-                    TempArray.add(Array[k][row]);// και πετάμε τα γράμματα της στήλης row του πίνακα στην λίστα μας
+            int row = Integer.parseInt(InputChoice);
+            if (row > 0 && row <= size) {//αν είναι έγκυρος ο δωσμένος αριθμός από τον χρήστη
+                //TempArray.clear();//καθαρίζεται εξ ολοκλήρου η λίστα temp
+                tempMap.clear();
+                for (int a = 0; a < size; a++) {
+                    Point tempPoint = new Point(x, y);
+                    System.out.println(tempPoint);
+                    if (CardGraphs.LettersMap.keySet() == tempPoint) {
+                        //TempArray.add(GameGraphs.LettersMap.get(a));// και πετάμε τα γράμματα της στήλης row του πίνακα στην λίστα μας
+                        tempMap.add(CardGraphs.LettersMap.get(tempPoint));
+                    }
+                    y += 105;
                 }
                 Collections.shuffle(TempArray);//ανακατεύουμε την TempArray με τα γράμματα που μόλις δώσαμε
                 for (int k = 0; k < TempArray.size(); k++) {
@@ -373,7 +381,6 @@ public class Game extends JFrame {
             String InputChoice = JOptionPane.showInputDialog(null, size + " γραμμές, επέλεξε γραμμή διαγραφής: ");
             int line = Integer.parseInt(InputChoice) - 1;
             if (line >= 0 && line < size) {//έλεγχος εγκυρότητας αριθμού
-                JOptionPane.showMessageDialog(null, "ΟΚ έγκυρος αριθμός");
                 TempArray.clear();//άδειασμα της TempArray λίστας
                 for (int k = 0; k < Array.length; k++) {
                     TempArray.add(Array[line][k]);//της προσθέτουμε τα γράμματα της επιθυμητής γραμμής

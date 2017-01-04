@@ -22,6 +22,7 @@ public class CardGraphs extends JComponent implements MouseListener {
     static HashMap<Point, Character> lettersMap = new HashMap<>();
     static HashMap<Point, Integer> valuesMap = new HashMap<>();
     ArrayList<Point> chosenLettersList = new ArrayList<>();
+    static HashMap<Point, Letter> LettersMap = new HashMap<>();
     private final int rectLength = 100;
     private Polygon rect, rect2;
     private boolean doubleWordValue = false, statBlackColor = false,begin=false;
@@ -78,10 +79,12 @@ public class CardGraphs extends JComponent implements MouseListener {
         setRect(rect);
         LetterPoint = new Point(x, y);
         letter.setPoint(LetterPoint);
-        lettersMap.put(LetterPoint, Character);
+        LettersMap.put(LetterPoint,letter);
+        //lettersMap.put(LetterPoint, Character);
         valuesMap.put(LetterPoint, Value);
         gg.setCounter(counter++);
         addMouseListener(this);
+        //System.out.println(LetterPoint);
     }
 
     public void setArrayDimension(int d) {
