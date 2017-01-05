@@ -310,13 +310,16 @@ public class Game extends JFrame {
 
     //αναδιάταξη γραμμάτων πρώτα της λίστας με τα γράμματα, απλά μέσω της έτοιμης εντολής από την βιβλιοθήκη shuffle
     public void Rearrangement(int SIZE) {
+        tempMap.clear();
+        tempMap.put(null, null);
         Collections.shuffle(managefile.Shuffled_Chars);
         int count = 0;
         //μετά την αλλαγμένη λίστα πετάμε τα γράμματα στον πίνακα, ουσιαστικά ανακατέψαμε έμμεσα τον πίνακα 
         //μέσω του ανακατέματος της λίστας που έχει ακριβώς τα ίδια γράμματα, αφού εκείνη έδωσε τα γράμματα στον πίνακα
         for (int k = 0; k < SIZE; k++) {
             for (int m = 0; m < SIZE; m++) {
-                System.out.println(Array[k][m]);
+                CardGraphs.LettersMap.putAll(tempMap);
+                //System.out.println(Array[k][m]);
                 //Array[k][m] = managefile.Shuffled_Chars.get(count);
                 count++;
             }
@@ -324,19 +327,18 @@ public class Game extends JFrame {
     }
 
     //αντικατάσταση γραμμάτων μίας γραμμής που επιλέγει παρακάτω ο χρήστης
-    public void RemakeLine(int Choice) {
+    public void RemakeLine(int size) {
         boolean statt = true;
         while (statt) {
             String InputChoice = JOptionPane.showInputDialog(null, "Επέλεξε γραμμή διαγραφής: ");
             int line = Integer.parseInt(InputChoice) - 1;
             int count = 0;//για την θέση επιλογής του γράμματος από την Shuffled_Chars
-            managefile.Selected_Words(Choice);// για μία γραμμή παίρνουμε μέσω της Selected_Words νέα γράμματα 
-            if ((line < Choice) && (line >= 0)) {//έλεγχος εγκυρότητας
-                for (int k = 0; k < Choice; k++) {
-                    //γεμίζουμε την επιλεγμένη γραμμή με τα νέα γράμματα από την Shuffled_Chars
-                    Array[line][k] = managefile.Shuffled_Chars.get(count);
-                    count++;//στην επόμενη θέση/γράμμα της Shuffled_Chars
-                }
+            if ((line < size) && (line >= 0)) {//έλεγχος εγκυρότητας
+                //for (int k = 0; k < size; k++) {
+                //γεμίζουμε την επιλεγμένη γραμμή με τα νέα γράμματα από την Shuffled_Chars
+                managefile.Selected_Words(size);// για μία γραμμή παίρνουμε μέσω της Selected_Words νέα γράμματα 
+                new GameGraphs(size, managefile.Shuffled_Chars);
+                count++;//στην επόμενη θέση/γράμμα της Shuffled_Chars
                 statt = false;
             } else {
                 JOptionPane.showMessageDialog(null, "Δεν έχει τέτοια γραμμή ο πίνακας ξαναπροσπάθησε");
@@ -347,25 +349,28 @@ public class Game extends JFrame {
     //αναδιάταξη γραμμάτων μίας στήλης που επιλέγει παρακάτω ο χρήστης
     public void RearrangementRow(int size) {
         boolean statt = true;
-        int x = 5, y = 5;
-        while (statt) {
+        int x, y = 5;
+        while (statt == true) {
             String InputChoice = JOptionPane.showInputDialog(null, "Επέλεξε στήλη διαγραφής: ");
-            int row = Integer.parseInt(InputChoice);
-            if (row > 0 && row <= size) {//αν είναι έγκυρος ο δωσμένος αριθμός από τον χρήστη
-                //TempArray.clear();//καθαρίζεται εξ ολοκλήρου η λίστα temp
-                tempMap.clear();
+            int row = Integer.parseInt(InputChoice) - 1;
+            if (row >= 0 && row < size) {//αν είναι έγκυρος ο δωσμένος αριθμός από τον χρήστη
+                x = row * 105 + 5;
+                tempMap.clear(); //καθαρίζεται εξ ολοκλήρου η tempMap
                 for (int a = 0; a < size; a++) {
                     Point tempPoint = new Point(x, y);
-                    System.out.println(tempPoint);
-                    if (CardGraphs.LettersMap.keySet() == tempPoint) {
-                        //TempArray.add(GameGraphs.LettersMap.get(a));// και πετάμε τα γράμματα της στήλης row του πίνακα στην λίστα μας
-                        tempMap.add(CardGraphs.LettersMap.get(tempPoint));
+                    for (Map.Entry<Point, Letter> entry : CardGraphs.LettersMap.entrySet()) {
+                        Point Pkey = entry.getKey();
+                        Letter val = entry.getValue();
+                        if ((Pkey.x == tempPoint.x) && (Pkey.y == tempPoint.y)) {
+                            tempMap.put(Pkey, val);
+                        }
                     }
                     y += 105;
                 }
-                Collections.shuffle(TempArray);//ανακατεύουμε την TempArray με τα γράμματα που μόλις δώσαμε
-                for (int k = 0; k < TempArray.size(); k++) {
-                    Array[k][row] = TempArray.get(k);//και πίσω πάλι στον πίνακα στη στήλη row πετάμε τα γράμματης της TempArray
+                List keys = new ArrayList(tempMap.keySet());
+                Collections.shuffle(keys);//ανακατεύουμε την List με τα γράμματα που μόλις δώσαμε μέσω της tempMap
+                for (int k = 0; k < tempMap.size(); k++) {
+                    Array[k][row] = tempMap.get(k);//και πίσω πάλι στον πίνακα στη στήλη row πετάμε τα γράμματης της TempArray
                 }//ουσιαστικά πετάξαμε και ανακατέψαμε τα γράμματα της στήλης του πίνακα σε μία λίστα και τα ξαναπήραμε ανακατεμένα πίσω στην στήλη
                 statt = false;//για να σταματήσει να τρέχει η while
             } else {
@@ -377,19 +382,32 @@ public class Game extends JFrame {
     //παρομοίως κάνουμε αναδιάταξη σε μία γραμμή που δίνει ο χρληστης
     public void RearrangementLine(int size) {
         boolean statt = true;
+        int y, x = 5;
         while (statt) {
-            String InputChoice = JOptionPane.showInputDialog(null, size + " γραμμές, επέλεξε γραμμή διαγραφής: ");
+            String InputChoice = JOptionPane.showInputDialog(null, "επέλεξε γραμμή διαγραφής: ");
             int line = Integer.parseInt(InputChoice) - 1;
             if (line >= 0 && line < size) {//έλεγχος εγκυρότητας αριθμού
-                TempArray.clear();//άδειασμα της TempArray λίστας
-                for (int k = 0; k < Array.length; k++) {
-                    TempArray.add(Array[line][k]);//της προσθέτουμε τα γράμματα της επιθυμητής γραμμής
+                y = line * 105 + 5;
+                tempMap.clear();//άδειασμα της TempArray λίστας
+                for (int a = 0; a < size; a++) {
+                    Point tempPoint = new Point(x, y);
+                    for (Map.Entry<Point, Letter> entry : CardGraphs.LettersMap.entrySet()) {
+                        Point Pkey = entry.getKey();
+                        Letter val = entry.getValue();
+                        if ((Pkey.x == tempPoint.x) && (Pkey.y == tempPoint.y)) {
+                            tempMap.put(Pkey, val);
+                        }
+                    }
+                    x += 105;
                 }
-                Collections.shuffle(TempArray);//ανακατεύουμε τα γράμματα της TempArray
-                for (int k = 0; k < TempArray.size(); k++) {
-                    Array[line][k] = TempArray.get(k);//και τα πετάμε πίσω στην γραμμή ανακατεμένα
-                }
-                statt = false;//σταματάει η επανάληψη έμεσα
+                System.out.println(tempMap);
+                List keys = new ArrayList(tempMap.keySet());
+                Collections.shuffle(keys);//ανακατεύουμε την List με τα γράμματα που μόλις δώσαμε μέσω της tempMap
+                System.out.println(keys);
+                for (int k = 0; k < tempMap.size(); k++) {
+                    Array[line][k] = tempMap.get(k);//και πίσω πάλι στον πίνακα στη στήλη row πετάμε τα γράμματης της TempArray
+                }//ουσιαστικά πετάξαμε και ανακατέψαμε τα γράμματα της στήλης του πίνακα σε μία λίστα και τα ξαναπήραμε ανακατεμένα πίσω στην στήλη
+                statt = false;//για να σταματήσει να τρέχει η while
             } else {
                 JOptionPane.showMessageDialog(null, "Δεν έχει τέτοια γραμμή ο πίνακας ξαναπροσπάθησε");
             }
