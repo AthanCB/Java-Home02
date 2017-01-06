@@ -19,7 +19,7 @@ public class CardGraphs extends JComponent implements MouseListener {
     String tempChar;
     int Points = 0, counter = 1, PointsOfLetter = 0;
     static int dimension;
-    static HashMap<Point, Character> lettersMap = new HashMap<>();
+    //static HashMap<Point, Character> lettersMap = new HashMap<>();
     static HashMap<Point, Integer> valuesMap = new HashMap<>();
     ArrayList<Point> chosenLettersList = new ArrayList<>();
     static HashMap<Point, Letter> LettersMap = new HashMap<>();
@@ -270,7 +270,8 @@ public class CardGraphs extends JComponent implements MouseListener {
         return true; // never runned
     }
 
-    public void ReDrawLetter(Graphics g, Letter l, int X, int Y, boolean stat) {
+    //STATIC?
+    public static void ReDrawLetter(Graphics g, Letter l, int X, int Y, boolean stat) {
         String LetterPoints = "" + l.getValue();
         String LetterChar = "" + l.getCharacter();
         if (stat == true) {

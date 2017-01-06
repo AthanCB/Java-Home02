@@ -293,15 +293,27 @@ public class Game extends JFrame {
             int y1 = Integer.parseInt(InputChoiceRow);
             int x2 = Integer.parseInt(InputChoice2Line);
             int y2 = Integer.parseInt(InputChoice2Row);
+            Point p1 = new Point(x1, y1);
+            Point p2 = new Point(x2, y2);
+            Point temp;
             //όσο και οι δύο θέσεις για τα γράμματα είναι όντως στον πίνακα, και θετικές
-            if (x1 < size && x2 < size && x1 >= 0 && x2 >= 0) {
-                //if (y1 < Array[x1].length && y2 < Array[x2].length) {
-                if (y1 < size && y2 < size) {
-                    Letter temp = Array[x1][y1];
-                    Array[x1][y1] = Array[x2][y2];
-                    Array[x2][y2] = temp;
-                    statt = false;
+            if (x1 < size && x2 < size && x1 >= 0 && x2 >= 0 && y1 < size && y2 < size && y2 > 0 && y1 > 0) {
+                for (Map.Entry<Point, Letter> entry : CardGraphs.LettersMap.entrySet()) {
+                    Point tempoPoint,Pkey = entry.getKey();
+                    Letter val = entry.getValue();
+                    if()
+                    temp = p1;
+                    p1 = p2;
+                    p2 = temp;
+                    
+                    if ((Pkey.x == tempPoint.x) && (Pkey.y == tempPoint.y)) {
+                        tempMap.put(Pkey, val);
+                    }
                 }
+//                    Letter tempL = Array[x1][y1];
+//                    Array[x1][y1] = Array[x2][y2];
+//                    Array[x2][y2] = tempL;
+                statt = false;
             } else {
                 JOptionPane.showMessageDialog(null, "Λάθος συντεταγμένες για τα γράμματα");
             }
@@ -335,6 +347,7 @@ public class Game extends JFrame {
             int count = 0;//για την θέση επιλογής του γράμματος από την Shuffled_Chars
             if ((line < size) && (line >= 0)) {//έλεγχος εγκυρότητας
                 //for (int k = 0; k < size; k++) {
+
                 //γεμίζουμε την επιλεγμένη γραμμή με τα νέα γράμματα από την Shuffled_Chars
                 managefile.Selected_Words(size);// για μία γραμμή παίρνουμε μέσω της Selected_Words νέα γράμματα 
                 new GameGraphs(size, managefile.Shuffled_Chars);
@@ -370,6 +383,7 @@ public class Game extends JFrame {
                 List keys = new ArrayList(tempMap.keySet());
                 Collections.shuffle(keys);//ανακατεύουμε την List με τα γράμματα που μόλις δώσαμε μέσω της tempMap
                 for (int k = 0; k < tempMap.size(); k++) {
+
                     Array[k][row] = tempMap.get(k);//και πίσω πάλι στον πίνακα στη στήλη row πετάμε τα γράμματης της TempArray
                 }//ουσιαστικά πετάξαμε και ανακατέψαμε τα γράμματα της στήλης του πίνακα σε μία λίστα και τα ξαναπήραμε ανακατεμένα πίσω στην στήλη
                 statt = false;//για να σταματήσει να τρέχει η while
@@ -382,17 +396,18 @@ public class Game extends JFrame {
     //παρομοίως κάνουμε αναδιάταξη σε μία γραμμή που δίνει ο χρληστης
     public void RearrangementLine(int size) {
         boolean statt = true;
-        int y, x = 5;
+        int y, x = 5;// για τις συντεταγμένες των γραμμάτων της σειράς
+        Point Pkey, tempPoint; // για σύγκριση των σημείων των γραμμάτων
         while (statt) {
             String InputChoice = JOptionPane.showInputDialog(null, "επέλεξε γραμμή διαγραφής: ");
             int line = Integer.parseInt(InputChoice) - 1;
             if (line >= 0 && line < size) {//έλεγχος εγκυρότητας αριθμού
                 y = line * 105 + 5;
                 tempMap.clear();//άδειασμα της TempArray λίστας
-                for (int a = 0; a < size; a++) {
-                    Point tempPoint = new Point(x, y);
+                for (int a = 0; a < size; a++) {//τρέχει όσες φορές είναι το αριθμός γραμμάτων στη γραμμή
+                    tempPoint = new Point(x, y); //manual πηγαίνει στο επόμενο σημείο, ίδια σειρά άλλη στήλη
                     for (Map.Entry<Point, Letter> entry : CardGraphs.LettersMap.entrySet()) {
-                        Point Pkey = entry.getKey();
+                        Pkey = entry.getKey();
                         Letter val = entry.getValue();
                         if ((Pkey.x == tempPoint.x) && (Pkey.y == tempPoint.y)) {
                             tempMap.put(Pkey, val);
@@ -400,13 +415,23 @@ public class Game extends JFrame {
                     }
                     x += 105;
                 }
-                System.out.println(tempMap);
-                List keys = new ArrayList(tempMap.keySet());
-                Collections.shuffle(keys);//ανακατεύουμε την List με τα γράμματα που μόλις δώσαμε μέσω της tempMap
-                System.out.println(keys);
-                for (int k = 0; k < tempMap.size(); k++) {
-                    Array[line][k] = tempMap.get(k);//και πίσω πάλι στον πίνακα στη στήλη row πετάμε τα γράμματης της TempArray
-                }//ουσιαστικά πετάξαμε και ανακατέψαμε τα γράμματα της στήλης του πίνακα σε μία λίστα και τα ξαναπήραμε ανακατεμένα πίσω στην στήλη
+                //System.out.println(tempMap);
+                List CopyKeys = new ArrayList(tempMap.keySet());
+                Collections.shuffle(CopyKeys);//ανακατεύουμε την List με τα γράμματα που μόλις δώσαμε μέσω της tempMap
+
+                //ξαναεπιστρέφουμε τα γράμματα πίσω με άλλη σειρά τώρα στην δωθείσα γραμμή
+                for (int a = 0; a < size; a++) {
+                    tempPoint = new Point(x, y);
+                    for (Map.Entry<Point, Letter> entry : CardGraphs.LettersMap.entrySet()) {
+                        Pkey = entry.getKey();
+                        Letter val = entry.getValue();
+                        if ((Pkey.x == tempPoint.x) && (Pkey.y == tempPoint.y)) {
+                            CardGraphs.ReDrawLetter(getGraphics(), Pkey.x, Pkey.y, true);
+                        }
+                    }
+                    x += 105;
+                }
+                //ουσιαστικά πετάξαμε και ανακατέψαμε τα γράμματα της στήλης του πίνακα σε μία λίστα και τα ξαναπήραμε ανακατεμένα πίσω στην στήλη
                 statt = false;//για να σταματήσει να τρέχει η while
             } else {
                 JOptionPane.showMessageDialog(null, "Δεν έχει τέτοια γραμμή ο πίνακας ξαναπροσπάθησε");

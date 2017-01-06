@@ -306,9 +306,9 @@ public class GameGraphs extends JFrame {
     public void CheckWord() {
         if (MadeWord.length() > 2) {
             JOptionPane.showMessageDialog(null, "Θα ελέγξουμε τη λέξη " + MadeWord);
-//                if (card.getDoubleWordValue() == true) {
-//                    WordPoints *= 2;
-//                }
+                if (card.getDoubleWordValue() == true) {
+                    WordPoints *= 2;
+                }
             if (game.SearchWord(MadeWord) == true) {
                 game.ReplaceWords();
                 card.ClearAllLetters(gp);// everytime
@@ -320,6 +320,15 @@ public class GameGraphs extends JFrame {
         }
     }
 
+    public void ReDrawLine(int line)
+    {
+        
+    }
+    public void ReDrawRow(int raw)
+    {
+        
+    }
+    
     class ButtonHandler implements ActionListener {
 
         @Override
