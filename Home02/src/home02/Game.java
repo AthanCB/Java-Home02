@@ -284,36 +284,50 @@ public class Game extends JFrame {
     //ανταλλαγή 2 γραμμάτων στον πίνακα από τον χρήστη
     public void Exchange_Letters(int size) {
         boolean statt = true;
-        while (statt) {
+        while (statt == true) {
             String InputChoiceLine = JOptionPane.showInputDialog(null, "Πρώτο Γράμμα: γραμμή: ");
             String InputChoiceRow = JOptionPane.showInputDialog(null, "Πρώτο Γράμμα: στήλη: ");
             String InputChoice2Line = JOptionPane.showInputDialog(null, "Δεύτερο Γράμμα: γραμμή: ");
             String InputChoice2Row = JOptionPane.showInputDialog(null, "Δεύτερο Γράμμα: στήλη: ");
-            int x1 = Integer.parseInt(InputChoiceLine);
-            int y1 = Integer.parseInt(InputChoiceRow);
-            int x2 = Integer.parseInt(InputChoice2Line);
-            int y2 = Integer.parseInt(InputChoice2Row);
-            Point p1 = new Point(x1, y1);
-            Point p2 = new Point(x2, y2);
-            Point temp;
+            int x1 = Integer.parseInt(InputChoiceLine) - 1;
+            int y1 = Integer.parseInt(InputChoiceRow) - 1;
+            int x2 = Integer.parseInt(InputChoice2Line) - 1;
+            int y2 = Integer.parseInt(InputChoice2Row) - 1;
+            Point tempP, tempP2;
+            Letter val = null, val2 = null;
             //όσο και οι δύο θέσεις για τα γράμματα είναι όντως στον πίνακα, και θετικές
-            if (x1 < size && x2 < size && x1 >= 0 && x2 >= 0 && y1 < size && y2 < size && y2 > 0 && y1 > 0) {
-                for (Map.Entry<Point, Letter> entry : CardGraphs.LettersMap.entrySet()) {
-                    Point tempoPoint,Pkey = entry.getKey();
-                    Letter val = entry.getValue();
-                    if()
-                    temp = p1;
-                    p1 = p2;
-                    p2 = temp;
-                    
-                    if ((Pkey.x == tempPoint.x) && (Pkey.y == tempPoint.y)) {
-                        tempMap.put(Pkey, val);
+            if (x1 < size && x2 < size && x1 >= 0 && x2 >= 0 && y1 < size && y2 < size && y2 >= 0 && y1 >= 0) {
+                x1 = x1 * 105 + 5;
+                y1 = y1 * 105 + 5;
+                x2 = x2 * 105 + 5;
+                y2 = y2 * 105 + 5;
+                Point p1 = new Point(x1, y1);
+                Point p2 = new Point(x2, y2);
+                if (p1.x == p2.x && p1.y == p2.y) {
+                    JOptionPane.showMessageDialog(null, "Επέλεξες το ίδιο γράμμα");
+                    statt = false;
+                } else {
+                    for (Map.Entry<Point, Letter> entry : CardGraphs.LettersMap.entrySet()) {
+                        tempP = entry.getKey();
+                        val = entry.getValue();
+                        if (p1.x == tempP.x && p1.y == tempP.y) {
+                            for (Map.Entry<Point, Letter> entry2 : CardGraphs.LettersMap.entrySet()) {
+                                tempP2 = entry2.getKey();
+                                val2 = entry2.getValue();
+                                if (p2.x == tempP2.x && p2.y == tempP2.y) {
+                                    tempP = p1;
+                                    p1 = p2;
+                                    p2 = tempP;
+                                    break;
+                                }
+                            }
+                        }
+//                    if ((Pkey.x == tempPoint.x) && (Pkey.y == tempPoint.y)) {
+//                        tempMap.put(Pkey, val);
+//                    }
                     }
+                    statt = false;
                 }
-//                    Letter tempL = Array[x1][y1];
-//                    Array[x1][y1] = Array[x2][y2];
-//                    Array[x2][y2] = tempL;
-                statt = false;
             } else {
                 JOptionPane.showMessageDialog(null, "Λάθος συντεταγμένες για τα γράμματα");
             }
@@ -426,7 +440,7 @@ public class Game extends JFrame {
                         Pkey = entry.getKey();
                         Letter val = entry.getValue();
                         if ((Pkey.x == tempPoint.x) && (Pkey.y == tempPoint.y)) {
-                            CardGraphs.ReDrawLetter(getGraphics(), Pkey.x, Pkey.y, true);
+                            CardGraphs.ReDrawLetter(getGraphics(), val, Pkey.x, Pkey.y, true);
                         }
                     }
                     x += 105;
