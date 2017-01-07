@@ -62,9 +62,8 @@ public class CardGraphs extends JComponent implements MouseListener {
     public CardGraphs() {
         begin = true;
         gg.manageWindow(null, true);
-        //LetterChecks(null, null, 0, 0);
     }
-
+    
     public CardGraphs(Letter letter, int x, int y) {
         this.Character = letter.getCharacter();
         this.Value = letter.getValue();
@@ -220,7 +219,7 @@ public class CardGraphs extends JComponent implements MouseListener {
                 l.setSituation(false);//available again
                 setStatBlackColor(true);
                 STAT = getStatBlackColor();
-                ReDrawLetter(g, l, X, Y, STAT);
+                DrawLetter(g, l, X, Y, STAT);
                 gg.manageWindow(l, STAT);
                 chosenLettersList.remove(chosenLettersList.size() - 1);
                 if (chosenLettersList.size() > 0) {
@@ -256,7 +255,7 @@ public class CardGraphs extends JComponent implements MouseListener {
                 gg.setCounter(counter);
                 setStatBlackColor(false);
                 STAT = getStatBlackColor();
-                ReDrawLetter(g, l, X, Y, STAT);
+                DrawLetter(g, l, X, Y, STAT);
                 gg.manageWindow(l, STAT);
                 return true;
             } else {
@@ -271,12 +270,11 @@ public class CardGraphs extends JComponent implements MouseListener {
     }
 
     //STATIC?
-    public static void ReDrawLetter(Graphics g, Letter l, int X, int Y, boolean stat) {
+    public static void DrawLetter(Graphics g, Letter l, int X, int Y, boolean stat) {
         String LetterPoints = "" + l.getValue();
         String LetterChar = "" + l.getCharacter();
         if (stat == true) {
             g.setColor(l.getColor());
-            //g.setColor(Color.white);
             g.fillRect(X, Y, 100, 100);
         } else {
             g.setColor(Color.yellow);

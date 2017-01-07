@@ -223,7 +223,7 @@ public class Game extends JFrame {
         int ThirdCount = 0;
         int FourthCount = 0;
         int FifthCount = 0;
-        while (stat) {//όσο η μεταβλητή είναι true
+        while (stat == true) {//όσο η μεταβλητή είναι true
             String ch = Choice + "";
             if (!ch.equals("0") && !ch.equals("1") && !ch.equals("2") && !ch.equals("3") && !ch.equals("4") && !ch.equals("5")) {
                 ch = JOptionPane.showInputDialog(null, "Δεν υπάρχει αυτή η επιλογή, ξαναδώσε");
@@ -278,63 +278,77 @@ public class Game extends JFrame {
                 JOptionPane.showMessageDialog(null, "Επέλεξες ήδη 15 φορές τις επιλογές, δε γίνεται άλλο");
                 stat = false;
             }
+            stat = false;
         }
     }
 
     //ανταλλαγή 2 γραμμάτων στον πίνακα από τον χρήστη
     public void Exchange_Letters(int size) {
         boolean statt = true;
+        Point tempP, tempP2, p1 = null, p2 = null;
+        int x1 = 0, x2 = 0, y2 = 0, y1 = 0;
+        Letter valL = null, valL2 = null;
         while (statt == true) {
             String InputChoiceLine = JOptionPane.showInputDialog(null, "Πρώτο Γράμμα: γραμμή: ");
             String InputChoiceRow = JOptionPane.showInputDialog(null, "Πρώτο Γράμμα: στήλη: ");
-            String InputChoice2Line = JOptionPane.showInputDialog(null, "Δεύτερο Γράμμα: γραμμή: ");
-            String InputChoice2Row = JOptionPane.showInputDialog(null, "Δεύτερο Γράμμα: στήλη: ");
-            int x1 = Integer.parseInt(InputChoiceLine) - 1;
-            int y1 = Integer.parseInt(InputChoiceRow) - 1;
-            int x2 = Integer.parseInt(InputChoice2Line) - 1;
-            int y2 = Integer.parseInt(InputChoice2Row) - 1;
-            Point tempP, tempP2;
-            Letter val = null, val2 = null;
-            //όσο και οι δύο θέσεις για τα γράμματα είναι όντως στον πίνακα, και θετικές
-            if (x1 < size && x2 < size && x1 >= 0 && x2 >= 0 && y1 < size && y2 < size && y2 >= 0 && y1 >= 0) {
-                x1 = x1 * 105 + 5;
-                y1 = y1 * 105 + 5;
-                x2 = x2 * 105 + 5;
-                y2 = y2 * 105 + 5;
-                Point p1 = new Point(x1, y1);
-                Point p2 = new Point(x2, y2);
-                if (p1.x == p2.x && p1.y == p2.y) {
-                    JOptionPane.showMessageDialog(null, "Επέλεξες το ίδιο γράμμα");
-                    statt = false;
+            x1 = Integer.parseInt(InputChoiceLine) - 1;
+            y1 = Integer.parseInt(InputChoiceRow) - 1;
+            if (x1 < size && x1 >= 0 && y1 < size && y1 >= 0) {
+                String InputChoice2Line = JOptionPane.showInputDialog(null, "Δεύτερο Γράμμα: γραμμή: ");
+                String InputChoice2Row = JOptionPane.showInputDialog(null, "Δεύτερο Γράμμα: στήλη: ");
+                x2 = Integer.parseInt(InputChoice2Line) - 1;
+                y2 = Integer.parseInt(InputChoice2Row) - 1;
+                if (x2 < size && x2 >= 0 && y2 < size && y2 >= 0) {
+                    x1 = x1 * 105 + 5;
+                    y1 = y1 * 105 + 5;
+                    x2 = x2 * 105 + 5;
+                    y2 = y2 * 105 + 5;
+                    p1 = new Point(x1, y1);
+                    p2 = new Point(x2, y2);
+                    if (p1.x == p2.x && p1.y == p2.y) {
+                        JOptionPane.showMessageDialog(null, "Επέλεξες το ίδιο γράμμα");
+                    } else {
+                        statt = false;
+                    }
                 } else {
-                    for (Map.Entry<Point, Letter> entry : CardGraphs.LettersMap.entrySet()) {
-                        tempP = entry.getKey();
-                        val = entry.getValue();
-                        if (p1.x == tempP.x && p1.y == tempP.y) {
-                            for (Map.Entry<Point, Letter> entry2 : CardGraphs.LettersMap.entrySet()) {
-                                tempP2 = entry2.getKey();
-                                val2 = entry2.getValue();
-                                if (p2.x == tempP2.x && p2.y == tempP2.y) {
-                                    tempP = p1;
-                                    p1 = p2;
-                                    p2 = tempP;
-                                    break;
-                                }
-                            }
+                    JOptionPane.showMessageDialog(null, "Λάθος συντεταγμένες για το γράμμα 2 ξανά και τα δύο");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Λάθος συντεταγμένες για το γράμμα 1");
+            }
+
+        }
+        //αν και οι δύο θέσεις για τα γράμματα είναι όντως στον πίνακα, και θετικές
+        if (statt == false) {
+            for (Map.Entry<Point, Letter> entry : CardGraphs.LettersMap.entrySet()) {
+                tempP = entry.getKey();
+                valL = entry.getValue();
+                if (p1.x == tempP.x && p1.y == tempP.y) {
+                    for (Map.Entry<Point, Letter> entry2 : CardGraphs.LettersMap.entrySet()) {
+                        tempP2 = entry2.getKey();
+                        valL2 = entry2.getValue();
+                        if (p2.x == tempP2.x && p2.y == tempP2.y) {
+                            tempP = p1;
+                            p1 = p2;
+                            p2 = tempP;
+//                            CardGraphs c = new CardGraphs();
+//                            c.DrawLetter(getGraphics(), valL, p1.x, p1.y, true);
+//                            c.DrawLetter(getGraphics(), valL2, p2.x, p2.y, true);
+                            CardGraphs.DrawLetter(getGraphics(), valL, p1.x, p1.y, true);
+                            CardGraphs.DrawLetter(getGraphics(), valL2, p2.x, p2.y, true);
+                            h ta 2 apo panw
                         }
+                    }
+                }
 //                    if ((Pkey.x == tempPoint.x) && (Pkey.y == tempPoint.y)) {
 //                        tempMap.put(Pkey, val);
 //                    }
-                    }
-                    statt = false;
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Λάθος συντεταγμένες για τα γράμματα");
             }
+
         }
     }
-
     //αναδιάταξη γραμμάτων πρώτα της λίστας με τα γράμματα, απλά μέσω της έτοιμης εντολής από την βιβλιοθήκη shuffle
+
     public void Rearrangement(int SIZE) {
         tempMap.clear();
         tempMap.put(null, null);
@@ -440,7 +454,7 @@ public class Game extends JFrame {
                         Pkey = entry.getKey();
                         Letter val = entry.getValue();
                         if ((Pkey.x == tempPoint.x) && (Pkey.y == tempPoint.y)) {
-                            CardGraphs.ReDrawLetter(getGraphics(), val, Pkey.x, Pkey.y, true);
+                            CardGraphs.DrawLetter(getGraphics(), val, Pkey.x, Pkey.y, true);
                         }
                     }
                     x += 105;
