@@ -7,6 +7,7 @@ package home02;
  Υπάρχουν σε αυτή τη κλάσση με άλλα λόγια μέθοδοι
  */
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.util.*;
 import javax.swing.JFrame;
@@ -20,8 +21,10 @@ public class Game extends JFrame {
 
     // πίνακας τύπου γράμματος/Letter 
     Letter Array[][];
-    GameGraphs gp;
+    GameGraphs gg;
     static int size;
+    CardGraphs c;
+    Graphics g;
     ManageList managefile = new ManageList();// δημιουργία αντικειμένου τύπου κλάσσης ManageList για τη πρόσβαση μετά στις συναρτήσεις στη ManageList
     ArrayList<Letter> TempArray = new ArrayList();//λίστα που δέχεται αντικείμενα τύπου Letters, για διευκόλυνση του πίνακα χρησιμοποιείται 
     HashMap<Point, Letter> tempMap = new HashMap<>();
@@ -60,9 +63,9 @@ public class Game extends JFrame {
     }
 
     //συνάρτηση για την εμφάνιση του μενου τη πρώτη φορά ή για το ξεκίνημα επιλογής γραμμάτων από τον χρήστη
-    public void LetsPlay(int Choice, String Word, User user) {
+    public void LetsPlay(int Choice, String Word, User user,Graphics g) {
         if (counterDismiss == 0) {//τη πρώτη φορά καλείται το μενου με τις επιλογές που μπορεί να κάνει ο χρήστης με τα γράμματα πριν παίξει
-            User_Menu(Choice);
+            User_Menu(Choice,g);
             counterDismiss++;
         }
         ChosenLetter(0, 0, user, Choice);// καλείται η συνάρτηση αυτή για την επιλογή του γράμματος
@@ -93,7 +96,7 @@ public class Game extends JFrame {
             if (Color.BLUE.equals(Array[l][r].getColor())) {//αν βρεθεί γράμμα μπλε τότε αλλάζει η boolean για να διπλασιαστεί η λέξη 
                 statPoints = true;
             }
-            Word = ManagePoints(l, r, user, Choice);//καλούμε τη συνάρτηση για τη διαχείριση των πόντων στη λέξη
+            Word = ManagePoints(l, r, user, Choice,g);//καλούμε τη συνάρτηση για τη διαχείριση των πόντων στη λέξη
             //αναδρομικά καλούμε τη συνάρτηση πάλι για να πάει ο χρήστης στο δεύτερο γράμμα μέσω της ίδιας συνάρτησης
             //που θα δέχεται παράμετρο τις συντεταγμένες του προηγούμενος γράμματος για τη γειτνιαση και τον user και το μέγεθος του τετραγωνικού πίνακα
             ChosenLetter(l, r, user, Choice);
@@ -118,7 +121,7 @@ public class Game extends JFrame {
             do {// δίνει απάντηση ο ή ν, ότιδήποτε άλλο δεν είναι αποδεκτό για αυτό του ξαναζητάμε απάντηση
                 inCh = in.next().charAt(0);
                 if (inCh == 'ο') {
-                    LetsPlay(Choice, Word, user);//για τη συνέχεια του παιχνιδιού ξανακαλούμε την LetsPlay για να ξαναψάξει από την αρχή λέξη
+                    LetsPlay(Choice, Word, user,g);//για τη συνέχεια του παιχνιδιού ξανακαλούμε την LetsPlay για να ξαναψάξει από την αρχή λέξη
                 } else if (inCh == 'ν') {
                     System.exit(0);//τέλος συστήματος και παιχνιδιού
                 }
@@ -127,7 +130,7 @@ public class Game extends JFrame {
     }
 
     //συνάρτηση για τη διαχείριση των πόντων στη λέξη και των επιλογών για τη λέξη σε κάθε φορά 
-    public String ManagePoints(int l, int r, User user, int Choice) {
+    public String ManagePoints(int l, int r, User user, int Choice,Graphics g) {
         Scanner in = new Scanner(System.in);
         Array[l][r].setSituation(true);//αλλάζει η κατάσταση του Letter έτσι ώστε να μη μπορεί να ξαναχρησιμοποιηθεί το γράμμα
         System.out.println(Array[l][r].getCharacter());
@@ -138,7 +141,7 @@ public class Game extends JFrame {
         if (nextCho == '1')//πάμε στο μενού των βοηθητικών επιλογών 
         {
             System.out.println("Πάμε πίσω στο μενού επιλογών. Υπόψιν οποιαδήποτε αλλαγή θα αλλάξει και το χτύσιμο ως τώρα της λέξης");
-            User_Menu(Choice);
+            User_Menu(Choice,g);
         } else if (nextCho == '2') {//αν ακυρώσει τις επιλογές του όλα τα γράμματα πρέπει να μπορούν να χρησιμοποιηθούν πάλι ξανα
             for (int k = 0; k < Array.length; k++) {
                 for (int m = 0; m < Array[k].length; m++) {
@@ -146,7 +149,7 @@ public class Game extends JFrame {
                 }
             }
             Word = "";// και αφού ξεκινάμε πάλι από την αρχή τη λέξη, την θέτουμε ως κενή
-            LetsPlay(Choice, Word, user);
+            LetsPlay(Choice, Word, user,g);
         } //else 
         Word += Array[l][r].getCharacter();//η λέξη αυξάνεται με το γράμμα επιλογής του χρήστη
         System.out.println("Ως τώρα η λέξη: " + Word);
@@ -214,7 +217,8 @@ public class Game extends JFrame {
     }
 
     //εμφάνιση μενού επιλογών για τη διαμορφωποίηση του πίνακα πριν ξεκινήσει ο χρήστης να επιλέγει γράμματα
-    public void User_Menu(int Choice) {
+    public void User_Menu(int Choice, Graphics g) {
+        gg = new GameGraphs();
         boolean stat = true;
         int localCount = 0; //μετρητής για τις φόρες που επιλέγονται οι επιλογές αφού ο χρήστης μπορεί ως 15 φόρες να τις επιλέξει
         int FirstCount = 0;//μετρητής για τις φόρες που επιλέγεται η πρώτη επιλογή αφού ο χρήστης μπορεί ως 3 φόρες να τη επιλέξει
@@ -232,7 +236,7 @@ public class Game extends JFrame {
                 if (FirstCount < 3) {
                     localCount++;
                     FirstCount++;
-                    Exchange_Letters(size);//μέθοδος ανταλλαγής γραμμάτων
+                    gg.Exchange_Letters(size,g);//μέθοδος ανταλλαγής γραμμάτων
                 } else {
                     JOptionPane.showMessageDialog(null, "Επέλεξες ήδη 3 φορές αυτή την επιλογή δε γίνεται άλλο");
                 }
@@ -282,73 +286,7 @@ public class Game extends JFrame {
         }
     }
 
-    //ανταλλαγή 2 γραμμάτων στον πίνακα από τον χρήστη
-    public void Exchange_Letters(int size) {
-        boolean statt = true;
-        Point tempP, tempP2, p1 = null, p2 = null;
-        int x1 = 0, x2 = 0, y2 = 0, y1 = 0;
-        Letter valL = null, valL2 = null;
-        while (statt == true) {
-            String InputChoiceLine = JOptionPane.showInputDialog(null, "Πρώτο Γράμμα: γραμμή: ");
-            String InputChoiceRow = JOptionPane.showInputDialog(null, "Πρώτο Γράμμα: στήλη: ");
-            x1 = Integer.parseInt(InputChoiceLine) - 1;
-            y1 = Integer.parseInt(InputChoiceRow) - 1;
-            if (x1 < size && x1 >= 0 && y1 < size && y1 >= 0) {
-                String InputChoice2Line = JOptionPane.showInputDialog(null, "Δεύτερο Γράμμα: γραμμή: ");
-                String InputChoice2Row = JOptionPane.showInputDialog(null, "Δεύτερο Γράμμα: στήλη: ");
-                x2 = Integer.parseInt(InputChoice2Line) - 1;
-                y2 = Integer.parseInt(InputChoice2Row) - 1;
-                if (x2 < size && x2 >= 0 && y2 < size && y2 >= 0) {
-                    x1 = x1 * 105 + 5;
-                    y1 = y1 * 105 + 5;
-                    x2 = x2 * 105 + 5;
-                    y2 = y2 * 105 + 5;
-                    p1 = new Point(x1, y1);
-                    p2 = new Point(x2, y2);
-                    if (p1.x == p2.x && p1.y == p2.y) {
-                        JOptionPane.showMessageDialog(null, "Επέλεξες το ίδιο γράμμα");
-                    } else {
-                        statt = false;
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Λάθος συντεταγμένες για το γράμμα 2 ξανά και τα δύο");
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Λάθος συντεταγμένες για το γράμμα 1");
-            }
-
-        }
-        //αν και οι δύο θέσεις για τα γράμματα είναι όντως στον πίνακα, και θετικές
-        if (statt == false) {
-            for (Map.Entry<Point, Letter> entry : CardGraphs.LettersMap.entrySet()) {
-                tempP = entry.getKey();
-                valL = entry.getValue();
-                if (p1.x == tempP.x && p1.y == tempP.y) {
-                    for (Map.Entry<Point, Letter> entry2 : CardGraphs.LettersMap.entrySet()) {
-                        tempP2 = entry2.getKey();
-                        valL2 = entry2.getValue();
-                        if (p2.x == tempP2.x && p2.y == tempP2.y) {
-                            tempP = p1;
-                            p1 = p2;
-                            p2 = tempP;
-//                            CardGraphs c = new CardGraphs();
-//                            c.DrawLetter(getGraphics(), valL, p1.x, p1.y, true);
-//                            c.DrawLetter(getGraphics(), valL2, p2.x, p2.y, true);
-                            CardGraphs.DrawLetter(getGraphics(), valL, p1.x, p1.y, true);
-                            CardGraphs.DrawLetter(getGraphics(), valL2, p2.x, p2.y, true);
-                            h ta 2 apo panw
-                        }
-                    }
-                }
-//                    if ((Pkey.x == tempPoint.x) && (Pkey.y == tempPoint.y)) {
-//                        tempMap.put(Pkey, val);
-//                    }
-            }
-
-        }
-    }
     //αναδιάταξη γραμμάτων πρώτα της λίστας με τα γράμματα, απλά μέσω της έτοιμης εντολής από την βιβλιοθήκη shuffle
-
     public void Rearrangement(int SIZE) {
         tempMap.clear();
         tempMap.put(null, null);

@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -306,9 +307,9 @@ public class GameGraphs extends JFrame {
     public void CheckWord() {
         if (MadeWord.length() > 2) {
             JOptionPane.showMessageDialog(null, "Θα ελέγξουμε τη λέξη " + MadeWord);
-                if (card.getDoubleWordValue() == true) {
-                    WordPoints *= 2;
-                }
+            if (card.getDoubleWordValue() == true) {
+                WordPoints *= 2;
+            }
             if (game.SearchWord(MadeWord) == true) {
                 game.ReplaceWords();
                 card.ClearAllLetters(gp);// everytime
@@ -320,15 +321,73 @@ public class GameGraphs extends JFrame {
         }
     }
 
-    public void ReDrawLine(int line)
-    {
-        
+    public void Exchange_Letters(int dimension, Graphics g) {
+        boolean statt = true;
+        Point tempP, tempP2, p1 = null, p2 = null;
+        int x1 = 0, x2 = 0, y2 = 0, y1 = 0;
+        Letter valL = null, valL2 = null;
+        String InputChoiceLine = "", InputChoiceRow = "";
+        while (statt == true) {
+            do {
+                InputChoiceLine = JOptionPane.showInputDialog(null, "Πρώτο Γράμμα: γραμμή: ");
+                InputChoiceRow = JOptionPane.showInputDialog(null, "Πρώτο Γράμμα: στήλη: ");
+            } while (Character.isDigit(InputChoiceLine.charAt(0)) != true);
+            x1 = Integer.parseInt(InputChoiceLine) - 1;
+            y1 = Integer.parseInt(InputChoiceRow) - 1;
+            if (x1 < dimension && x1 >= 0 && y1 < dimension && y1 >= 0) {
+                do {
+                    InputChoiceLine = JOptionPane.showInputDialog(null, "Δεύτερο Γράμμα: γραμμή: ");
+                    InputChoiceRow = JOptionPane.showInputDialog(null, "Δεύτερο Γράμμα: στήλη: ");
+                } while (Character.isDigit(InputChoiceLine.charAt(0)) != true);
+                x2 = Integer.parseInt(InputChoiceLine) - 1;
+                y2 = Integer.parseInt(InputChoiceRow) - 1;
+                if (x2 < dimension && x2 >= 0 && y2 < dimension && y2 >= 0) {
+                    x1 = x1 * 105 + 5;
+                    y1 = y1 * 105 + 5;
+                    x2 = x2 * 105 + 5;
+                    y2 = y2 * 105 + 5;
+                    p1 = new Point(x1, y1);
+                    p2 = new Point(x2, y2);
+                    if (p1.x == p2.x && p1.y == p2.y) {
+                        JOptionPane.showMessageDialog(null, "Επέλεξες το ίδιο γράμμα");
+                    } else {
+                        statt = false;
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Λάθος συντεταγμένες για το γράμμα 2 ξανά και τα δύο");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Λάθος συντεταγμένες για το γράμμα 1");
+            }
+        }
+        //αν και οι δύο θέσεις για τα γράμματα είναι όντως στον πίνακα, και θετικές
+        if (statt == false) {
+            for (Map.Entry<Point, Letter> entry : CardGraphs.LettersMap.entrySet()) {
+                tempP = entry.getKey();
+                valL = entry.getValue();
+                if (p1.x == tempP.x && p1.y == tempP.y) {
+                    for (Map.Entry<Point, Letter> entry2 : CardGraphs.LettersMap.entrySet()) {
+                        tempP2 = entry2.getKey();
+                        valL2 = entry2.getValue();
+                        if (p2.x == tempP2.x && p2.y == tempP2.y) {
+                            tempP = p1;
+                            p1 = p2;
+                            p2 = tempP;
+                            System.out.println(valL2);
+                            System.out.println(valL);
+                            CardGraphs.DrawLetter(getGraphics(), valL, p1.x, p1.y, true);
+                            CardGraphs.DrawLetter(getGraphics(), valL2, p2.x, p2.y, true);
+                        }
+                    }
+                }
+//                    if ((Pkey.x == tempPoint.x) && (Pkey.y == tempPoint.y)) {
+//                        tempMap.put(Pkey, val);
+//                    }
+            }
+
+        }
     }
-    public void ReDrawRow(int raw)
-    {
-        
-    }
-    
+
     class ButtonHandler implements ActionListener {
 
         @Override
@@ -342,27 +401,27 @@ public class GameGraphs extends JFrame {
                 tempcheck = false;
             } else if (ae.getSource() == b1) {
                 if (JOptionPane.showConfirmDialog(null, "Επέλεξε να αντικατασήσεις μια σειρά") == 0) {
-                    game.User_Menu(2);
+                    game.User_Menu(2, getGraphics());
                     //game.RemakeLine(dimension);
                 }
             } else if (ae.getSource() == b2) {
                 if (JOptionPane.showConfirmDialog(null, "Επέλεξες να ανακατέψεις μια σειρά") == 0) {
-                    game.User_Menu(5);
+                    game.User_Menu(5, getGraphics());
                     //game.RearrangementLine();
                 }
             } else if (ae.getSource() == b3) {
                 if (JOptionPane.showConfirmDialog(null, "Επέλεξες να ανακατέψεις μια στήλη") == 0) {
-                    game.User_Menu(4);
+                    game.User_Menu(4, getGraphics());
                     //game.RearrangementRow();
                 }
             } else if (ae.getSource() == b4) {
                 if (JOptionPane.showConfirmDialog(null, "Επέλεξες να ανακατέψεις όλα τα γράμματα") == 0) {
-                    game.User_Menu(3);
+                    game.User_Menu(3, getGraphics());
                     //game.Rearrangement(dimension);
                 }
             } else if (ae.getSource() == b5) {
                 if (JOptionPane.showConfirmDialog(null, "Επέλεξες να ανταλλάξεις δύο γράμματα μεταξύ τους") == 0) {
-                    game.User_Menu(1);
+                    game.User_Menu(1, getGraphics());
                     //game.Exchange_Letters();
                 }
             } else if (ae.getSource() == bUsers) {
