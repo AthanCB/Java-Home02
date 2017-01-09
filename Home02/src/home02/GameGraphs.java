@@ -10,6 +10,7 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -375,8 +376,8 @@ public class GameGraphs extends JFrame {
                             p2 = tempP;
                             System.out.println(valL2);
                             System.out.println(valL);
-                            CardGraphs.DrawLetter(getGraphics(), valL, p1.x, p1.y, true);
-                            CardGraphs.DrawLetter(getGraphics(), valL2, p2.x, p2.y, true);
+                            CardGraphs.DrawLetter(g, valL, p1.x, p1.y, true);
+                            CardGraphs.DrawLetter(g, valL2, p2.x, p2.y, true);
                         }
                     }
                 }

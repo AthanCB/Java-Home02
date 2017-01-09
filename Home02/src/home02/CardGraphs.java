@@ -209,10 +209,6 @@ public class CardGraphs extends JComponent implements MouseListener {
     }
 
     public boolean LetterChecks(Graphics g, Letter l, int X, int Y) {
-//        if(begin==true)
-//        {
-//            gg.manageWindow(null, true);
-//        }
         if (LastX == X && LastY == Y) {//last letter
             int ch = JOptionPane.showConfirmDialog(null, "Θες να ακυρώσεις το τελευταίο γράμμα");
             if (ch == 0) {

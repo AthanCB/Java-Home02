@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
-import javax.swing.JOptionPane;
 
 public class ManageList {
 
@@ -13,18 +12,18 @@ public class ManageList {
     private Scanner in;
 
     /* η AllWordsList αποθηκεύει από το αρχείο που έχουμε κάνει στον ίδιο φάκελο
-    όλες τις λέξεις που βρίσκει, όπου σε κάθε σειρά του αρχείου έχουμε βάλει μία λέξη*/
+     όλες τις λέξεις που βρίσκει, όπου σε κάθε σειρά του αρχείου έχουμε βάλει μία λέξη*/
     ArrayList<String> AllWordsList = new ArrayList();
 
     /* η λίστα WordList κρατάει και αυτή τις λέξεις του αρχείου αλλά κάθε φορά που χρησιμοποιούνται τα γράμματα μίας λέξης 
-    στο παιχνίδι τότε στην WordList αφαιρούνται αυτά τα γράμματα, δηλαδή η λέξη
-    έτσι ώστε να μην ξαναχρησιμοποιούνται σε κάποιο γύρο στο παιχνίδι μετά*/
+     στο παιχνίδι τότε στην WordList αφαιρούνται αυτά τα γράμματα, δηλαδή η λέξη
+     έτσι ώστε να μην ξαναχρησιμοποιούνται σε κάποιο γύρο στο παιχνίδι μετά*/
     ArrayList<String> WordList = new ArrayList();
 
     /*η TempWordList χρησιμοποιείται για να αποθηκεύσουμε τις λέξεις στον κάθε γύρο.*/
     ArrayList<String> TempWordList = new ArrayList();
     /*Από τις λέξεις της TempWordList παίρνουμε μετα και πετάμε τα γράμματα τους στην Shuffled_Chars
-    για τη δημιουργία μετά του πίνακα με του οποίου τα γράμματα ο χρήστη θα παίξει και θα φτιάξει λέξεις*/
+     για τη δημιουργία μετά του πίνακα με του οποίου τα γράμματα ο χρήστη θα παίξει και θα φτιάξει λέξεις*/
     ArrayList<Letter> Shuffled_Chars = new ArrayList();
     int counterBlue = 0, counterRed = 0;//counters για τον μέγιστο αριθμό κόκκινων και μπλε γραμμάτων
 
@@ -52,7 +51,7 @@ public class ManageList {
     }
 
     /*στη μέθοδο αυτή στέλνουμε στην TempWordList από την WordList τόσες λέξεις ώστε το σύνολο των γραμμάτων των λέξεων αυτών
-    να είναι μικρότερο ή ίσο από το μέγεθος*μέγεθος που δίνει ο χρήστης  */
+     να είναι μικρότερο ή ίσο από το μέγεθος*μέγεθος που δίνει ο χρήστης  */
     public void Selected_Words(int Choice) {
         int counter = 0; // μετρητής για όλα τα γράμματα των λέξεων που παίρνει η WordList
         for (int i = 0; i < WordList.size(); i++) {
@@ -80,7 +79,6 @@ public class ManageList {
     }
 
     public void CharList() {
-
         //εδώ παίρνουμε το κάθε γράμμα της κάθες λέξης της TempWordList και το πετάμε στη λίστα Shuffled_Chars τύπου Character
         for (int k = 0; k < TempWordList.size(); k++) {// τρέχει για όλο το σύνολο των λέξεων της TempWordList
             for (int m = 0; m < TempWordList.get(k).length(); m++) { // τρέχει τη κάθε λέξη της TempWordList για όλα τα γράμματα της
@@ -98,7 +96,6 @@ public class ManageList {
         letter.setCharacter(TempWordList.get(k).charAt(m));
         letter.setValue(GivenValue(letter.getCharacter())); //σαν αξία παίρνει τη τιμή που επιστρέφει η GivenValue
         // θέτει σαν false την κατάσταση του γράμματος, γιατί δε χρησιμοποιείται εξ αρχής στη λέξη
-
         //όταν χρησιμοποιηθεί στη λέξη τότε θα θέσουμε τη κατάσταση του true έτσι να μη μπορεί να ξαναχρησιμοποιηθεί
         letter.setSituation(false);
         return letter;// επιστρέφουμε το γράμμα, μαζί με τα γνωρίσματα που τα ορίσαμε πάνω ακριβώς
@@ -124,7 +121,7 @@ public class ManageList {
                 letter.setColor(Color.BLUE);
                 counterBlue++;//αυξάνουμε και τον μετρητή για τα μπλε γράμματα
             }
-        } else if (counterBlue >= 3) {//&&counterRed <= 3
+        } else if (counterBlue >= 3 && counterRed < 4) {
             ch = rnd.nextInt(2) + 1;// δύο επιλογές πλέον για το χρώμα του γράμματος, άσπρο ή κόκκινο
             if (ch == 1) {// αν ο τυχαίος αριθμός είναι το 1 τότε άσπρο το χρώμα του
                 letter = new WhiteLetter();//δημιουργία αντικειμένου τύπου WhiteLetter
@@ -134,7 +131,7 @@ public class ManageList {
                 letter.setColor(Color.RED);
                 counterRed++;//αυξάνουμε και τον μετρητή για τα κόκκινα γράμματα
             }
-        } else if (counterRed >= 4) {//counterBlue < 3
+        } else if (counterRed >= 4 && counterBlue < 3) {
             ch = rnd.nextInt(2) + 1; //2 επιλογές, μόνο μπλε η άσπρο μπορεί να είναι ένα γράμμα
             if (ch == 1) {
                 letter = new WhiteLetter();//δημιουργία αντικειμένου τύπου WhiteLetter
@@ -143,13 +140,15 @@ public class ManageList {
                 letter = new BlueLetter();//δημιουργία αντικειμένου τύπου BlueLetter
                 letter.setColor(Color.BLUE);
                 counterBlue++;//αυξάνουμε και τον μετρητή για τα μπλε γράμματα
-            } else// σε αυτή τη περίπτωση το γράμμα μπορεί να είναι μόνο άσπρο, αφού περάσαμε τον max αριθμό για blue και red Letter
+            } else if (counterRed >= 4 && counterBlue >= 3)// σε αυτή τη περίπτωση το γράμμα μπορεί να είναι μόνο άσπρο, αφού περάσαμε τον max αριθμό για blue και red Letter
             {
                 letter = new WhiteLetter();//δημιουργία αντικειμένου τύπου WhiteLetter
                 letter.setColor(Color.WHITE);
+            } else {
+                System.out.println("Not logic");
             }
         }
-       
+        System.out.println(counterBlue + " " + counterRed);
         return letter;
     }
 
