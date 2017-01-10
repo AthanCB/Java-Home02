@@ -28,8 +28,8 @@ public class GameGraphs extends JFrame {
     String tempChar, FileWord = "";
     int Points = 0, WordPoints = 0, PointsOfLetter = 0;
     static int dimension;
-    FlowLayout fl = new FlowLayout();
-    GridLayout gl = new GridLayout(13, 1);
+    //FlowLayout fl = new FlowLayout();
+   
 //    JPanel panels[] = new JPanel[20];
 //    JLabel labels[] = new JLabel[5];
 //    JButton buttons[] = new JButton[10];
@@ -43,7 +43,7 @@ public class GameGraphs extends JFrame {
     JButton b3 = new JButton("3)Αναδιάταξη στήλης");
     JButton b4 = new JButton("4)Αναδιάταξη γραμμάτων");
     JButton b5 = new JButton("5)Εναλλαγή γραμμάτων");
-    JFrame jf2 = new JFrame();
+    JFrame jf = new JFrame();
     JPanel jp1 = new JPanel();
     JPanel jp2 = new JPanel();
     JPanel jp3 = new JPanel();
@@ -73,7 +73,7 @@ public class GameGraphs extends JFrame {
     Scanner scan;
     static ArrayList<Letter> letterList = new ArrayList<>();
     Container pane = new Container();
-    JFrame jf = new JFrame();
+    //JFrame jf = new JFrame();
     JButton button1, button3, button2;
     JPanel row1, row2;
     JLabel label;
@@ -128,9 +128,11 @@ public class GameGraphs extends JFrame {
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public GameGraphs(int dimension, ArrayList<Letter> Shuffled_Chars) {
         super("Window");
+       
         card = new CardGraphs();
         card.setArrayDimension(dimension);
-        jf.setSize(dimension * 110, dimension * 115);
+        jf.setSize(dimension * 110 + 700, dimension * 115);
+       
         setCounter(0);
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
@@ -142,19 +144,27 @@ public class GameGraphs extends JFrame {
                 jf.setVisible(true);
                 counter++;
                 x += 105;
+                System.out.print(currentLetter.getCharacter() + " ");
             }
+            
+            System.out.println();
             x = 5;
             y += 105;
         }
+//        JButton buttonTest = new JButton("Ti leei");
+//        buttonTest.setVisible(true);
+//        jf.add(buttonTest);
+      
+        
         setCounter(counter);
     }
 
     public void manageWindow(Letter letter, boolean stBC) {
-        jf2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jf2.setVisible(true);
-        jf2.setLayout(gl);
-        jf2.setSize(800, 1000);
-        jf2.setLocation(1000, 5);
+//        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        jf.setVisible(true);
+       // jf.setLayout(gl);
+//        jf.setSize(800, 1000);
+//        jf.setLocation(1000, 5);
         if (getCounter() == 0) { // first letter
             //System.out.println("begin");
             WordPoints = 0;
@@ -235,42 +245,42 @@ public class GameGraphs extends JFrame {
         bRestart.addActionListener(bh);
 
         jp1.add(JMadeWord);
-        jf2.add(jp1);
+        jf.add(jp1);
 
         jp2.add(JYourPoints);
-        jf2.add(jp2);
+        jf.add(jp2);
 
         jp10.add(info1);
-        jf2.add(jp10);
+        jf.add(jp10);
 
         jp11.add(info2);
-        jf2.add(jp11);
+        jf.add(jp11);
 
         jp3.add(options);
-        jf2.add(jp3);
+        jf.add(jp3);
 
         jp4.add(b1);
-        jf2.add(jp4);
+        jf.add(jp4);
 
         jp5.add(b2);
-        jf2.add(jp5);
+        jf.add(jp5);
 
         jp6.add(b3);
-        jf2.add(jp6);
+        jf.add(jp6);
 
         jp7.add(b4);
-        jf2.add(jp7);
+        jf.add(jp7);
 
         jp8.add(b5);
-        jf2.add(jp8);
+        jf.add(jp8);
 
         jp9.add(bCheckWord);
-        jf2.add(jp9);
+        jf.add(jp9);
 
         jp12.add(bGameHelp);
         jp12.add(bExit);
         jp12.add(bUsers);
-        jf2.add(jp12);
+        jf.add(jp12);
 
         //for( JButton buttons : )
     }

@@ -121,25 +121,27 @@ public class ManageList {
                 letter.setColor(Color.BLUE);
                 counterBlue++;//αυξάνουμε και τον μετρητή για τα μπλε γράμματα
             }
-        } else if (counterBlue >= 3 && counterRed < 4) {
-            ch = rnd.nextInt(2) + 1;// δύο επιλογές πλέον για το χρώμα του γράμματος, άσπρο ή κόκκινο
-            if (ch == 1) {// αν ο τυχαίος αριθμός είναι το 1 τότε άσπρο το χρώμα του
-                letter = new WhiteLetter();//δημιουργία αντικειμένου τύπου WhiteLetter
-                letter.setColor(Color.WHITE);
-            } else if (ch == 2) {// αν ο τυχαίος αριθμός είναι το 2 τότε κόκκινο το χρώμα του
-                letter = new RedLetter();//δημιουργία αντικειμένου τύπου RedLetter
-                letter.setColor(Color.RED);
-                counterRed++;//αυξάνουμε και τον μετρητή για τα κόκκινα γράμματα
-            }
-        } else if (counterRed >= 4 && counterBlue < 3) {
-            ch = rnd.nextInt(2) + 1; //2 επιλογές, μόνο μπλε η άσπρο μπορεί να είναι ένα γράμμα
-            if (ch == 1) {
-                letter = new WhiteLetter();//δημιουργία αντικειμένου τύπου WhiteLetter
-                letter.setColor(Color.WHITE);
-            } else if (ch == 2) {// αν ο τυχαίος αριθμός είναι το 3 τότε μπλε το χρώμα του
-                letter = new BlueLetter();//δημιουργία αντικειμένου τύπου BlueLetter
-                letter.setColor(Color.BLUE);
-                counterBlue++;//αυξάνουμε και τον μετρητή για τα μπλε γράμματα
+        } else {
+            if (counterBlue >= 3 && counterRed < 4) {
+                ch = rnd.nextInt(2) + 1;// δύο επιλογές πλέον για το χρώμα του γράμματος, άσπρο ή κόκκινο
+                if (ch == 1) {// αν ο τυχαίος αριθμός είναι το 1 τότε άσπρο το χρώμα του
+                    letter = new WhiteLetter();//δημιουργία αντικειμένου τύπου WhiteLetter
+                    letter.setColor(Color.WHITE);
+                } else if (ch == 2) {// αν ο τυχαίος αριθμός είναι το 2 τότε κόκκινο το χρώμα του
+                    letter = new RedLetter();//δημιουργία αντικειμένου τύπου RedLetter
+                    letter.setColor(Color.RED);
+                    counterRed++;//αυξάνουμε και τον μετρητή για τα κόκκινα γράμματα
+                }
+            } else if (counterRed >= 4 && counterBlue < 3) {
+                ch = rnd.nextInt(2) + 1; //2 επιλογές, μόνο μπλε η άσπρο μπορεί να είναι ένα γράμμα
+                if (ch == 1) {
+                    letter = new WhiteLetter();//δημιουργία αντικειμένου τύπου WhiteLetter
+                    letter.setColor(Color.WHITE);
+                } else if (ch == 2) {// αν ο τυχαίος αριθμός είναι το 3 τότε μπλε το χρώμα του
+                    letter = new BlueLetter();//δημιουργία αντικειμένου τύπου BlueLetter
+                    letter.setColor(Color.BLUE);
+                    counterBlue++;//αυξάνουμε και τον μετρητή για τα μπλε γράμματα
+                }
             } else if (counterRed >= 4 && counterBlue >= 3)// σε αυτή τη περίπτωση το γράμμα μπορεί να είναι μόνο άσπρο, αφού περάσαμε τον max αριθμό για blue και red Letter
             {
                 letter = new WhiteLetter();//δημιουργία αντικειμένου τύπου WhiteLetter
@@ -148,7 +150,6 @@ public class ManageList {
                 System.out.println("Not logic");
             }
         }
-        System.out.println(counterBlue + " " + counterRed);
         return letter;
     }
 
