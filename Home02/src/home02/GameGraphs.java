@@ -3,18 +3,14 @@ package home02;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import javax.swing.JButton;
@@ -28,27 +24,16 @@ public class GameGraphs extends JFrame {
     String tempChar, FileWord = "";
     int Points = 0, WordPoints = 0, PointsOfLetter = 0;
     static int dimension;
-    //FlowLayout fl = new FlowLayout();
-//    JPanel panels[] = new JPanel[20];
-//    JLabel labels[] = new JLabel[5];
-//    JButton buttons[] = new JButton[10];    
     JFrame jf = new JFrame();
-//    JPanel jp1 = new JPanel();
-//    JPanel jp2 = new JPanel();
-//    JPanel jp3 = new JPanel();
-//    JPanel jp4 = new JPanel();
-//    JPanel jp5 = new JPanel();
-//    JPanel jp6 = new JPanel();
-//    JPanel jp7 = new JPanel();
-//    JPanel jp8 = new JPanel();
-//    JPanel jp9 = new JPanel();
-//    JPanel jp10 = new JPanel();
-//    JPanel jp11 = new JPanel();
-//    JPanel jp12 = new JPanel();
+    JLabel bReplaceLineResults = new JLabel();
+    JLabel bRearrangeLineResults = new JLabel();
+    JLabel bRearrangeRowresults = new JLabel();
+    JLabel bRearrangeResults = new JLabel();
+    JLabel bExchangeLettersResults = new JLabel();
     JLabel options = new JLabel();
     JLabel info2 = new JLabel();
     JLabel info1 = new JLabel();
-    JLabel JMadeWord = new JLabel();// for row1
+    JLabel JMadeWord = new JLabel();
     JLabel JYourPoints = new JLabel();
     JButton bExit = new JButton();
     JButton bRestart = new JButton();
@@ -72,14 +57,12 @@ public class GameGraphs extends JFrame {
     Scanner scan;
     static ArrayList<Letter> letterList = new ArrayList<>();
     Container pane = new Container();
-    //JFrame jf = new JFrame();
     JButton button1, button3, button2;
     JPanel row1, row2;
     JLabel label;
     CardGraphs card;
     Game game = new Game();
     int counter;
-    //counter = 0;
 
     public void setMadeWord(String w) {
         MadeWord = w;
@@ -131,6 +114,7 @@ public class GameGraphs extends JFrame {
         card.setArrayDimension(dimension);
         setButtons(dimension);
         //jf.setLocation(1000, 5);
+        jf.setForeground(Color.magenta);
         jf.setMinimumSize(new Dimension(1350, 750));
         jf.setSize(dimension * 110 * 2 + 100, dimension * 115);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -166,7 +150,6 @@ public class GameGraphs extends JFrame {
                 sb.deleteCharAt(MadeWord.length() - 1);
                 setMadeWord(sb.toString());
             } else {// (stBC == false && counter != 0) 
-                //System.out.println("just a letter");
                 WordPoints += letter.getValue();
                 MadeWord += letter.getCharacter();
                 //setPointsOfWords(WordPoints);
@@ -368,19 +351,18 @@ public class GameGraphs extends JFrame {
         bCheckWord = new JButton("ΕΛΕΓΧΟΣ ΛΕΞΗΣ");
         bGameHelp = new JButton("Οδηγίες για το παιχνίδι");
         bUsers = new JButton("ABOUT/χρήστες");
+
         b1.setText("1)Αντικατάσταση γραμμάτων γραμμής");
         b2.setText("2)Αναδιάταξη γραμμής");
         b3.setText("3)Αναδιάταξη στήλης");
         b4.setText("4)Αναδιάταξη γραμμάτων");
         b5.setText("5)Εναλλαγή γραμμάτων");
-        JMadeWord.setVisible(true);
-        System.out.println(dimension * 110);
+
         JMadeWord.setText("Η λέξη ως τώρα: " + getMadeWord());
         JMadeWord.setForeground(Color.BLUE);
         JMadeWord.setFont(new Font("Courier", Font.BOLD, 40));
         JMadeWord.setBounds(dimension * 110 + 100, 10, 600, 40);
 
-        JYourPoints.setVisible(true);
         JYourPoints.setText("Οι πόντοι της λέξης ως τώρα: " + WordPoints);
         JYourPoints.setForeground(Color.RED);
         JYourPoints.setFont(new Font("Courier", Font.BOLD, 40));
@@ -388,44 +370,59 @@ public class GameGraphs extends JFrame {
 
         options.setText("Πρόσθετες επιλογές:");
         options.setFont(new Font("Courier", Font.BOLD, 22));
-        options.setBounds(dimension * 110 + 100, 110, 600, 40);
+        options.setBounds(dimension * 110 + 220, 210, 600, 40);
 
         info1.setText("Τωρινή λέξη: " + getNumberOfWords() + ", στόχος λέξεων: " + successWords);
         info1.setFont(new Font("Courier", Font.ITALIC, 25));
         info1.setForeground(Color.DARK_GRAY);
-        info1.setBounds(dimension * 110 + 100, 160, 600, 40);
+        info1.setBounds(dimension * 110 + 150, 160, 600, 40);
 
-        if (getPointsOfWords() > getsuccessPoints()) {
-            JOptionPane.showMessageDialog(null, "Μάζεψες τους απαιτούμενους πόντους, ΝΙΚΗΣΕΣ!");
-            System.exit(0);
-        }
-
+//        if (getPointsOfWords() > getsuccessPoints()) {
+//            JOptionPane.showMessageDialog(null, "Μάζεψες τους απαιτούμενους πόντους, ΝΙΚΗΣΕΣ!");
+//            System.exit(0);
+//        }
         info2.setText("Εξασφαλισμένοι πόντοι συνολικά: " + getPointsOfWords() + ", Στόχος: " + getsuccessPoints());
         info2.setFont(new Font("Courier", Font.ITALIC, 25));
         info2.setForeground(Color.DARK_GRAY);
-        info2.setBounds(dimension * 110 + 100, 210, 600, 40);
+        info2.setBounds(dimension * 110 + 100, 130, 600, 40);
 
-        b1.setBounds(dimension * 110 + 100, 260, 250, 40);
-        b2.setBounds(dimension * 110 + 100, 310, 250, 40);
-        b3.setBounds(dimension * 110 + 100, 360, 250, 40);
-        b4.setBounds(dimension * 110 + 100, 410, 250, 40);
-        b5.setBounds(dimension * 110 + 100, 460, 250, 40);
+        b1.setBounds(dimension * 110 + 200, 260, 250, 40);
+        b2.setBounds(dimension * 110 + 200, 310, 250, 40);
+        b3.setBounds(dimension * 110 + 200, 360, 250, 40);
+        b4.setBounds(dimension * 110 + 200, 410, 250, 40);
+        b5.setBounds(dimension * 110 + 200, 460, 250, 40);
 
-        bExit.setBackground(Color.RED);
+        bReplaceLineResults.setBounds(dimension * 110 + 500, 260, 250, 40);
+        bExchangeLettersResults.setBounds(dimension * 110 + 500, 310, 250, 40);
+        bRearrangeLineResults.setBounds(dimension * 110 + 500, 360, 250, 40);
+        bRearrangeRowresults.setBounds(dimension * 110 + 500, 410, 250, 40);
+        bRearrangeResults.setBounds(dimension * 110 + 500, 460, 250, 40);
+
+        bRearrangeLineResults.setText("/" + 3);
+        bExchangeLettersResults.setText("/" + 3);
+        bReplaceLineResults.setText("/" + 3);
+        bRearrangeResults.setText("/" + 3);
+        bRearrangeRowresults.setText("/" + 3);
+
         bExit.setForeground(Color.white);
-        bExit.setBounds(dimension * 110 + 100, 510, 200, 40);
-
-        bGameHelp.setBackground(Color.GRAY);
+        bCheckWord.setForeground(Color.white);
+        bUsers.setForeground(Color.white);
         bGameHelp.setForeground(Color.white);
-        bGameHelp.setBounds(dimension * 110 + 100, 560, 100, 40);
+        bRearrangeResults.setForeground(Color.black);
+        bRearrangeRowresults.setForeground(Color.black);
+        bReplaceLineResults.setForeground(Color.black);
+        bRearrangeLineResults.setForeground(Color.black);
+        bExchangeLettersResults.setForeground(Color.black);
 
         bUsers.setBackground(Color.GRAY);
-        bUsers.setForeground(Color.white);
-        bUsers.setBounds(dimension * 110 + 100, 560, 100, 40);
-
+        bGameHelp.setBackground(Color.GRAY);
         bCheckWord.setBackground(Color.BLUE);
-        bCheckWord.setForeground(Color.white);
-        bCheckWord.setBounds(dimension * 110 + 100, 560, 200, 40);
+        bExit.setBackground(Color.RED);
+
+        bExit.setBounds(dimension * 110 + 100, 510, 200, 40);
+        bUsers.setBounds(dimension * 110 + 100, 560, 200, 40);
+        bGameHelp.setBounds(dimension * 110 + 400, 510, 200, 40);
+        bCheckWord.setBounds(dimension * 110 + 400, 560, 200, 40);
 
         ButtonHandler bh = new ButtonHandler();
         bExit.addActionListener(bh);
@@ -439,6 +436,11 @@ public class GameGraphs extends JFrame {
         b5.addActionListener(bh);
         bRestart.addActionListener(bh);
 
+        jf.add(bRearrangeLineResults);
+        jf.add(bRearrangeResults);
+        jf.add(bRearrangeRowresults);
+        jf.add(bReplaceLineResults);
+        jf.add(bExchangeLettersResults);
         jf.add(JMadeWord);
         jf.add(JYourPoints);
         jf.add(info1);

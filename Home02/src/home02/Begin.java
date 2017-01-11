@@ -57,7 +57,7 @@ public class Begin {
                 choice = JOptionPane.showOptionDialog(null, null, " δώσε το μέγεθος του πίνακα: 5x5 or 8x8 or 10x10: ", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, null, opt, opt[1]);
             }
         }
-        JOptionPane.showMessageDialog(null, user.getName() + " ο πίνακας που δημιούργησες είναι " + size + " γραμμών και στήλων");
+        //JOptionPane.showMessageDialog(null, user.getName() + " ο πίνακας που δημιούργησες είναι " + size + " γραμμών και στήλων");
         Game game = new Game(); // δημιουργία αντικειμένου τύπου Game 
         game.setArraySize(size);
         game.CreateTable(user);// κάλεσμα της συνάρτησης StartGame της κλάσσης game 
