@@ -45,9 +45,21 @@ public class GameGraphs extends JFrame {
     JButton b3 = new JButton();
     JButton b4 = new JButton();
     JButton b5 = new JButton();
+    JPanel jp1 = new JPanel();
+    JPanel jp2 = new JPanel();
+    JPanel jp3 = new JPanel();
+    JPanel jp4 = new JPanel();
+    JPanel jp5 = new JPanel();
+    JPanel jp6 = new JPanel();
+    JPanel jp7 = new JPanel();
+    JPanel jp8 = new JPanel();
+    JPanel jp9 = new JPanel();
+    JPanel jp10 = new JPanel();
+    JPanel jp11 = new JPanel();
+    JPanel jp12 = new JPanel();
     boolean tempcheck = true;
     private static String MadeWord = "";
-    Graphics gp;
+    Graphics g;
     int LastX = 0, LastY = 0, answer;
     Point LetterPoint;
     StringBuilder sb;
@@ -88,6 +100,14 @@ public class GameGraphs extends JFrame {
         return PointsOfWords;
     }
 
+    public void setPointsOfTheWord(int p) {
+        WordPoints += p;
+    }
+
+    public int getPointsOfTheWord() {
+        return WordPoints;
+    }
+
     public void setsuccessPoints(int sp) {
         successPoints = sp;
     }
@@ -104,20 +124,29 @@ public class GameGraphs extends JFrame {
         return counter;
     }
 
+    public void setDimension(int d) {
+        dimension = d;
+    }
+
+    public int getDimension() {
+        return dimension;
+    }
+
     public GameGraphs() {
     }
 
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public GameGraphs(int dimension, ArrayList<Letter> Shuffled_Chars) {
         super("Window");
+        setDimension(dimension);
         card = new CardGraphs();
         card.setArrayDimension(dimension);
-        setButtons(dimension);
-        //jf.setLocation(1000, 5);
+        setWindow(true, null,g);
         jf.setForeground(Color.magenta);
         jf.setMinimumSize(new Dimension(1350, 750));
         jf.setSize(dimension * 110 * 2 + 100, dimension * 115);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //jf.setResizable(false);
         setCounter(0);
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
@@ -138,50 +167,117 @@ public class GameGraphs extends JFrame {
         setCounter(counter);
     }
 
-    public void manageWindow(Letter letter, boolean stBC) {
+    public void setWindow(boolean stBC, Letter letter,Graphics g) {
         if (getCounter() == 0) { // first letter
-            WordPoints = 0;
+            //WordPoints = 0;
+            setPointsOfTheWord(0);
             setMadeWord("");
-            setPointsOfWords(0);
+            setPointsOfWords(getPointsOfWords());
         } else {
+//            jf.remove(JMadeWord);
+//            jf.remove(JYourPoints);
             if (stBC == true && getCounter() != 0) {//remove last letter
-                WordPoints -= letter.getValue();
+                setPointsOfTheWord(getPointsOfTheWord() - letter.getValue());
                 sb = new StringBuilder(MadeWord);
                 sb.deleteCharAt(MadeWord.length() - 1);
                 setMadeWord(sb.toString());
             } else {// (stBC == false && counter != 0) 
-                WordPoints += letter.getValue();
+                //WordPoints += letter.getValue();
+                setPointsOfTheWord(getPointsOfTheWord() + letter.getValue());
                 MadeWord += letter.getCharacter();
-                //setPointsOfWords(WordPoints);
+                setPointsOfWords(WordPoints);
             }
         }
+//        if (WordPoints != 0) {
+//            jb.setVisible(false);
+//            jf.remove(jb);
+//            jb.hide();
+//        } else {
+//            jb.setVisible(true);
+//        }
+        bExit = new JButton("Διακοπή παιχνιδιού");
+        bRestart = new JButton("Επανεκκίνηση παιχνιδιού");
+        bCheckWord = new JButton("ΕΛΕΓΧΟΣ ΛΕΞΗΣ");
+        bGameHelp = new JButton("Οδηγίες για το παιχνίδι");
+        bUsers = new JButton("ABOUT/χρήστες");
+
+        b1.setText("1)Αντικατάσταση γραμμάτων γραμμής");
+        b2.setText("2)Αναδιάταξη γραμμής");
+        b3.setText("3)Αναδιάταξη στήλης");
+        b4.setText("4)Αναδιάταξη γραμμάτων");
+        b5.setText("5)Εναλλαγή γραμμάτων");
 
         JMadeWord.setText("Η λέξη ως τώρα: " + getMadeWord());
         JMadeWord.setForeground(Color.BLUE);
         JMadeWord.setFont(new Font("Courier", Font.BOLD, 40));
-
-        JYourPoints.setVisible(true);
-        JYourPoints.setText("Οι πόντοι της λέξης ως τώρα: " + WordPoints);
+        JMadeWord.setBounds(getDimension() * 110 + 100, 10, 600, 40);
+        JMadeWord.setVisible(true);
+        
+        JYourPoints.setText("Οι πόντοι της λέξης ως τώρα: " + getPointsOfTheWord());// instead of WordPoints
         JYourPoints.setForeground(Color.RED);
+        System.out.println(getPointsOfTheWord() + " " + JMadeWord.getText());
+        //System.out.println(JYourPoints.getText() + " " + JMadeWord.getText());
         JYourPoints.setFont(new Font("Courier", Font.BOLD, 40));
+        JYourPoints.setBounds(getDimension() * 110 + 100, 60, 600, 40);
+        JYourPoints.setVisible(true);
 
         options.setText("Πρόσθετες επιλογές:");
         options.setFont(new Font("Courier", Font.BOLD, 22));
-
+        options.setBounds(getDimension() * 110 + 220, 210, 600, 40);
         info1.setText("Τωρινή λέξη: " + getNumberOfWords() + ", στόχος λέξεων: " + successWords);
         info1.setFont(new Font("Courier", Font.ITALIC, 25));
         info1.setForeground(Color.DARK_GRAY);
+        info1.setBounds(getDimension() * 110 + 150, 160, 600, 40);
 
         if (getPointsOfWords() > getsuccessPoints()) {
             JOptionPane.showMessageDialog(null, "Μάζεψες τους απαιτούμενους πόντους, ΝΙΚΗΣΕΣ!");
             System.exit(0);
         }
-
         info2.setText("Εξασφαλισμένοι πόντοι συνολικά: " + getPointsOfWords() + ", Στόχος: " + getsuccessPoints());
         info2.setFont(new Font("Courier", Font.ITALIC, 25));
         info2.setForeground(Color.DARK_GRAY);
+        info2.setBounds(getDimension() * 110 + 100, 130, 600, 40);
+
+        b1.setBounds(getDimension() * 110 + 200, 260, 250, 40);
+        b2.setBounds(getDimension() * 110 + 200, 310, 250, 40);
+        b3.setBounds(getDimension() * 110 + 200, 360, 250, 40);
+        b4.setBounds(getDimension() * 110 + 200, 410, 250, 40);
+        b5.setBounds(getDimension() * 110 + 200, 460, 250, 40);
+
+        bReplaceLineResults.setBounds(getDimension() * 110 + 500, 260, 250, 40);
+        bExchangeLettersResults.setBounds(getDimension() * 110 + 500, 310, 250, 40);
+        bRearrangeLineResults.setBounds(getDimension() * 110 + 500, 360, 250, 40);
+        bRearrangeRowresults.setBounds(getDimension() * 110 + 500, 410, 250, 40);
+        bRearrangeResults.setBounds(getDimension() * 110 + 500, 460, 250, 40);
+
+        bRearrangeLineResults.setText("/" + 3);
+        bExchangeLettersResults.setText("/" + 3);
+        bReplaceLineResults.setText("/" + 3);
+        bRearrangeResults.setText("/" + 3);
+        bRearrangeRowresults.setText("/" + 3);
+
+        bExit.setForeground(Color.white);
+        bCheckWord.setForeground(Color.white);
+        bUsers.setForeground(Color.white);
+        bGameHelp.setForeground(Color.white);
+        bRearrangeResults.setForeground(Color.black);
+        bRearrangeRowresults.setForeground(Color.black);
+        bReplaceLineResults.setForeground(Color.black);
+        bRearrangeLineResults.setForeground(Color.black);
+        bExchangeLettersResults.setForeground(Color.black);
+
+        bUsers.setBackground(Color.GRAY);
+        bGameHelp.setBackground(Color.GRAY);
+        bCheckWord.setBackground(Color.BLUE);
+        bExit.setBackground(Color.RED);
+
+        bExit.setBounds(getDimension() * 110 + 100, 510, 200, 40);
+        bUsers.setBounds(getDimension() * 110 + 100, 560, 200, 40);
+        bGameHelp.setBounds(getDimension() * 110 + 400, 510, 200, 40);
+        bCheckWord.setBounds(getDimension() * 110 + 400, 560, 200, 40);
 
         ButtonHandler bh = new ButtonHandler();
+
         bExit.addActionListener(bh);
         bCheckWord.addActionListener(bh);
         bUsers.addActionListener(bh);
@@ -194,42 +290,52 @@ public class GameGraphs extends JFrame {
         bRestart.addActionListener(bh);
 
 //        jp1.add(JMadeWord);
-//        jf.add(jp1);
-//
 //        jp2.add(JYourPoints);
-//        jf.add(jp2);
-//
-//        jp10.add(info1);
-//        jf.add(jp10);
-//
-//        jp11.add(info2);
-//        jf.add(jp11);
-//
 //        jp3.add(options);
-//        jf.add(jp3);
-//
+//        jp10.add(info1);
+//        jp11.add(info2);
 //        jp4.add(b1);
-//        jf.add(jp4);
-//
 //        jp5.add(b2);
-//        jf.add(jp5);
-//
 //        jp6.add(b3);
-//        jf.add(jp6);
-//
 //        jp7.add(b4);
-//        jf.add(jp7);
-//
-//        jp8.add(b5);
-//        jf.add(jp8);
-//
-//        jp9.add(bCheckWord);
-//        jf.add(jp9);
-//
+//        jp8.add(b5);        
+//        jp9.add(bCheckWord);        
 //        jp12.add(bGameHelp);
 //        jp12.add(bExit);
 //        jp12.add(bUsers);
+//        jf.add(jp1);
+//        jf.add(jp2);
+//        jf.add(jp3);
+//        jf.add(jp10);
+//        jf.add(jp11);
+//        jf.add(jp4);
+//        jf.add(jp5);
+//        jf.add(jp6);
+//        jf.add(jp8);
+//        jf.add(jp7);
+//        jf.add(jp9);        
 //        jf.add(jp12);
+        jf.add(JMadeWord);
+        jf.add(JYourPoints);
+        jf.add(info1);
+        jf.add(info2);
+        jf.add(options);
+        jf.add(bRearrangeLineResults);
+        jf.add(bRearrangeResults);
+        jf.add(bRearrangeRowresults);
+        jf.add(bReplaceLineResults);
+        jf.add(bExchangeLettersResults);
+        jf.add(b1);
+        jf.add(b2);
+        jf.add(b3);
+        jf.add(b4);
+        jf.add(b5);
+        jf.add(bCheckWord);
+        jf.add(bGameHelp);
+        jf.add(bExit);
+        jf.add(bUsers);
+        revalidate();
+        repaint();
     }
 
     public void Instructions() {
@@ -270,7 +376,7 @@ public class GameGraphs extends JFrame {
             }
             if (game.SearchWord(MadeWord) == true) {
                 game.ReplaceWords();
-                card.ClearAllLetters(gp);// everytime
+                //card.ClearAllLetters(gp);// everytime
                 setMadeWord("");
                 setPointsOfWords(WordPoints);
             }
@@ -344,118 +450,10 @@ public class GameGraphs extends JFrame {
             }
         }
     }
-
-    private void setButtons(int dimension) {
-        bExit = new JButton("Διακοπή παιχνιδιού");
-        bRestart = new JButton("Επανεκκίνηση παιχνιδιού");
-        bCheckWord = new JButton("ΕΛΕΓΧΟΣ ΛΕΞΗΣ");
-        bGameHelp = new JButton("Οδηγίες για το παιχνίδι");
-        bUsers = new JButton("ABOUT/χρήστες");
-
-        b1.setText("1)Αντικατάσταση γραμμάτων γραμμής");
-        b2.setText("2)Αναδιάταξη γραμμής");
-        b3.setText("3)Αναδιάταξη στήλης");
-        b4.setText("4)Αναδιάταξη γραμμάτων");
-        b5.setText("5)Εναλλαγή γραμμάτων");
-
-        JMadeWord.setText("Η λέξη ως τώρα: " + getMadeWord());
-        JMadeWord.setForeground(Color.BLUE);
-        JMadeWord.setFont(new Font("Courier", Font.BOLD, 40));
-        JMadeWord.setBounds(dimension * 110 + 100, 10, 600, 40);
-
-        JYourPoints.setText("Οι πόντοι της λέξης ως τώρα: " + WordPoints);
-        JYourPoints.setForeground(Color.RED);
-        JYourPoints.setFont(new Font("Courier", Font.BOLD, 40));
-        JYourPoints.setBounds(dimension * 110 + 100, 60, 600, 40);
-
-        options.setText("Πρόσθετες επιλογές:");
-        options.setFont(new Font("Courier", Font.BOLD, 22));
-        options.setBounds(dimension * 110 + 220, 210, 600, 40);
-
-        info1.setText("Τωρινή λέξη: " + getNumberOfWords() + ", στόχος λέξεων: " + successWords);
-        info1.setFont(new Font("Courier", Font.ITALIC, 25));
-        info1.setForeground(Color.DARK_GRAY);
-        info1.setBounds(dimension * 110 + 150, 160, 600, 40);
-
-//        if (getPointsOfWords() > getsuccessPoints()) {
-//            JOptionPane.showMessageDialog(null, "Μάζεψες τους απαιτούμενους πόντους, ΝΙΚΗΣΕΣ!");
-//            System.exit(0);
-//        }
-        info2.setText("Εξασφαλισμένοι πόντοι συνολικά: " + getPointsOfWords() + ", Στόχος: " + getsuccessPoints());
-        info2.setFont(new Font("Courier", Font.ITALIC, 25));
-        info2.setForeground(Color.DARK_GRAY);
-        info2.setBounds(dimension * 110 + 100, 130, 600, 40);
-
-        b1.setBounds(dimension * 110 + 200, 260, 250, 40);
-        b2.setBounds(dimension * 110 + 200, 310, 250, 40);
-        b3.setBounds(dimension * 110 + 200, 360, 250, 40);
-        b4.setBounds(dimension * 110 + 200, 410, 250, 40);
-        b5.setBounds(dimension * 110 + 200, 460, 250, 40);
-
-        bReplaceLineResults.setBounds(dimension * 110 + 500, 260, 250, 40);
-        bExchangeLettersResults.setBounds(dimension * 110 + 500, 310, 250, 40);
-        bRearrangeLineResults.setBounds(dimension * 110 + 500, 360, 250, 40);
-        bRearrangeRowresults.setBounds(dimension * 110 + 500, 410, 250, 40);
-        bRearrangeResults.setBounds(dimension * 110 + 500, 460, 250, 40);
-
-        bRearrangeLineResults.setText("/" + 3);
-        bExchangeLettersResults.setText("/" + 3);
-        bReplaceLineResults.setText("/" + 3);
-        bRearrangeResults.setText("/" + 3);
-        bRearrangeRowresults.setText("/" + 3);
-
-        bExit.setForeground(Color.white);
-        bCheckWord.setForeground(Color.white);
-        bUsers.setForeground(Color.white);
-        bGameHelp.setForeground(Color.white);
-        bRearrangeResults.setForeground(Color.black);
-        bRearrangeRowresults.setForeground(Color.black);
-        bReplaceLineResults.setForeground(Color.black);
-        bRearrangeLineResults.setForeground(Color.black);
-        bExchangeLettersResults.setForeground(Color.black);
-
-        bUsers.setBackground(Color.GRAY);
-        bGameHelp.setBackground(Color.GRAY);
-        bCheckWord.setBackground(Color.BLUE);
-        bExit.setBackground(Color.RED);
-
-        bExit.setBounds(dimension * 110 + 100, 510, 200, 40);
-        bUsers.setBounds(dimension * 110 + 100, 560, 200, 40);
-        bGameHelp.setBounds(dimension * 110 + 400, 510, 200, 40);
-        bCheckWord.setBounds(dimension * 110 + 400, 560, 200, 40);
-
-        ButtonHandler bh = new ButtonHandler();
-        bExit.addActionListener(bh);
-        bCheckWord.addActionListener(bh);
-        bUsers.addActionListener(bh);
-        bGameHelp.addActionListener(bh);
-        b1.addActionListener(bh);
-        b2.addActionListener(bh);
-        b3.addActionListener(bh);
-        b4.addActionListener(bh);
-        b5.addActionListener(bh);
-        bRestart.addActionListener(bh);
-
-        jf.add(bRearrangeLineResults);
-        jf.add(bRearrangeResults);
-        jf.add(bRearrangeRowresults);
-        jf.add(bReplaceLineResults);
-        jf.add(bExchangeLettersResults);
-        jf.add(JMadeWord);
-        jf.add(JYourPoints);
-        jf.add(info1);
-        jf.add(info2);
-        jf.add(options);
-        jf.add(b1);
-        jf.add(b2);
-        jf.add(b3);
-        jf.add(b4);
-        jf.add(b5);
-        jf.add(bCheckWord);
-        jf.add(bGameHelp);
-        jf.add(bExit);
-        jf.add(bUsers);
-    }
+//    @Override
+//    public void repaint() {
+//        System.out.println("repaint");
+//    }
 
     class ButtonHandler implements ActionListener {
 
@@ -481,10 +479,11 @@ public class GameGraphs extends JFrame {
             } else if (ae.getSource() == b3) {
                 if (JOptionPane.showConfirmDialog(null, "Επέλεξες να ανακατέψεις μια στήλη") == 0) {
                     game.User_Menu(4, getGraphics());
-                    //game.RearrangementRow();
+                    //game.RearrangementRow();                    
                 }
             } else if (ae.getSource() == b4) {
                 if (JOptionPane.showConfirmDialog(null, "Επέλεξες να ανακατέψεις όλα τα γράμματα") == 0) {
+//                    jb.setVisible(false);
                     game.User_Menu(3, getGraphics());
                     //game.Rearrangement(dimension);
                 }

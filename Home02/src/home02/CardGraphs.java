@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
@@ -129,6 +130,7 @@ public class CardGraphs extends JComponent implements MouseListener {
 
     @Override
     public void repaint() {
+        //System.out.println("repaint");
     }
 
     public void Myrepaint(Graphics g, MouseEvent me) {
@@ -168,7 +170,7 @@ public class CardGraphs extends JComponent implements MouseListener {
             }
             X = 5;
             Y += 105;
-        }
+        }              
     }
 
     public void ClearAllLetters(Graphics g) {
@@ -203,7 +205,7 @@ public class CardGraphs extends JComponent implements MouseListener {
         LastX = 0;
         LastY = 0;
         gg.setCounter(0);
-        gg.manageWindow(null, true);
+        gg.setWindow(true,null,g);
     }
 
     public boolean LetterChecks(Graphics g, Letter l, int X, int Y) {
@@ -214,7 +216,7 @@ public class CardGraphs extends JComponent implements MouseListener {
                 setStatBlackColor(true);
                 STAT = getStatBlackColor();
                 DrawLetter(g, l, X, Y, STAT);
-                gg.manageWindow(l, STAT);
+                gg.setWindow(STAT,l,g);
                 chosenLettersList.remove(chosenLettersList.size() - 1);
                 if (chosenLettersList.size() > 0) {
                     LastX = chosenLettersList.get(chosenLettersList.size() - 1).x;
@@ -250,7 +252,7 @@ public class CardGraphs extends JComponent implements MouseListener {
                 setStatBlackColor(false);
                 STAT = getStatBlackColor();
                 DrawLetter(g, l, X, Y, STAT);
-                gg.manageWindow(l, STAT);
+                gg.setWindow(STAT,l,g);
                 return true;
             } else {
                 JOptionPane.showMessageDialog(null, "Δεν είναι γειτονικό αυτό το γράμμα");
@@ -272,7 +274,7 @@ public class CardGraphs extends JComponent implements MouseListener {
             g.fillRect(X, Y, 100, 100);
         } else {
             g.setColor(Color.yellow);
-            g.fillRect(X, Y, 100, 100);
+            g.fillRect(X, Y, 100, 100);            
         }
         g.setColor(Color.BLACK);
         g.setFont(new Font("Courier", Font.BOLD, 71));
@@ -284,7 +286,9 @@ public class CardGraphs extends JComponent implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent me) {
+        //if(me.getSource()==)
         Myrepaint(getGraphics(), me);
+        //gg.repaint();
     }
 
     @Override
