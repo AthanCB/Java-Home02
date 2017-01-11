@@ -20,6 +20,7 @@ public class Game extends JFrame {
     }
 
     // πίνακας τύπου γράμματος/Letter 
+    GameGraphs gameG;
     Letter Array[][];
     GameGraphs gg;
     static int size;
@@ -54,14 +55,15 @@ public class Game extends JFrame {
         managefile.ReadFile();
         managefile.Selected_Words(size);
         managefile.CharList();
-        GameGraphs gameG = new GameGraphs(size, managefile.Shuffled_Chars);
+        
+        gameG = new GameGraphs(size, managefile.Shuffled_Chars);
         gameG.setsuccessPoints(50);
         gameG.setPointsOfWords(0);
         gameG.setNumberOfWords(1);
         gameG.setCounter(0);
+        
         //LetsPlay(Choice, Word, user);
     }
-
     //συνάρτηση για την εμφάνιση του μενου τη πρώτη φορά ή για το ξεκίνημα επιλογής γραμμάτων από τον χρήστη
     public void LetsPlay(int Choice, String Word, User user,Graphics g) {
         if (counterDismiss == 0) {//τη πρώτη φορά καλείται το μενου με τις επιλογές που μπορεί να κάνει ο χρήστης με τα γράμματα πριν παίξει

@@ -130,11 +130,13 @@ public class CardGraphs extends JComponent implements MouseListener {
 
     @Override
     public void repaint() {
+        revalidate();
         //System.out.println("repaint");
     }
 
     public void Myrepaint(Graphics g, MouseEvent me) {
         Point currentPoint = me.getPoint();
+        
         int X = 5, Y = 5;
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
@@ -170,7 +172,9 @@ public class CardGraphs extends JComponent implements MouseListener {
             }
             X = 5;
             Y += 105;
-        }              
+        }            
+        revalidate();
+        repaint();
     }
 
     public void ClearAllLetters(Graphics g) {

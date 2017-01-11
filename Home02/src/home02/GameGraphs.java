@@ -24,7 +24,7 @@ public class GameGraphs extends JFrame {
     String tempChar, FileWord = "";
     int Points = 0, WordPoints = 0, PointsOfLetter = 0;
     static int dimension;
-    JFrame jf = new JFrame();
+    
     JLabel bReplaceLineResults = new JLabel();
     JLabel bRearrangeLineResults = new JLabel();
     JLabel bRearrangeRowresults = new JLabel();
@@ -33,8 +33,8 @@ public class GameGraphs extends JFrame {
     JLabel options = new JLabel();
     JLabel info2 = new JLabel();
     JLabel info1 = new JLabel();
-    JLabel JMadeWord = new JLabel();
-    JLabel JYourPoints = new JLabel();
+    JLabel JMadeWord ;
+    JLabel JYourPoints;
     JButton bExit = new JButton();
     JButton bRestart = new JButton();
     JButton bCheckWord = new JButton();
@@ -75,7 +75,11 @@ public class GameGraphs extends JFrame {
     CardGraphs card;
     Game game = new Game();
     int counter;
-
+    private void Repaint(){
+        repaint();
+        revalidate();
+        
+    }
     public void setMadeWord(String w) {
         MadeWord = w;
     }
@@ -101,7 +105,7 @@ public class GameGraphs extends JFrame {
     }
 
     public void setPointsOfTheWord(int p) {
-        WordPoints += p;
+        WordPoints = p;
     }
 
     public int getPointsOfTheWord() {
@@ -140,22 +144,22 @@ public class GameGraphs extends JFrame {
         super("Window");
         setDimension(dimension);
         card = new CardGraphs();
-        card.setArrayDimension(dimension);
-        setWindow(true, null,g);
-        jf.setForeground(Color.magenta);
-        jf.setMinimumSize(new Dimension(1350, 750));
-        jf.setSize(dimension * 110 * 2 + 100, dimension * 115);
-        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        card.setArrayDimension(dimension);        
+        setBackground(Color.black);
+        setMinimumSize(new Dimension(1350, 750));
+        setSize(dimension * 110 * 2 + 100, dimension * 115);
+        setWindow(true, null, g);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //jf.setResizable(false);
         setCounter(0);
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 Letter currentLetter = Shuffled_Chars.get(counter);
                 Color c = currentLetter.getColor();
-                jf.getContentPane().add(new CardGraphs(currentLetter, x, y));
+                getContentPane().add(new CardGraphs(currentLetter, x, y));
                 currentLetter.setSituation(false);
                 letterList.add(currentLetter);
-                jf.setVisible(true);
+                setVisible(true);
                 counter++;
                 x += 105;
                 System.out.print(currentLetter.getCharacter() + " ");
@@ -167,7 +171,7 @@ public class GameGraphs extends JFrame {
         setCounter(counter);
     }
 
-    public void setWindow(boolean stBC, Letter letter,Graphics g) {
+    public void setWindow(boolean stBC, Letter letter, Graphics g) {
         if (getCounter() == 0) { // first letter
             //WordPoints = 0;
             setPointsOfTheWord(0);
@@ -206,21 +210,22 @@ public class GameGraphs extends JFrame {
         b3.setText("3)Αναδιάταξη στήλης");
         b4.setText("4)Αναδιάταξη γραμμάτων");
         b5.setText("5)Εναλλαγή γραμμάτων");
-
-        JMadeWord.setText("Η λέξη ως τώρα: " + getMadeWord());
+        JMadeWord=new JLabel("Η λέξη ως τώρα: " + getMadeWord());
+        //JMadeWord.setText();
         JMadeWord.setForeground(Color.BLUE);
         JMadeWord.setFont(new Font("Courier", Font.BOLD, 40));
         JMadeWord.setBounds(getDimension() * 110 + 100, 10, 600, 40);
         JMadeWord.setVisible(true);
         
-        JYourPoints.setText("Οι πόντοι της λέξης ως τώρα: " + getPointsOfTheWord());// instead of WordPoints
+        //JYourPoints.setText("Οι πόντοι της λέξης ως τώρα: " + getPointsOfTheWord());// instead of WordPoints        
+        JYourPoints= new JLabel("Οι πόντοι της λέξης ως τώρα: " + getPointsOfTheWord());
         JYourPoints.setForeground(Color.RED);
-        System.out.println(getPointsOfTheWord() + " " + JMadeWord.getText());
+        System.out.println(getPointsOfTheWord() + " " + getMadeWord());
         //System.out.println(JYourPoints.getText() + " " + JMadeWord.getText());
         JYourPoints.setFont(new Font("Courier", Font.BOLD, 40));
         JYourPoints.setBounds(getDimension() * 110 + 100, 60, 600, 40);
         JYourPoints.setVisible(true);
-
+      //  Repaint();
         options.setText("Πρόσθετες επιλογές:");
         options.setFont(new Font("Courier", Font.BOLD, 22));
         options.setBounds(getDimension() * 110 + 220, 210, 600, 40);
@@ -315,27 +320,27 @@ public class GameGraphs extends JFrame {
 //        jf.add(jp7);
 //        jf.add(jp9);        
 //        jf.add(jp12);
-        jf.add(JMadeWord);
-        jf.add(JYourPoints);
-        jf.add(info1);
-        jf.add(info2);
-        jf.add(options);
-        jf.add(bRearrangeLineResults);
-        jf.add(bRearrangeResults);
-        jf.add(bRearrangeRowresults);
-        jf.add(bReplaceLineResults);
-        jf.add(bExchangeLettersResults);
-        jf.add(b1);
-        jf.add(b2);
-        jf.add(b3);
-        jf.add(b4);
-        jf.add(b5);
-        jf.add(bCheckWord);
-        jf.add(bGameHelp);
-        jf.add(bExit);
-        jf.add(bUsers);
-        revalidate();
+        add(JMadeWord);
+        add(JYourPoints);
+        add(info1);
+        add(info2);
+        add(options);
+        add(bRearrangeLineResults);
+        add(bRearrangeResults);
+        add(bRearrangeRowresults);
+        add(bReplaceLineResults);
+        add(bExchangeLettersResults);
+        add(b1);
+        add(b2);
+        add(b3);
+        add(b4);
+        add(b5);
+        add(bCheckWord);
+        add(bGameHelp);
+        add(bExit);
+        add(bUsers);
         repaint();
+        revalidate();
     }
 
     public void Instructions() {
