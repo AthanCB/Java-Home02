@@ -17,6 +17,7 @@ public class Game extends JFrame {
 
     // άδειος constructor
     public Game() {
+        
     }
 
     // πίνακας τύπου γράμματος/Letter 
@@ -60,8 +61,9 @@ public class Game extends JFrame {
         gameG.setsuccessPoints(50);
         gameG.setPointsOfWords(0);
         gameG.setNumberOfWords(1);
-        gameG.setCounter(0);
-        
+        gameG.repaint();      
+        gameG.revalidate();
+        //c = new CardGraphs(gameG);
         //LetsPlay(Choice, Word, user);
     }
     //συνάρτηση για την εμφάνιση του μενου τη πρώτη φορά ή για το ξεκίνημα επιλογής γραμμάτων από τον χρήστη
@@ -182,8 +184,9 @@ public class Game extends JFrame {
 
     // εύρεση της δωσμένης από τον χρήστη λέξη στο αρχείο
     public boolean SearchWord(String word) {
+        System.out.println(word);
         boolean counter = true;//μετρητής για την εύρεση της λέξης
-        for (int i = 0; i < managefile.AllWordsList.size(); i++) {
+        for (int i = 0; i < managefile.AllWordsList.size(); i++) {            
             if (word.equals(managefile.AllWordsList.get(i))) {//αν βρέθηκε η λέξη στο αρχείο
                 counter = false;
                 //Word = "";// η λέξη γίνεται πάλι έμμεσα κενή για να γεμίσει ξανά από τα γράμματα της επόμενης λέξης

@@ -14,7 +14,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 public class CardGraphs extends JComponent implements MouseListener {
-
+    
     Game game = new Game();
     GameGraphs gg = new GameGraphs();
     String tempChar;
@@ -63,6 +63,10 @@ public class CardGraphs extends JComponent implements MouseListener {
     public CardGraphs() {
     }
     
+//    public CardGraphs(GameGraphs GG){
+//        this.gg=GG;
+//    }
+
     public CardGraphs(Letter letter, int x, int y) {
         this.Character = letter.getCharacter();
         this.Value = letter.getValue();
@@ -80,7 +84,7 @@ public class CardGraphs extends JComponent implements MouseListener {
         LettersMap.put(LetterPoint, letter);
         //lettersMap.put(LetterPoint, Character);
         valuesMap.put(LetterPoint, Value);
-        gg.setCounter(counter++);
+        //gg.setCounter(counter++);
         addMouseListener(this);
         //System.out.println(LetterPoint);
     }
@@ -123,7 +127,7 @@ public class CardGraphs extends JComponent implements MouseListener {
         g.setFont(new Font("Courier", Font.BOLD, 71));
         g.drawString(Letter, 25 + xCoord, 75 + yCoord);
 
-        g.setFont(new Font("Courier", Font.BOLD, 12));
+        g.setFont(new Font("Courier", Font.BOLD, 17));
         g.drawString(valueS, 80 + xCoord, 80 + yCoord);
         g.drawPolygon(rect);
     }
@@ -136,7 +140,7 @@ public class CardGraphs extends JComponent implements MouseListener {
 
     public void Myrepaint(Graphics g, MouseEvent me) {
         Point currentPoint = me.getPoint();
-        
+
         int X = 5, Y = 5;
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
@@ -172,7 +176,7 @@ public class CardGraphs extends JComponent implements MouseListener {
             }
             X = 5;
             Y += 105;
-        }            
+        }
         revalidate();
         repaint();
     }
@@ -209,7 +213,7 @@ public class CardGraphs extends JComponent implements MouseListener {
         LastX = 0;
         LastY = 0;
         gg.setCounter(0);
-        gg.setWindow(true,null,g);
+        gg.setWindow(true, null, g);
     }
 
     public boolean LetterChecks(Graphics g, Letter l, int X, int Y) {
@@ -220,7 +224,7 @@ public class CardGraphs extends JComponent implements MouseListener {
                 setStatBlackColor(true);
                 STAT = getStatBlackColor();
                 DrawLetter(g, l, X, Y, STAT);
-                gg.setWindow(STAT,l,g);
+                gg.setWindow(STAT, l, g);
                 chosenLettersList.remove(chosenLettersList.size() - 1);
                 if (chosenLettersList.size() > 0) {
                     LastX = chosenLettersList.get(chosenLettersList.size() - 1).x;
@@ -256,7 +260,7 @@ public class CardGraphs extends JComponent implements MouseListener {
                 setStatBlackColor(false);
                 STAT = getStatBlackColor();
                 DrawLetter(g, l, X, Y, STAT);
-                gg.setWindow(STAT,l,g);
+                gg.setWindow(STAT, l, g);
                 return true;
             } else {
                 JOptionPane.showMessageDialog(null, "Δεν είναι γειτονικό αυτό το γράμμα");
@@ -278,7 +282,7 @@ public class CardGraphs extends JComponent implements MouseListener {
             g.fillRect(X, Y, 100, 100);
         } else {
             g.setColor(Color.yellow);
-            g.fillRect(X, Y, 100, 100);            
+            g.fillRect(X, Y, 100, 100);
         }
         g.setColor(Color.BLACK);
         g.setFont(new Font("Courier", Font.BOLD, 71));
@@ -291,8 +295,8 @@ public class CardGraphs extends JComponent implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent me) {
         //if(me.getSource()==)
-        Myrepaint(getGraphics(), me);
-        //gg.repaint();
+        gg.setreadyWindow(true);
+        Myrepaint(getGraphics(), me);        
     }
 
     @Override

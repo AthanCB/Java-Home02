@@ -13,7 +13,7 @@ public class ManageList {
 
     /* η AllWordsList αποθηκεύει από το αρχείο που έχουμε κάνει στον ίδιο φάκελο
      όλες τις λέξεις που βρίσκει, όπου σε κάθε σειρά του αρχείου έχουμε βάλει μία λέξη*/
-    ArrayList<String> AllWordsList = new ArrayList();
+    static ArrayList<String> AllWordsList = new ArrayList();
 
     /* η λίστα WordList κρατάει και αυτή τις λέξεις του αρχείου αλλά κάθε φορά που χρησιμοποιούνται τα γράμματα μίας λέξης 
      στο παιχνίδι τότε στην WordList αφαιρούνται αυτά τα γράμματα, δηλαδή η λέξη
@@ -24,7 +24,7 @@ public class ManageList {
     ArrayList<String> TempWordList = new ArrayList();
     /*Από τις λέξεις της TempWordList παίρνουμε μετα και πετάμε τα γράμματα τους στην Shuffled_Chars
      για τη δημιουργία μετά του πίνακα με του οποίου τα γράμματα ο χρήστη θα παίξει και θα φτιάξει λέξεις*/
-    ArrayList<Letter> Shuffled_Chars = new ArrayList();
+    static ArrayList<Letter> Shuffled_Chars = new ArrayList();
     int counterBlue = 0, counterRed = 0;//counters για τον μέγιστο αριθμό κόκκινων και μπλε γραμμάτων
 
     //μέθοδος μέσω της οποίας ανόιγουμε το αρχείο που είναι στον ίδιο φάκελο με τον κώδικα στο source
@@ -43,6 +43,7 @@ public class ManageList {
             Word = in.next();//αποθηκεύουμε τη λέξη σε συμβολοσειρά
             WordList.add(Word); // τη λέξη την προσθέτουμε στην WordList, αργότερα αφαιρούνται αυτές που έχουν παιχτεί τα γραμματά τους
             AllWordsList.add(Word); // τη λέξη την προσθέτουμε και στην AllWordList που κρατά όλες τις λέξεις του αρχείου μόνιμα
+           
         }
         Collections.shuffle(WordList);// ανακατεύουμε τις λέξεις της Wordlist για να μην επιλεχθούν μετά με τη σειρά τα γραμματά τους
 //        for(int i=0;i<WordList.size();i++)
