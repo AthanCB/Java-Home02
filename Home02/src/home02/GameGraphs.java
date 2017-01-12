@@ -25,7 +25,9 @@ public class GameGraphs extends JFrame {
 
     String tempChar, FileWord = "";
     ArrayList<String> WordsFile = new ArrayList<String>();
-    int Points = 0, WordPoints = 0, PointsOfLetter = 0;
+    int Points = 0, PointsOfLetter = 0;
+    static int WordPoints;
+    static int tempWordPoints;
     static int dimension;
     JLabel bReplaceLineResults = new JLabel();
     JLabel bRearrangeLineResults = new JLabel();
@@ -147,11 +149,9 @@ public class GameGraphs extends JFrame {
     }
 
     @SuppressWarnings("OverridableMethodCallInConstructor")
-    public GameGraphs(int dimension, ArrayList<Letter> Shuffled_Chars) {
-        super("Window");
-        setreadyWindow(false);
+    public void MakeGameGraphs(int dimension, ArrayList<Letter> Shuffled_Chars, boolean ready) {
+        //super("Window");
         setDimension(dimension);
-        //card = new CardGraphs();        
         setBackground(Color.lightGray);
         setMinimumSize(new Dimension(1350, 750));
         setSize(dimension * 110 * 2 + 100, dimension * 115);
@@ -159,10 +159,12 @@ public class GameGraphs extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setCounter(0);
+        if(getreadyWindow()==true)
+            WordPoints = 0;
+        //setreadyWindow(false);
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 Letter currentLetter = Shuffled_Chars.get(counter);
-                //Color c = currentLetter.getColor();
                 c = new CardGraphs(currentLetter, x, y);
                 c.setArrayDimension(dimension);
                 getContentPane().add(c);
@@ -177,10 +179,29 @@ public class GameGraphs extends JFrame {
             x = 5;
             y += 105;
         }
+        revalidate();
+        repaint();
         setCounter(counter);
-        System.out.println(getreadyWindow());
     }
-//
+
+    public void remakeArrayGraphs(ArrayList<Letter> Shuffled_Chars) {
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+                Letter currentLetter = Shuffled_Chars.get(counter);
+                c = new CardGraphs(currentLetter, x, y);
+                c.setArrayDimension(dimension);
+                getContentPane().add(c);
+                currentLetter.setSituation(false);
+                letterList.add(currentLetter);
+                setVisible(true);
+                counter++;
+                x += 105;
+                System.out.print(currentLetter.getCharacter() + " ");
+            }
+        }
+    }
+
+//  
 //    @Override
 //    public void repaint() {
 //        System.out.println("counter: " + counter);
@@ -190,7 +211,6 @@ public class GameGraphs extends JFrame {
 //            System.out.println("22222222222222222");
 //        }
 //    }
-
     public void setWindow(boolean stBC, Letter letter, Graphics g) {
         SwingUtilities.updateComponentTreeUI(this);
         info1 = new JLabel();
@@ -400,7 +420,7 @@ public class GameGraphs extends JFrame {
         }
     }
 
-    public void Exchange_Letters(int dimension, Graphics g) {
+    public void Exchange_Letters(int dimension) {
         boolean statt = true;
         Point tempP, tempP2, p1 = null, p2 = null;
         int x1 = 0, x2 = 0, y2 = 0, y1 = 0;
@@ -449,22 +469,29 @@ public class GameGraphs extends JFrame {
                         tempP2 = entry2.getKey();
                         valL2 = entry2.getValue();
                         if (p2.x == tempP2.x && p2.y == tempP2.y) {
-                            for (int i = 0; i < ManageList.Shuffled_Chars.size(); i++) {
-                                Collections.swap(ManageList.Shuffled_Chars, y, x);
+                            for (int i = 0; i < letterList.size(); i++) {
+                                if (letterList.get(i).getPoint() == tempP) {
+                                    for (int j = 0; j < letterList.size(); j++) {
+                                        if (letterList.get(j).getPoint() == tempP2) {
+                                            Collections.swap(ManageList.Shuffled_Chars, i, j);
+                                        }
+                                    }
+                                }
+//                                tempP.x = p1.x;
+//                                p1 = p2;
+//                                p2 = tempP;
+//                                System.out.println(p1 + " " + p2);
+//                                CardGraphs.DrawLetter(g, valL, p1.x, p1.y, true);
+//                                CardGraphs.DrawLetter(g, valL2, p2.x, p2.y, true);
                             }
-                            tempP.x = p1.x;
-                            p1 = p2;
-                            p2 = tempP;
-                            System.out.println(p1 + " " + p2);
-                            CardGraphs.DrawLetter(g, valL, p1.x, p1.y, true);
-                            CardGraphs.DrawLetter(g, valL2, p2.x, p2.y, true);
                         }
                     }
-                }
 //                    if ((Pkey.x == tempPoint.x) && (Pkey.y == tempPoint.y)) {
 //                        tempMap.put(Pkey, val);
 //                    }
+                }
             }
+            MakeGameGraphs(dimension, ManageList.Shuffled_Chars, true);
         }
     }
 
@@ -473,38 +500,44 @@ public class GameGraphs extends JFrame {
         @Override
         public void actionPerformed(ActionEvent ae) {
             if (ae.getSource() == bExit) {
+                tempWordPoints = WordPoints;
                 System.exit(0);
             } else if (ae.getSource() == bCheckWord) {
                 if (tempcheck == true) {
                     CheckWord();
                 }
                 tempcheck = false;
-            } else if (ae.getSource() == b1) {
-                if (JOptionPane.showConfirmDialog(null, "Επέλεξε να αντικατασήσεις μια σειρά") == 0) {
-                    game.User_Menu(2, getGraphics());
+            } else if (ae.getSource() == b1) {                 
+                    game.User_Menu(2, getGraphics());                    
+                    dispose();
+                    setPointsOfTheWord(tempWordPoints);                    
                     //game.RemakeLine(dimension);
-                }
+                
             } else if (ae.getSource() == b2) {
-                if (JOptionPane.showConfirmDialog(null, "Επέλεξες να ανακατέψεις μια σειρά") == 0) {
+                
                     game.User_Menu(5, getGraphics());
-                    //game.RearrangementLine();
-                }
+                    dispose();
+                    setPointsOfTheWord(tempWordPoints);                    
+                
             } else if (ae.getSource() == b3) {
-                if (JOptionPane.showConfirmDialog(null, "Επέλεξες να ανακατέψεις μια στήλη") == 0) {
+               
                     game.User_Menu(4, getGraphics());
-                    //game.RearrangementRow();                    
-                }
+                    dispose();
+                    setPointsOfTheWord(tempWordPoints);                    
+                
             } else if (ae.getSource() == b4) {
-                if (JOptionPane.showConfirmDialog(null, "Επέλεξες να ανακατέψεις όλα τα γράμματα") == 0) {
-//                    jb.setVisible(false);
+                
+                    c.YellowLetterPoints.clear();
                     game.User_Menu(3, getGraphics());
-                    //game.Rearrangement(dimension);
-                }
+                    dispose();
+                    setPointsOfTheWord(tempWordPoints);                    
+                
             } else if (ae.getSource() == b5) {
-                if (JOptionPane.showConfirmDialog(null, "Επέλεξες να ανταλλάξεις δύο γράμματα μεταξύ τους") == 0) {
+                
                     game.User_Menu(1, getGraphics());
-                    //game.Exchange_Letters();
-                }
+                    dispose();
+                    setPointsOfTheWord(tempWordPoints);                    
+                
             } else if (ae.getSource() == bUsers) {
                 if (JOptionPane.showConfirmDialog(null, "Επέλεξες να δεις τους χρήστες της εργασίας") == 0) {
                     ReadUsersFile();

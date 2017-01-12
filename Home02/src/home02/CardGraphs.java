@@ -14,13 +14,14 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 public class CardGraphs extends JComponent implements MouseListener {
-    
+
     Game game = new Game();
     GameGraphs gg = new GameGraphs();
     String tempChar;
+    private Letter Cletter;
     int Points = 0, counter = 1, PointsOfLetter = 0;
     static int dimension;
-    //static HashMap<Point, Character> lettersMap = new HashMap<>();
+    static ArrayList<Point> YellowLetterPoints = new ArrayList<>();
     static HashMap<Point, Integer> valuesMap = new HashMap<>();
     ArrayList<Point> chosenLettersList = new ArrayList<>();
     static HashMap<Point, Letter> LettersMap = new HashMap<>();
@@ -62,12 +63,12 @@ public class CardGraphs extends JComponent implements MouseListener {
 
     public CardGraphs() {
     }
-    
+
 //    public CardGraphs(GameGraphs GG){
 //        this.gg=GG;
 //    }
-
     public CardGraphs(Letter letter, int x, int y) {
+        this.Cletter = letter;
         this.Character = letter.getCharacter();
         this.Value = letter.getValue();
         this.ColorC = letter.getColor();
@@ -113,19 +114,20 @@ public class CardGraphs extends JComponent implements MouseListener {
     @Override
     public void paint(Graphics g) {
         super.paintComponent(g);
-        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        String Letter = "" + Character;
+        String LetterS = "" + Character;
         String valueS = "" + Value;
-
-        g.setColor(Color.BLACK);
-        g.drawRect(xCoord, yCoord, rectLength, rectLength); // rectLength=100
-
         g.setColor(ColorC);
         g.fillRect(xCoord, yCoord, rectLength, rectLength);
-
+        for (int i = 0; i < YellowLetterPoints.size(); i++) {
+            if (Cletter.getPoint().equals(YellowLetterPoints.get(i))) {
+                g.setColor(Color.yellow);
+                g.fillRect(xCoord, yCoord, rectLength, rectLength);
+                break;
+            }
+        }
         g.setColor(Color.BLACK);
         g.setFont(new Font("Courier", Font.BOLD, 71));
-        g.drawString(Letter, 25 + xCoord, 75 + yCoord);
+        g.drawString(LetterS, 25 + xCoord, 75 + yCoord);
 
         g.setFont(new Font("Courier", Font.BOLD, 17));
         g.drawString(valueS, 80 + xCoord, 80 + yCoord);
@@ -135,7 +137,6 @@ public class CardGraphs extends JComponent implements MouseListener {
     @Override
     public void repaint() {
         revalidate();
-        //System.out.println("repaint");
     }
 
     public void Myrepaint(Graphics g, MouseEvent me) {
@@ -255,6 +256,7 @@ public class CardGraphs extends JComponent implements MouseListener {
                 }
                 System.out.println("Γράμμα με συντεταγμένες: " + l.getPoint() + ", " + l.getCharacter() + ", " + l.getValue());
                 l.setSituation(true);
+                YellowLetterPoints.add(l.getPoint());
                 counter++;
                 gg.setCounter(counter);
                 setStatBlackColor(false);
@@ -296,7 +298,7 @@ public class CardGraphs extends JComponent implements MouseListener {
     public void mouseClicked(MouseEvent me) {
         //if(me.getSource()==)
         gg.setreadyWindow(true);
-        Myrepaint(getGraphics(), me);        
+        Myrepaint(getGraphics(), me);
     }
 
     @Override
