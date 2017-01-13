@@ -115,15 +115,15 @@ public class Game extends JFrame {
     public void CheckWords(int Choice, User user) {
         Scanner in = new Scanner(System.in);
         if (WordCounter == 5) {
-            System.out.println("Έγραψες 5 λέξεις, το παιχνίδι τελείωσε.");
+            JOptionPane.showMessageDialog(null, "Έγραψες 5 λέξεις, το παιχνίδι τελείωσε.");
             if (AllPoints >= WinPoints) {
                 System.out.println("Νίκησες το παιχνίδι! Συγχαρητήρια!");
             } else {
                 System.out.println("Λυπάμαι, έχασες :( ");
             }
-            System.exit(0);//έμεσο τέλος παιχνιδιού 
+            //System.exit(0);//έμεσο τέλος παιχνιδιού 
         } else {// αν ακόμα δεν έχουμε περάσει τις 5 λέξεις και μπορεί ο χρήστης να γράψει και άλλη λέξη
-            System.out.println("Θες να διακόψεις το παιχνίδι;(ν/ο) ");
+            //System.out.println("Θες να διακόψεις το παιχνίδι;(ν/ο) ");
             char inCh;
             do {// δίνει απάντηση ο ή ν, ότιδήποτε άλλο δεν είναι αποδεκτό για αυτό του ξαναζητάμε απάντηση
                 inCh = in.next().charAt(0);
@@ -186,7 +186,6 @@ public class Game extends JFrame {
 //    }
     // εύρεση της δωσμένης από τον χρήστη λέξη στο αρχείο
     public boolean SearchWord(String word) {
-        System.out.println(word);
         boolean counter = true;//μετρητής για την εύρεση της λέξης
         for (int i = 0; i < managefile.AllWordsList.size(); i++) {
             if (word.equals(managefile.AllWordsList.get(i))) {//αν βρέθηκε η λέξη στο αρχείο
@@ -203,6 +202,23 @@ public class Game extends JFrame {
         }//αλλιώς επιστροφή true αφού βρέθηκε η λέξη και δε μπήκε στην if πριν
         else {
             JOptionPane.showMessageDialog(null, "Βρήκες την λέξη");
+            WordCounter++;
+        }
+        if (WordCounter == 5) {
+            JOptionPane.showMessageDialog(null, "Βρήκες 5 λέξεις, ας δούμε αν μάζεψες 50 πόντους");
+            if (gg.getPointsOfWords() >= gg.getsuccessPoints()) {
+                JOptionPane.showMessageDialog(null, "Μάζεψες τους απαιτούμενους πόντους, ΝΙΚΗΣΕΣ!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Έχασες δε μάζεψες 50 πόντους");
+            }
+            System.exit(0);
+        } else {
+            if (gg.getPointsOfWords() > gg.getsuccessPoints()) {
+                JOptionPane.showMessageDialog(null, "Μάζεψες τους απαιτούμενους πόντους, ΝΙΚΗΣΕΣ!");
+                System.exit(0);
+            } else {
+                JOptionPane.showMessageDialog(null, "Δε μάζεψες 50 πόντους αλλά έχεις ως τώρα: " + gg.getPointsOfWords());
+            }
         }
         return true;
     }

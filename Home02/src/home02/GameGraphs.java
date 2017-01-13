@@ -64,7 +64,7 @@ public class GameGraphs extends JFrame {
     Point LetterPoint;
     StringBuilder sb;
     static int successPoints, successWords = 5;
-    int PointsOfWords = 0, NumberOfWords = 1;
+    static int PointsOfWords = 0, NumberOfWords = 1;
     private int x = 5, y = 5;
     Scanner scan;
     static ArrayList<Letter> letterList = new ArrayList<>();
@@ -177,7 +177,6 @@ public class GameGraphs extends JFrame {
         setCounter(counter);
     }
 
-
     public void setWindow(boolean stBC, Letter letter, Graphics g) {
         SwingUtilities.updateComponentTreeUI(this);
         info1 = new JLabel();
@@ -203,7 +202,6 @@ public class GameGraphs extends JFrame {
             } else {// (stBC == false && counter != 0) 
                 setPointsOfTheWord(getPointsOfTheWord() + letter.getValue());
                 MadeWord += letter.getCharacter();
-                setPointsOfWords(WordPoints);
             }
         }
         bExit = new JButton("Διακοπή παιχνιδιού");
@@ -238,11 +236,6 @@ public class GameGraphs extends JFrame {
         info1.setFont(new Font("Courier", Font.ITALIC, 25));
         info1.setForeground(Color.DARK_GRAY);
         info1.setBounds(getDimension() * 110 + 150, 60, 600, 40);
-
-        if (getPointsOfWords() > getsuccessPoints()) {
-            JOptionPane.showMessageDialog(null, "Μάζεψες τους απαιτούμενους πόντους, ΝΙΚΗΣΕΣ!");
-            System.exit(0);
-        }
         info2.setText("Εξασφαλισμένοι πόντοι συνολικά: " + getPointsOfWords() + ", Στόχος: " + getsuccessPoints());
         info2.setFont(new Font("Courier", Font.ITALIC, 25));
         info2.setForeground(Color.DARK_GRAY);
@@ -372,7 +365,7 @@ public class GameGraphs extends JFrame {
                 //card.ClearAllLetters(gp);// everytime
                 setMadeWord("");
                 setPointsOfWords(WordPoints);
-                setPointsOfTheWord(0);
+                setPointsOfTheWord(0);                
             }
         } else {
             JOptionPane.showMessageDialog(null, "Δεν μπορείς να ελέγξεις τη λέξη, πρέπει το λιγότερο 3 γράμματα να διαλέξεις ", "File error", JOptionPane.ERROR_MESSAGE);
