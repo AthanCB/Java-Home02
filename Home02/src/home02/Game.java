@@ -327,9 +327,10 @@ public class Game extends JFrame {
         gg.MakeGameGraphs(size, ManageList.Shuffled_Chars);
     }
 
-    //αντικατάσταση γραμμάτων μίας γραμμής που επιλέγει παρακάτω ο χρήστης
+    //αντικατάσταση γραμμάτων μίας γραμμής που επιλέγει παρακάτω ο χρήστης    
+    // ΔΕ ΔΟΥΛΕΥΕΙ ΣΤΗ ΓΡΑΜΜΗ 352
     public void RemakeLine(int size) {
-        boolean statt = true;
+        boolean statt = true, statt2 = true;
         char extraC;
         Point tempPoint, CLetterPoint;
         Letter l = null;
@@ -342,34 +343,31 @@ public class Game extends JFrame {
             if ((line < size) && (line >= 0)) {//έλεγχος εγκυρότητας
                 x = line * 105 + 5;
                 tempMap.clear();
-                for (int i = 0; i < size; i++) {
-                    if (y < (size - 1) * 105) {
-                        tempPoint = new Point(x, y);
-                        for (int j = 0; j < managefile.Shuffled_Chars.size(); j++) {
-                            CLetterPoint = managefile.Shuffled_Chars.get(j).getPoint();
-                            System.out.println(CLetterPoint + " " + j);
-                            if (CLetterPoint.x == tempPoint.x) { //&& CLetterPoint.y == tempPoint.y
-                                //tempMap.put(managefile.Shuffled_Chars.get(j).getPoint(), managefile.Shuffled_Chars.get(j));
-                                int o = rnd.nextInt(managefile.AllWordsList.size());
-                                int p = rnd.nextInt(managefile.AllWordsList.get(o).length());
-                                extraC = ManageList.AllWordsList.get(o).charAt(p);
-                                l = managefile.SetColorAndValue();
-                                l.setCharacter(extraC);
-                                l.setValue(ManageList.GivenValue(extraC));
-                                managefile.Shuffled_Chars.set(j, l);
-                                //Collections.swap(managefile.Shuffled_Chars, i, j);
-                            } else {
-                                //System.out.print(CLetterPoint + " " + tempPoint);
+                while (statt2 == true) {
+                    for (int i = 0; i < size; i++) {
+                        if (y < (size - 1) * 105) {
+                            tempPoint = new Point(x, y);
+                            for (int j = 0; j < managefile.Shuffled_Chars.size(); j++) {
+                                CLetterPoint = managefile.Shuffled_Chars.get(j).getPoint();
+                                if (CLetterPoint.x == tempPoint.x && CLetterPoint != null) {
+                                    System.out.println(CLetterPoint);
+                                    int o = rnd.nextInt(managefile.AllWordsList.size());
+                                    int p = rnd.nextInt(managefile.AllWordsList.get(o).length());
+                                    extraC = ManageList.AllWordsList.get(o).charAt(p);
+                                    l = managefile.SetColorAndValue();
+                                    l.setCharacter(extraC);
+                                    l.setValue(ManageList.GivenValue(extraC));
+                                    managefile.Shuffled_Chars.set(j, l);
+                                } else {
+                                    statt2 = false;
+                                }
                             }
+                            y += 105;
                         }
-                        y += 105;
                     }
                 }
-                //γεμίζουμε την επιλεγμένη γραμμή με τα νέα γράμματα από την Shuffled_Chars
-                //managefile.Selected_Words(size);// για μία γραμμή παίρνουμε μέσω της Selected_Words νέα γράμματα 
                 statt = false;
                 gameG.MakeGameGraphs(size, managefile.Shuffled_Chars);
-                //Collections.shuffle(managefile.Shuffled_Chars);                
             } else {
                 JOptionPane.showMessageDialog(null, "Δεν έχει τέτοια γραμμή ο πίνακας ξαναπροσπάθησε");
             }

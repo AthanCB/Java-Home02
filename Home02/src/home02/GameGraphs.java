@@ -177,22 +177,6 @@ public class GameGraphs extends JFrame {
         setCounter(counter);
     }
 
-    public void remakeArrayGraphs(ArrayList<Letter> Shuffled_Chars) {
-        for (int i = 0; i < dimension; i++) {
-            for (int j = 0; j < dimension; j++) {
-                Letter currentLetter = Shuffled_Chars.get(counter);
-                c = new CardGraphs(currentLetter, x, y);
-                c.setArrayDimension(dimension);
-                getContentPane().add(c);
-                currentLetter.setSituation(false);
-                letterList.add(currentLetter);
-                setVisible(true);
-                counter++;
-                x += 105;
-                //System.out.print(currentLetter.getCharacter() + " ");
-            }
-        }
-    }
 
     public void setWindow(boolean stBC, Letter letter, Graphics g) {
         SwingUtilities.updateComponentTreeUI(this);
