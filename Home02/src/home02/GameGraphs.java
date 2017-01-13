@@ -1,5 +1,6 @@
 package home02;
 //icsd14134 Bonis Athanasios - icsd11039 Dimopoulos Goergios
+
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -35,7 +36,7 @@ public class GameGraphs extends JFrame {
     static int dimension;//διασταση του πινακα
 
     //labels με τις πληροφοριες για τη λεξη τους ποντους της, τους συνολικους ποντους κλπ
-    JLabel options = new JLabel(); 
+    JLabel options = new JLabel();
     JLabel info2;
     JLabel info1;
     JLabel JMadeWord;
@@ -211,7 +212,7 @@ public class GameGraphs extends JFrame {
         bGameHelp = new JButton("Οδηγίες για το παιχνίδι");
         bUsers = new JButton("ABOUT/χρήστες");
         bWordsFile = new JButton("Αναζήτηση Αρχείου Λέξεων");
-        
+
         b1.setText("1)Αντικατάσταση γραμμάτων γραμμής");
         b2.setText("2)Αναδιάταξη γραμμής");
         b3.setText("3)Αναδιάταξη στήλης");
@@ -262,7 +263,7 @@ public class GameGraphs extends JFrame {
         bUsers.setForeground(Color.white);
         bGameHelp.setForeground(Color.white);
         bWordsFile.setForeground(Color.white);
-        
+
         bUsers.setBackground(Color.GRAY);
         bGameHelp.setBackground(Color.GRAY);
         bCheckWord.setBackground(Color.BLUE);
@@ -290,7 +291,7 @@ public class GameGraphs extends JFrame {
         b5.addActionListener(bh);
         bRestart.addActionListener(bh);
         add(options);
-        
+
         //προσθετουμε στο frame τα κουμπια
         add(b1);
         add(b2);
@@ -439,6 +440,7 @@ public class GameGraphs extends JFrame {
                     }
                 }
             }
+            //dispose();  //Κλείνει το τρεχόν παράθυρο 
             //ξαναχτιζεται το παραθυρο ατυπα με τα νεα δεδομενα, δηλαδη την ανταλλαγη θεσεων μεταξυ δυο γραμματων
             MakeGameGraphs(dimension, ManageList.Shuffled_Chars);
         }
@@ -459,27 +461,33 @@ public class GameGraphs extends JFrame {
                 tempcheck = false;
             } else if (ae.getSource() == b1) {
                 game.User_Menu(2, getGraphics());
-                // setPointsOfTheWord(tempWordPoints);
+                dispose();  //Κλείνει το τρεχόν παράθυρο                 
+                JOptionPane.showMessageDialog(null, "Επέλεξε να αντικαταστήσεις μια σειρά, έχεις ακόμη " + (3 - Game.SecondCount) + " προσπάθειες για την επιλογή αυτή και συνολικά " + Game.localCount);
                 //game.RemakeLine(dimension);
 
             } else if (ae.getSource() == b2) {
                 game.User_Menu(5, getGraphics());
-                // setPointsOfTheWord(tempWordPoints);
+                dispose();  //Κλείνει το τρεχόν παράθυρο 
+                JOptionPane.showMessageDialog(null, "Επέλεξες να ανακατέψεις μια σειρά, έχεις ακόμη " + (3 - Game.FifthCount) + " προσπάθειες για την επιλογή αυτή και συνολικά " + Game.localCount);
 
             } else if (ae.getSource() == b3) {
                 game.User_Menu(4, getGraphics());
-                //  setPointsOfTheWord(tempWordPoints);
+                dispose();  //Κλείνει το τρεχόν παράθυρο 
+                JOptionPane.showMessageDialog(null, "Επέλεξες να ανακατέψεις μια στήλη, έχεις ακόμη " + (3 - Game.FourthCount) + " προσπάθειες για την επιλογή αυτή και συνολικά " + Game.localCount);
 
             } else if (ae.getSource() == b4) {
                 if (JOptionPane.showConfirmDialog(null, "Όλα μηδενίζονται και παίζεις από την αρχή για τη λέξη οκ;") == 0) {
                     c.YellowLetterPoints.clear();
                     setMadeWord("");
                     setPointsOfTheWord(0);
+                    dispose();  //Κλείνει το τρεχόν παράθυρο 
                     game.User_Menu(3, getGraphics());
                     //  setPointsOfTheWord(tempWordPoints);
                 }
             } else if (ae.getSource() == b5) {
                 game.User_Menu(1, getGraphics());
+                dispose();  //Κλείνει το τρεχόν παράθυρο 
+                JOptionPane.showMessageDialog(null, "Επέλεξες να ανταλλάξεις δύο γράμματα μεταξύ τους, έχεις ακόμη " + (3 - Game.FirstCount) + " προσπάθειες για την επιλογή αυτή και συνολικά " + Game.localCount);
                 //  setPointsOfTheWord(tempWordPoints);
 
             } else if (ae.getSource() == bUsers) {
@@ -495,12 +503,12 @@ public class GameGraphs extends JFrame {
                 fc.setCurrentDirectory(new File("src/home02/Wordlist.txt"));
                 fc.setDialogTitle("WordList");
                 fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                if(fc.showOpenDialog(bWordsFile) == JFileChooser.APPROVE_OPTION){
+                if (fc.showOpenDialog(bWordsFile) == JFileChooser.APPROVE_OPTION) {
                     //
                 }
-               
+
             }
-            
+
         }
     }
 }

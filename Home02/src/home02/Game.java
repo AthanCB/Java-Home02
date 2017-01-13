@@ -242,7 +242,6 @@ public class Game extends JFrame {
     public void User_Menu(int Choice, Graphics g) {
         gg = new GameGraphs();
         boolean stat = true;
-        int Ch;
 //        localCount = 0; //μετρητής για τις φόρες που επιλέγονται οι επιλογές αφού ο χρήστης μπορεί ως 15 φόρες να τις επιλέξει
 //        FirstCount = 0;//μετρητής για τις φόρες που επιλέγεται η πρώτη επιλογή αφού ο χρήστης μπορεί ως 3 φόρες να τη επιλέξει
 //        //ομοίως και για τις άλλες επιλογές, ως 3 φορές μπορούν να επιλεχθούν
@@ -252,76 +251,49 @@ public class Game extends JFrame {
 //        FifthCount = 0;
         while (stat == true) {//όσο η μεταβλητή είναι true
             String ch = Choice + "";
-//            if (!ch.equals("0") && !ch.equals("1") && !ch.equals("2") && !ch.equals("3") && !ch.equals("4") && !ch.equals("5")) {
-//                ch = JOptionPane.showInputDialog(null, "Δεν υπάρχει αυτή η επιλογή, ξαναδώσε");
 //            }//θεωρούμε ότι ο χρήστης δίνει αριθμό και όχι κάποιο χαρακτήρα πχ
             if (ch.equals("1")) {
                 if (FirstCount < 3) {
-                    Ch = JOptionPane.showConfirmDialog(null, "Επέλεξες να ανταλλάξεις δύο γράμματα μεταξύ τους, έχεις ακόμη " + (3 - FirstCount) + " προσπάθειες για την επιλογή αυτή και συνολικά " + localCount);
-                    if (Ch == 0) {
-                        localCount--;
-                        FirstCount++;
-                        gg.Exchange_Letters(size);//μέθοδος ανταλλαγής γραμμάτων
-                        gg.dispose();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Ακύρωση επιλογής πάμε πίσω");
-                    }
+                    localCount--;
+                    FirstCount++;
+                    gg.Exchange_Letters(size);//μέθοδος ανταλλαγής γραμμάτων                    
                 } else {
-                    JOptionPane.showMessageDialog(null, "Επέλεξες ήδη 3 φορές αυτή την επιλογή δε γίνεται άλλο");
+                    JOptionPane.showMessageDialog(null, "Επέλεξες ήδη 3 φορές την επιλογή, δε γίνεται άλλο");
                 }
             } else if (ch.equals("2")) {
                 if (SecondCount < 3) {
-                    Ch = JOptionPane.showConfirmDialog(null, "Επέλεξε να αντικαταστήσεις μια σειρά, έχεις ακόμη " + (3 - SecondCount) + " προσπάθειες για την επιλογή αυτή και συνολικά " + localCount);
-                    if (Ch == 0) {
-                        SecondCount++;
-                        localCount--;
-                        RemakeLine(size);//μέθοδος αντικατάσταση γραμμής
-                        gg.dispose();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Ακύρωση επιλογής πάμε πίσω");
-                    }
+                    SecondCount++;
+                    localCount--;
+                    //gg.dispose();
+                    RemakeLine(size);//μέθοδος αντικατάσταση γραμμής                        
                 } else {
                     JOptionPane.showMessageDialog(null, "Επέλεξες ήδη 3 φορές την επιλογή RemakeLine, δε γίνεται άλλο");
                 }
             } else if (ch.equals("3")) {
                 if (ThirdCount < 3) {
-                    Ch = JOptionPane.showConfirmDialog(null, "Επέλεξες να ανακατέψεις όλα τα γράμματα, έχεις ακόμη " + (3 - ThirdCount) + " προσπάθειες για την επιλογή αυτή και συνολικά " + localCount);
-                    if (Ch == 0) {
-                        localCount--;
-                        ThirdCount++;
-                        Rearrangement(size);//μέθοδο αναδιάταξης όλων των γραμμάτων του πίνακα
-                        gg.dispose();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Ακύρωση επιλογής πάμε πίσω");
-                    }
+                    //JOptionPane.showConfirmDialog(null, "Επέλεξες να ανακατέψεις όλα τα γράμματα, έχεις ακόμη " + (3 - ThirdCount) + " προσπάθειες για την επιλογή αυτή και συνολικά " + localCount);
+                    localCount--;
+                    ThirdCount++;
+                    Rearrangement(size);//μέθοδο αναδιάταξης όλων των γραμμάτων του πίνακα
                 } else {
                     JOptionPane.showMessageDialog(null, "Επέλεξες ήδη 3 φορές την επιλογή Rearrangement, δε γίνεται άλλο");
                 }
             } else if (ch.equals("4")) {
-                if (FourthCount < 3) {
-                    Ch = JOptionPane.showConfirmDialog(null, "Επέλεξες να ανακατέψεις μια στήλη, έχεις ακόμη " + (3 - FourthCount) + " προσπάθειες για την επιλογή αυτή και συνολικά " + localCount);
-                    if (Ch == 0) {
-                        localCount--;
-                        FourthCount++;
-                        RearrangementRow(size);//μέθοδο αναδιάταξη όλων των γραμμάτων μιας σειράς
-                        gg.dispose();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Ακύρωση επιλογής πάμε πίσω");
-                    }
+                if (FourthCount < 3) {                   
+                    localCount--;
+                    FourthCount++;
+                    //gg.dispose();
+                    RearrangementRow(size);//μέθοδο αναδιάταξη όλων των γραμμάτων μιας στηλης                    
                 } else {
                     JOptionPane.showMessageDialog(null, "Επέλεξες ήδη 3 φορές την επιλογή RearrangementRow, δε γίνεται άλλο");
                 }
             } else if (ch.equals("5")) {
                 if (FifthCount < 3) {
-                    Ch = JOptionPane.showConfirmDialog(null, "Επέλεξες να ανακατέψεις μια σειρά, έχεις ακόμη " + (3 - FifthCount) + " προσπάθειες για την επιλογή αυτή και συνολικά " + localCount);
-                    if (Ch == 0) {
-                        localCount--;
-                        FifthCount++;
-                        RearrangementLine(size);//μέθοδο αναδιάταξη γραμμάτων μίας γραμμής
-                        gg.dispose();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Επέλεξες ήδη 3 φορές την επιλογή RearrangementRow, δε γίνεται άλλο");
-                    }
+                    localCount--;
+                    FifthCount++;
+                    //gg.dispose();
+                    RearrangementLine(size);//μέθοδο αναδιάταξη γραμμάτων μίας γραμμής                        
+
                 } else {
                     JOptionPane.showMessageDialog(null, "Επέλεξες ήδη 3 φορές την επιλογή RearrangementLine, δε γίνεται άλλο");
                 }
@@ -341,9 +313,10 @@ public class Game extends JFrame {
         tempMap.clear();
         Collections.shuffle(managefile.Shuffled_Chars);
         gg.MakeGameGraphs(size, ManageList.Shuffled_Chars);
+        JOptionPane.showMessageDialog(null, "Επέλεξες να ανακατέψεις όλα τα γράμματα, έχεις ακόμη " + (3 - ThirdCount) + " προσπάθειες για την επιλογή αυτή και συνολικά " + localCount);
     }
 
-    //αντικατάσταση γραμμάτων μίας γραμμής που επιλέγει παρακάτω ο χρήστης    
+    //αντικατάσταη γραμμάτων μίας γραμμής που επιλέγει παρακάτω ο χρήστης    
     // ΔΕ ΔΟΥΛΕΥΕΙ ΣΤΗ ΓΡΑΜΜΗ 352
     public void RemakeLine(int size) {
         boolean statt = true, statt2 = true;
@@ -383,7 +356,7 @@ public class Game extends JFrame {
                     }
                 }
                 statt = false;
-                gameG.MakeGameGraphs(size, managefile.Shuffled_Chars);
+                gg.MakeGameGraphs(size, managefile.Shuffled_Chars);                
             } else {
                 JOptionPane.showMessageDialog(null, "Δεν έχει τέτοια γραμμή ο πίνακας ξαναπροσπάθησε");
             }
@@ -395,7 +368,7 @@ public class Game extends JFrame {
         boolean statt = true;
         int x, y = 5;
         while (statt == true) {
-            String InputChoice = JOptionPane.showInputDialog(null, "Επέλεξε στήλη διαγραφής: ");
+            String InputChoice = JOptionPane.showInputDialog(null, "Επέλεξε στήλη για ανακάτεμα: ");
             int row = Integer.parseInt(InputChoice) - 1;
             if (row >= 0 && row < size) {//αν είναι έγκυρος ο δωσμένος αριθμός από τον χρήστη
                 x = row * 105 + 5;
@@ -432,8 +405,8 @@ public class Game extends JFrame {
 //            }
 //            System.out.println();            
 //        }
-//        gg.dispose();
-        gg.MakeGameGraphs(size, ManageList.Shuffled_Chars);
+        gg.dispose();
+        gg.MakeGameGraphs(size, ManageList.Shuffled_Chars);        
     }
     //παρομοίως κάνουμε αναδιάταξη σε μία γραμμή που δίνει ο χρηστης
 
@@ -472,8 +445,7 @@ public class Game extends JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Δεν έχει τέτοια γραμμή ο πίνακας ξαναπροσπάθησε");
             }
-        }
-        gg.dispose(); //Κλείνει το τρεχόν παράθυρο 
-        gg.MakeGameGraphs(size, ManageList.Shuffled_Chars); //ανοίγει το παράθυρο με τα νέα δεδομένα
+        }        
+        gg.MakeGameGraphs(size, ManageList.Shuffled_Chars); //ανοίγει το παράθυρο με τα νέα δεδομένα        
     }
 }
