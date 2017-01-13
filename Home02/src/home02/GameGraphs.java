@@ -1,5 +1,5 @@
 package home02;
-
+//icsd14134 Bonis Athanasios - icsd11039 Dimopoulos Goergios
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -254,26 +254,10 @@ public class GameGraphs extends JFrame {
         b4.setBounds(getDimension() * 110 + 200, 260, 250, 40);
         b5.setBounds(getDimension() * 110 + 200, 310, 250, 40);
 
-//        bReplaceLineResults.setBounds(getDimension() * 110 + 500, 110, 250, 40);
-//        bExchangeLettersResults.setBounds(getDimension() * 110 + 500, 160, 250, 40);
-//        bRearrangeLineResults.setBounds(getDimension() * 110 + 500, 210, 250, 40);
-//        bRearrangeRowresults.setBounds(getDimension() * 110 + 500, 260, 250, 40);
-//        bRearrangeResults.setBounds(getDimension() * 110 + 500, 310, 250, 40);
-//
-//        bRearrangeLineResults.setText("/" + 3);
-//        bExchangeLettersResults.setText("/" + 3);
-//        bReplaceLineResults.setText("/" + 3);
-//        bRearrangeResults.setText("/" + 3);
-//        bRearrangeRowresults.setText("/" + 3);
         bExit.setForeground(Color.white);
         bCheckWord.setForeground(Color.white);
         bUsers.setForeground(Color.white);
         bGameHelp.setForeground(Color.white);
-//        bRearrangeResults.setForeground(Color.black);
-//        bRearrangeRowresults.setForeground(Color.black);
-//        bReplaceLineResults.setForeground(Color.black);
-//        bRearrangeLineResults.setForeground(Color.black);
-//        bExchangeLettersResults.setForeground(Color.black);
 
         bUsers.setBackground(Color.GRAY);
         bGameHelp.setBackground(Color.GRAY);
@@ -300,16 +284,7 @@ public class GameGraphs extends JFrame {
         b4.addActionListener(bh);
         b5.addActionListener(bh);
         bRestart.addActionListener(bh);
-//        add(JMadeWord);
-//        add(JYourPoints);
-//        add(info1);
-//        add(info2);
         add(options);
-//        add(bRearrangeLineResults);
-//        add(bRearrangeResults);
-//        add(bRearrangeRowresults);
-//        add(bReplaceLineResults);
-//        add(bExchangeLettersResults);
         
         //προσθετουμε στο frame τα κουμπια
         add(b1);
