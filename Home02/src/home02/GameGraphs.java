@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Scanner;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -45,6 +46,7 @@ public class GameGraphs extends JFrame {
     JButton bCheckWord = new JButton();
     JButton bGameHelp = new JButton();
     JButton bUsers = new JButton();
+    JButton bWordsFile = new JButton();
     JButton b1 = new JButton();
     JButton b2 = new JButton();
     JButton b3 = new JButton();
@@ -208,7 +210,8 @@ public class GameGraphs extends JFrame {
         bCheckWord = new JButton("ΕΛΕΓΧΟΣ ΛΕΞΗΣ");
         bGameHelp = new JButton("Οδηγίες για το παιχνίδι");
         bUsers = new JButton("ABOUT/χρήστες");
-
+        bWordsFile = new JButton("Αναζήτηση Αρχείου Λέξεων");
+        
         b1.setText("1)Αντικατάσταση γραμμάτων γραμμής");
         b2.setText("2)Αναδιάταξη γραμμής");
         b3.setText("3)Αναδιάταξη στήλης");
@@ -258,18 +261,19 @@ public class GameGraphs extends JFrame {
         bCheckWord.setForeground(Color.white);
         bUsers.setForeground(Color.white);
         bGameHelp.setForeground(Color.white);
-
+        bWordsFile.setForeground(Color.white);
+        
         bUsers.setBackground(Color.GRAY);
         bGameHelp.setBackground(Color.GRAY);
         bCheckWord.setBackground(Color.BLUE);
         bExit.setBackground(Color.RED);
-
-        //ομοιως οπως για τα παραπανω κουμπια
-        bExit.setBounds(getDimension() * 110 + 100, 360, 200, 40);
-        bUsers.setBounds(getDimension() * 110 + 100, 410, 200, 40);
-        bGameHelp.setBounds(getDimension() * 110 + 400, 360, 200, 40);
-        bCheckWord.setBounds(getDimension() * 110 + 400, 410, 200, 40);
-
+        bWordsFile.setBackground(Color.GRAY);
+        //ομοιως οπως για τα παραπανω κουμπια  
+        bExit.setBounds(getDimension() * 110 + 380, 410, 200, 40);
+        bUsers.setBounds(getDimension() * 110 + 80, 360, 200, 40);
+        bGameHelp.setBounds(getDimension() * 110 + 380, 360, 200, 40);
+        bCheckWord.setBounds(getDimension() * 110 + 80, 410, 200, 40);
+        bWordsFile.setBounds(getDimension() * 110 + 200, 470, 250, 40);
         //αντικειμενο της εσωτερικης κλασσης για την διευκολυνση στη χρησιμοποιηση των κουμπιων και των ActionListener τους
         ButtonHandler bh = new ButtonHandler();
 
@@ -278,6 +282,7 @@ public class GameGraphs extends JFrame {
         bCheckWord.addActionListener(bh);
         bUsers.addActionListener(bh);
         bGameHelp.addActionListener(bh);
+        bWordsFile.addActionListener(bh);
         b1.addActionListener(bh);
         b2.addActionListener(bh);
         b3.addActionListener(bh);
@@ -296,6 +301,7 @@ public class GameGraphs extends JFrame {
         add(bGameHelp);
         add(bExit);
         add(bUsers);
+        add(bWordsFile);
         //τοιμες μεθοδοι που βρηκαμε στο ιντερνετ και βοηθανε ισως στη ομαλη λειτουργια ανανεωσης του παραθυρου
         this.revalidate();
         SwingUtilities.updateComponentTreeUI(this);
@@ -484,7 +490,17 @@ public class GameGraphs extends JFrame {
                 if (JOptionPane.showConfirmDialog(null, "Οδηγίες για το πως παίζεται το παιχνίδι") == 0) {
                     Instructions();
                 }
+            } else if (ae.getSource() == bWordsFile) {
+                JFileChooser fc = new JFileChooser();
+                fc.setCurrentDirectory(new File("src/home02/Wordlist.txt"));
+                fc.setDialogTitle("WordList");
+                fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                if(fc.showOpenDialog(bWordsFile) == JFileChooser.APPROVE_OPTION){
+                    //
+                }
+               
             }
+            
         }
     }
 }

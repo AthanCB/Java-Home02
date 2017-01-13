@@ -15,28 +15,29 @@ import javax.swing.JOptionPane;
 /*Σε αυτή την κλάση δημιουργούμε τα γραφικά του πίνακα με τις κάρτες και διαχειριζόμαστε τις επιλογές του χρήστη 
 ώστε να γίνουν οι απαραίτητες χρωματικές και λειτουργικές αλλαγές στα γραφικά*/
 public class CardGraphs extends JComponent implements MouseListener {
-    
+    //constructors για την καλυτερη προσβαση σε μεθοδους των παρακατω κλασσεων
     Game game = new Game();
     GameGraphs gg = new GameGraphs();
     String tempChar;
     private Letter Cletter;
-    int Points = 0, counter = 1, PointsOfLetter = 0;
-    static int dimension;
+    int counter = 1, PointsOfLetter = 0;//μετρητης και και ποντοι γραμματος
+    static int dimension;//διασταση πινακα γραμματων
+    //λιστα με τα γραμματα που χρησιμοποιουντια στη λεξη, δηλαδη γινονται κιτρινα
     static ArrayList<Point> YellowLetterPoints = new ArrayList<>();
-    static HashMap<Point, Integer> valuesMap = new HashMap<>();
-    ArrayList<Point> chosenLettersList = new ArrayList<>();
-    static HashMap<Point, Letter> LettersMap = new HashMap<>();
-    private final int rectLength = 100;
-    private Polygon rect, rect2;
-    private boolean doubleWordValue = false, statBlackColor = false, begin = false;
+    static HashMap<Point, Integer> valuesMap = new HashMap<>();//map με τα id και ποντους/αξια των γραμματων, για την αναζητηση μετα
+    ArrayList<Point> chosenLettersList = new ArrayList<>(); //λιστα με τα id των γραμματων
+    static HashMap<Point, Letter> LettersMap = new HashMap<>(); //map με τα id και τα ιδια τα γραμματα για την αναζητηση μετα
+    private final int rectLength = 100;//για τη σχεδιαση του καθε γραμματος εξ ορισμου διασταση
+    private Polygon rect, rect2;//για τη σχεδιαση του καθε γραμματος σε πολυγωνο, τετραγωνο ουσιαστικα
+    private boolean doubleWordValue = false, statBlackColor = false, begin = false;// για την καλυτερη χρηση σε ελεγχους
+    //για τα χαρακτηριστικα του καθε γραμματος, αποθηκευουν και τοπικα τις τιμες τους
     private char Character;
     private int Value;
     private Color ColorC;
-    int LastX = 0, LastY = 0;
+    int LastX = 0, LastY = 0;//συντεταγμενες του τελευταιου γραμματος της λεξης για τον ελεγχο γειτνιασης
     boolean STAT;
-    private int xCoord, yCoord;
-    Point LetterPoint;
-    StringBuilder sb;
+    private int xCoord, yCoord;//συντεταγμενες για τον σχεδιασμο του γραμματος
+    Point LetterPoint;// για το σημειο που θα οριζεται το καθε γραμμα στον σχεδιασμο του
     /*Setters και Getters για τις private ιδιότητες της κλάσης*/
     public boolean getStatBlackColor() {
         return statBlackColor;
@@ -73,7 +74,7 @@ public class CardGraphs extends JComponent implements MouseListener {
         this.ColorC = letter.getColor();
         this.xCoord = x;
         this.yCoord = y;
-        rect = new Polygon();
+        rect = new Polygon();//αναλογως με τις δωσμενες συντεταγμενες και το μηκος ζωγραφιζουμε το καθε γραμμα και τους ποντους του
         rect.addPoint(xCoord, yCoord);
         rect.addPoint(xCoord, yCoord + rectLength);
         rect.addPoint(xCoord + rectLength, yCoord + rectLength);
@@ -81,12 +82,13 @@ public class CardGraphs extends JComponent implements MouseListener {
         setRect(rect);
         LetterPoint = new Point(x, y);
         letter.setPoint(LetterPoint);
+        //προσθετουμε το καθε σημειο σε 2 map με ολα τα σημεια/id των γραμματων
         LettersMap.put(LetterPoint, letter);
         //lettersMap.put(LetterPoint, Character);
         valuesMap.put(LetterPoint, Value);
         //gg.setCounter(counter++);
-        addMouseListener(this);
-        //System.out.println(LetterPoint);
+        addMouseListener(this);//για τη λειτουργια του ποντικιου πανω στον πινακα, στο ιντερνετ το βρηκαμε οτι χρησιμευει
+       
     }
 
     public void setArrayDimension(int d) {
@@ -116,6 +118,7 @@ public class CardGraphs extends JComponent implements MouseListener {
         super.paintComponent(g);
         String LetterS = "" + Character;
         String valueS = "" + Value;
+       //το χρωμα που θα ζωγραφιστει ειναι αυτο που εχει το γραμμα απο τη κλασση
         g.setColor(ColorC);
         g.fillRect(xCoord, yCoord, rectLength, rectLength);
         for (int i = 0; i < YellowLetterPoints.size(); i++) { /*Αν τα γράμματα περιέχονται μέσα στην λίστα με 
@@ -126,6 +129,7 @@ public class CardGraphs extends JComponent implements MouseListener {
                 break;
             }
         }
+        //ζωγραφιζουμε μετα το φοντο και το γραμμα και τους ποντους του
         g.setColor(Color.BLACK);
         g.setFont(new Font("Courier", Font.BOLD, 71));
         g.drawString(LetterS, 25 + xCoord, 75 + yCoord);
@@ -142,9 +146,8 @@ public class CardGraphs extends JComponent implements MouseListener {
     /*Όταν ο χρήστης επιλέγει οτιδήποτε πάνω στον πίνακα γραμμάτων τότε καλείται η Myrepaint η οποία κάνει όλες
     τις αλλάγες πάνω στον πίνακα και την αλληλεπίδραση του χρήστη.*/
     public void Myrepaint(Graphics g, MouseEvent me) {  
-        Point currentPoint = me.getPoint();
-
-        int X = 5, Y = 5;
+        Point currentPoint = me.getPoint();//το σημειο που πατηθηκε το ποντικι για ελεγχο
+        int X = 5, Y = 5;//εκκινηση στον πινακα για την ευρεση του γραμματος στο οποιο πατησε το κουμπι
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 rect2 = new Polygon(); 
@@ -153,18 +156,25 @@ public class CardGraphs extends JComponent implements MouseListener {
                 rect2.addPoint(X + rectLength, Y + rectLength);
                 rect2.addPoint(X + rectLength, Y);
                 setRect(rect2);
+                //αν το τωρινο πολυγωνο που ζωγραφιζεται περιεχει/βρει το σημειο του ποντικιου
+                // δηλαδη παμε στο γραμμα που πατησαμε πανω
                 if (rect2.contains(currentPoint)) {
+                    //αν ειναι το αριστερο κλικ του ποντικιου
                     if (me.getButton() == MouseEvent.BUTTON1) {
+                        //βρισκουμε το γραμμα με αυτο το id/σημειο
                         for (Letter letterFromList : GameGraphs.letterList) {
+                            //αν το τετραγωνο περιεχει το σημειο και της λιστας εδω
                             if (rect2.contains(letterFromList.getPoint())) {
+                                //αν εινι ελευθερο το γραμμα για τη λεξη,αλλιως ηδη χρησιμοποιηθει η δε γινεται
                                 if (LetterChecks(g, letterFromList, X, Y) == true) {
-                                    chosenLettersList.add(new Point(X, Y));
+                                    chosenLettersList.add(new Point(X, Y));//αν ειναι ελευθερο λοιπον το προσθετουμε στην ακολουθηλιστα
                                 } else {
-                                    System.out.println("Δε προστέθηκε κάτι τώρα");
+                                    //System.out.println("Δε προστέθηκε κάτι τώρα");
                                 }
                             }
                         }
                     }
+                    // αν πατηθει το δεξι κλικ, ακυρωνεται ολοκληρη η λεξη και καθαριζεται ο πινακας
                     if (me.getButton() == MouseEvent.BUTTON3) {
                         int answer = JOptionPane.showConfirmDialog(null, "Θες να ακυρώσεις τη τωρινή λέξη");
                         if (answer == 0) {
@@ -267,7 +277,7 @@ public class CardGraphs extends JComponent implements MouseListener {
                 System.out.println("Γράμμα με συντεταγμένες: " + l.getPoint() + ", " + l.getCharacter() + ", " + l.getValue());
                 l.setSituation(true);
                 YellowLetterPoints.add(l.getPoint());
-                counter++;
+                counter++;//επομενο γραμμα
                 gg.setCounter(counter);
                 setStatBlackColor(false);
                 STAT = getStatBlackColor();
