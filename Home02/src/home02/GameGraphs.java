@@ -21,19 +21,25 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+// σε αυτη τη κλασση χτιζουμε τα γραφικα του παραθυρου ουσιαστικα
+// συν οτι εδω εχουμε τις βοηθητικες λειτουργιες για τα γραμματα μεσω των κουμπιων
 public class GameGraphs extends JFrame {
 
     String tempChar, FileWord = "";
-    ArrayList<String> WordsFile = new ArrayList<String>();
-    int Points = 0, PointsOfLetter = 0;
-    static int WordPoints;
-    static int dimension;
 
-    JLabel options = new JLabel();
+    // λιστα για τις λεξεις των αρχειων με τους χρηστες και τιςς οδηγιες
+    ArrayList<String> WordsFile = new ArrayList<String>();
+    int PointsOfLetter = 0;//ποντοι του γραμματος
+    static int WordPoints;//ποντοι για τη λεξη
+    static int dimension;//διασταση του πινακα
+
+    //labels με τις πληροφοριες για τη λεξη τους ποντους της, τους συνολικους ποντους κλπ
+    JLabel options = new JLabel(); 
     JLabel info2;
     JLabel info1;
     JLabel JMadeWord;
     JLabel JYourPoints;
+    //αναφορα και δημιουργια των κουμπιων για τις βοηθητικες επιλογες για τον πινακα γραμματων
     JButton bExit = new JButton();
     JButton bRestart = new JButton();
     JButton bCheckWord = new JButton();
@@ -44,38 +50,24 @@ public class GameGraphs extends JFrame {
     JButton b3 = new JButton();
     JButton b4 = new JButton();
     JButton b5 = new JButton();
-    JPanel jp1 = new JPanel();
-    JPanel jp2 = new JPanel();
-    JPanel jp3 = new JPanel();
-    JPanel jp4 = new JPanel();
-    JPanel jp5 = new JPanel();
-    JPanel jp6 = new JPanel();
-    JPanel jp7 = new JPanel();
-    JPanel jp8 = new JPanel();
-    JPanel jp9 = new JPanel();
-    JPanel jp10 = new JPanel();
-    JPanel jp11 = new JPanel();
-    JPanel jp12 = new JPanel();
     boolean tempcheck = true;
-    private static String MadeWord = "";
-    Graphics g;
-    private boolean readyWindow;
-    int LastX = 0, LastY = 0, answer;
-    Point LetterPoint;
-    StringBuilder sb;
-    static int successPoints, successWords = 5;
-    static int PointsOfWords = 0, NumberOfWords = 1;
-    private int x = 5, y = 5;
-    Scanner scan;
-    static ArrayList<Letter> letterList = new ArrayList<>();
-    Container pane = new Container();
-    JButton button1, button3, button2;
-    JPanel row1, row2;
-    JLabel label;
-    CardGraphs c;
-    Game game = new Game();
-    int counter;
+    private static String MadeWord = "";//η λεξη που φτιαχνει ο χρηστη
+    Graphics g; //χρηση γραφικων για μια συναρτηση παρακατω που τα χρειαζεται, η setWindow δηλαδη
+    private boolean readyWindow; //boolean, αν το παραθυρο φτιαχτει 
+    int LastX = 0, LastY = 0; //συντεταγμενες για το τελευταιο γραμμα της λεξηες, για ελεγχο γειτνιασης
+    //Point LetterPoint;
+    StringBuilder sb; // για τη καλυτερη διαχειριση της λεξης οταν σε αυτη μειωνουμε το τελευταιο γραμμα
+    static int successPoints, successWords = 5; //απο μονοι μας επιλεγουμε οτι οταν βρει ο χρηστης 5 λεξεις να μη παει για αλλη
+    static int PointsOfWords = 0, NumberOfWords = 1; //αρχικοποιηση των ποντων της λεξης και του αριθμου των λεξεων
+    private int x = 5, y = 5; //αρχικοποιηση στις συντεταγμενες για τα γραμματα
+    static ArrayList<Letter> letterList = new ArrayList<>(); //λιστα με τα γραμματα που εχει ο πινακας, εχει τα ιδια γραμματα με την shuffle_chars λιστα 
+    Scanner scan;//για την ευρεση του αρχειου
+//    JPanel row1, row2;
+    CardGraphs c; // αντικειμενου τυπου CardGraphs για την ευχερεια των μεθοδων του
+    Game game = new Game();// παρομοιως δημιουργουμε και αντικειμενο τυπου Game
+    int counter;//μετρητης για τα γραμματα του πινακα
 
+    //παρακατω εχουμε καποιους setters & getters σε καποιες μεταβλητες για την πιο ευκολη προσβαση και διαχειριση τους απο αλλες κλασεις και οχι μονο
     public void setreadyWindow(boolean rW) {
         readyWindow = rW;
     }
@@ -140,70 +132,77 @@ public class GameGraphs extends JFrame {
         return dimension;
     }
 
+    //empty constructor
     public GameGraphs() {
     }
 
-    @SuppressWarnings("OverridableMethodCallInConstructor")
+    //μεθοδος που δημιουργει το παραθυρο αναλογως με το μεγεθος του πινακα γραμματων που θελουμε
+    // και συμπληρωνεται με τα γραμματα που δεχεται απο την λιστα που χει σαν παραμετρο
     public void MakeGameGraphs(int dimension, ArrayList<Letter> Shuffled_Chars) {
-        //super("Window");
-        setDimension(dimension);
-        setBackground(Color.lightGray);
-        setMinimumSize(new Dimension(1350, 750));
-        setSize(dimension * 110 * 2 + 100, dimension * 115);
+        setDimension(dimension);//οριζουμε διασταση στο frame
+        setBackground(Color.lightGray);// φοντο χρωματος παραθυρου
+        setMinimumSize(new Dimension(1350, 750));//θετουμε ελαχιστο μεγεθος παραθυρου
+        setSize(dimension * 110 * 2 + 100, dimension * 115);//οριζουμε μεγεθος στο παραθυρο αναλογως με το μεγεθος του πινακα γραμματων
         setWindow(true, null, g);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
-        setCounter(0);
-        setreadyWindow(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //αν παταμε το Χ να τερματιζεται το προγραμμα μας με ασφαλεια
+        setResizable(false);//να μην αλλαζει το μεγεθος παραθυρου χειροκινητα, για ασφαλεια
+        setCounter(0);//θετουμε τον μετρητη γραμματων ισο με 0 γιατι ξεκιναμε απο το πρωτα γραμμα στη σχεδιαση του πινακα στο παραθυρο
+        setreadyWindow(true); // αν ανοιξε το παραθυρο για πρωτη φορα αλλαζει η boolean για μετεπειτα χρησιμοποιηση της boolean
+        //τρεχει διπλη for, οσο ειναι συνολικα τα γραμματα του πινακα
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                Letter currentLetter = Shuffled_Chars.get(counter);
+                Letter currentLetter = Shuffled_Chars.get(counter);//παιρνουμε ενα ενα τα γραμαμτα απο τη λιστα
                 c = new CardGraphs(currentLetter, x, y);
                 c.setArrayDimension(dimension);
-                getContentPane().add(c);
-                currentLetter.setSituation(false);
-                letterList.add(currentLetter);
-                setVisible(true);
-                counter++;
-                x += 105;
-                System.out.print(currentLetter.getCharacter() + " ");
+                getContentPane().add(c);//προσθετουμε στο παραθυρο το καθε γραμμα μεσω του constructor της CardGraphs
+                currentLetter.setSituation(false);//θετουμε αυτοματα και ελευθερο το γραμμα για χρησιμοποιηση στη υποηφια λεξη
+                letterList.add(currentLetter);//προσθετουμε το γραμμα σε μια τοπικα λιστα, οπως ειναι η Shuffled_Chars
+                setVisible(true); //να ειναι εμφανισημο το παραθυρο
+                counter++;//μετρητης για τα γραμματα
+                x += 105;// πηγαινει στο επομενο γραμμα, δεξια ουσιαστικα κατα 105 πιξελς
+                //System.out.print(currentLetter.getCharacter() + " ");
             }
-            System.out.println();
-            x = 5;
-            y += 105;
+            //System.out.println();
+            x = 5; // παμε στην αρχη της καθε σειρας στον πινακα που ξεκινα στον αξονα Χ στο 5ο πιξελ
+            y += 105;// παει στην επομενη γραμμης, δηλαδη συν 105 πιξελς κατω
+            //ουσιαστικα κατεβαινει στην επομενη σειρα στην αρχη της για να ζωγραφιστει το επομενο γραμμα
         }
-        revalidate();
+        revalidate();//για την ασφαλη ανανεωση του παραθυρου, στο ιντερνετ τις βρηκαμε τις μεθοδους και τις πεταξαμε
         repaint();
         setCounter(counter);
     }
 
+    //σχεδιαζουμε το παραθυρο ουσιαστικα εδω, πριν απλα το δημιουργησαμε, εδω του πεταμε ολα τα components
+    //και καλειται ξανα οταν επηρεαζεται ο πινακας με τα γραμματα, η λεξη και η ποντοι
+    // αφου ολα αλληλεπιδρουν μεταξυ τους, δηλαδη αν αυξηθουν οι ποντοι τοτε επηρεαζεται και ο πινακας σαν γραφικα
     public void setWindow(boolean stBC, Letter letter, Graphics g) {
         SwingUtilities.updateComponentTreeUI(this);
         info1 = new JLabel();
         info2 = new JLabel();
         JMadeWord = new JLabel();
-
-        if (getCounter() == 0 && getreadyWindow() == false) { // first letter
+        if (getCounter() == 0 && getreadyWindow() == false) {
 //            WordPoints = 0;
 //            setPointsOfTheWord(0);
 //            setMadeWord("");
 //            System.out.println("nooooooooo");
 //            //setPointsOfWords(getPointsOfWords());
-        } else {
+        } else { // οταν δεν ειαμστε στο πρωτο γραμμα της λεξης και ενημερωνονται γραφικα λεξη και ποντοι
             remove(info2);
             remove(info1);
             remove(JMadeWord);
             info1.setVisible(false);
-            if (stBC == true && getCounter() != 0) {//remove last letter
-                setPointsOfTheWord(getPointsOfTheWord() - letter.getValue());
-                sb = new StringBuilder(MadeWord);
+            if (stBC == true && getCounter() != 0) {//εδω θα μπει αν ο χρηστης επιλεξει το τελευταιο γραμμα
+                setPointsOfTheWord(getPointsOfTheWord() - letter.getValue());//αφαιρουνται στους πντους της λεξης οι ποντοι του τελευταιου γραμματος
+                sb = new StringBuilder(MadeWord);// αφαιρειται απο τη λεξη και το τελεταιο γραμμα
                 sb.deleteCharAt(MadeWord.length() - 1);
                 setMadeWord(sb.toString());
             } else {// (stBC == false && counter != 0) 
+                //αλλιως προσθετουμε το γραμμα στη λεξη και την αξια στην συνολικη αξια της λεξης
                 setPointsOfTheWord(getPointsOfTheWord() + letter.getValue());
                 MadeWord += letter.getCharacter();
             }
         }
+        //παρακατω δημιουργουμε και πεταμε στο παραθυρο τα απαραιτητα components
         bExit = new JButton("Διακοπή παιχνιδιού");
         bRestart = new JButton("Επανεκκίνηση παιχνιδιού");
         bCheckWord = new JButton("ΕΛΕΓΧΟΣ ΛΕΞΗΣ");
@@ -225,7 +224,6 @@ public class GameGraphs extends JFrame {
         JYourPoints = new JLabel("Οι πόντοι της λέξης ως τώρα: " + getPointsOfTheWord());
         JYourPoints.setForeground(Color.RED);
 
-        //System.out.println(JYourPoints.getText() + " " + JMadeWord.getText());
         JYourPoints.setFont(new Font("Courier", Font.BOLD, 40));
         JYourPoints.setBounds(getDimension() * 110 + 100, 60, 600, 40);
         JYourPoints.setVisible(true);
@@ -241,6 +239,7 @@ public class GameGraphs extends JFrame {
         info2.setForeground(Color.DARK_GRAY);
         info2.setBounds(getDimension() * 110 + 100, 30, 600, 40);
 
+        //αν φτιαχτηκε το παραθυρο τοτε καθε φορα που καλειται αυτη η συναρτηση πεταγεται ενημερωση με τη κατασταση της λεξης και των γραμματων
         if (getreadyWindow() == true) {
             JOptionPane.showMessageDialog(null,
                     JYourPoints.getText()
@@ -248,6 +247,7 @@ public class GameGraphs extends JFrame {
                     + " \n " + info1.getText()
                     + " \n " + info2.getText());
         }
+        //οριζουμε διαστασεις στα κουμπια αναλογως τις διαστασεις του πινακα που εχουμε, χειροκινητα
         b1.setBounds(getDimension() * 110 + 200, 110, 250, 40);
         b2.setBounds(getDimension() * 110 + 200, 160, 250, 40);
         b3.setBounds(getDimension() * 110 + 200, 210, 250, 40);
@@ -280,13 +280,16 @@ public class GameGraphs extends JFrame {
         bCheckWord.setBackground(Color.BLUE);
         bExit.setBackground(Color.RED);
 
+        //ομοιως οπως για τα παραπανω κουμπια
         bExit.setBounds(getDimension() * 110 + 100, 360, 200, 40);
         bUsers.setBounds(getDimension() * 110 + 100, 410, 200, 40);
         bGameHelp.setBounds(getDimension() * 110 + 400, 360, 200, 40);
         bCheckWord.setBounds(getDimension() * 110 + 400, 410, 200, 40);
 
+        //αντικειμενο της εσωτερικης κλασσης για την διευκολυνση στη χρησιμοποιηση των κουμπιων και των ActionListener τους
         ButtonHandler bh = new ButtonHandler();
 
+        //ενεργοποιουμε ουσιαστικα τα κουμπια, αποκτουν ουσιαστικα ουσια και λειτουργια μεσω της εσωτερικης κλασσης
         bExit.addActionListener(bh);
         bCheckWord.addActionListener(bh);
         bUsers.addActionListener(bh);
@@ -307,6 +310,8 @@ public class GameGraphs extends JFrame {
 //        add(bRearrangeRowresults);
 //        add(bReplaceLineResults);
 //        add(bExchangeLettersResults);
+        
+        //προσθετουμε στο frame τα κουμπια
         add(b1);
         add(b2);
         add(b3);
@@ -316,25 +321,31 @@ public class GameGraphs extends JFrame {
         add(bGameHelp);
         add(bExit);
         add(bUsers);
+        //τοιμες μεθοδοι που βρηκαμε στο ιντερνετ και βοηθανε ισως στη ομαλη λειτουργια ανανεωσης του παραθυρου
         this.revalidate();
         SwingUtilities.updateComponentTreeUI(this);
     }
 
+    //μεθοδος που ανοιγει τον φακελο με τις οδηγιες του παιχνιδιου
     public void Instructions() {
         FileWord = "";
+        //για ασφαλεια κανουμε εδω χρηση try catch
         try {
+            //δοκιμαζουμε να βρουμε μεσω μονοπατιου το αρχειο
             scan = new Scanner(new File("src/home02/Instructions.txt"));
-            while (scan.hasNext()) {
-                FileWord += scan.next();
-                System.out.println(FileWord);
+            while (scan.hasNext()) {// οσο στο αρχειο υπαρχει λεξη να διαβαστει
+                FileWord += scan.next();//προσθετουμε σε μια συμβολοσειρα καθε λεξη
+                //System.out.println(FileWord);
             }
+            //εμφανιζει τις οδηγιες
             JOptionPane.showMessageDialog(null, FileWord, "File infos", JOptionPane.INFORMATION_MESSAGE);
-            scan.close();
-        } catch (FileNotFoundException ex) {
+            scan.close();//κλεινει το αρχειο με ασφαλεια
+        } catch (FileNotFoundException ex) {//αν δε βρεθει το αρχειο
             JOptionPane.showMessageDialog(null, "Το αρχείο με τις οδηγίες δε βρέθηκε", "File error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
+    //μεθοδος για το ανοιγμα του αρχειου με τα ονοματα των φοιτητων, ομοιως οπως η απο πανω συναρτηση δουλευει
     public void ReadUsersFile() {
         FileWord = "";
         try {
@@ -345,8 +356,8 @@ public class GameGraphs extends JFrame {
                 //System.out.println(FileWord);
             }
             for (int i = 0; i < WordsFile.size(); i++) {
-                FileWord += WordsFile.get(i) + " ";
-            }
+                FileWord += WordsFile.get(i) + " ";//προσθετει σε μια λιστα τη καθε λεξη
+            }//εμφανιζει τους χρηστες μεσω της λιστας που αποθηκευσε τις λεξεις του αρχειου
             JOptionPane.showMessageDialog(null, FileWord, "File infos", JOptionPane.INFORMATION_MESSAGE);
             scan.close();
         } catch (FileNotFoundException ex) {
@@ -354,29 +365,32 @@ public class GameGraphs extends JFrame {
         }
     }
 
+    //μεθοδος που ελεγχει τη λεξη, αν υπαρχει δηλαδη στο αρχειο
     public void CheckWord() {
         if (MadeWord.length() > 2) {
             JOptionPane.showMessageDialog(null, "Θα ελέγξουμε τη λέξη " + MadeWord);
-            if (c.getDoubleWordValue() == true) {
+            if (c.getDoubleWordValue() == true) {//ν περιεχει η λεξη δηλαδη μπλε γραμμα
                 WordPoints *= 2;
             }
-            if (game.SearchWord(MadeWord) == true) {
+            if (game.SearchWord(MadeWord) == true) {//ο ελεγχος θα γινει ουσιαστικα στην συναρτηση αυτη
                 //game.ReplaceWords();
                 //card.ClearAllLetters(gp);// everytime
+                //αν οντως βρεθηκε η λεξη σβηνουμε τη τωρινη λεξη και ποντους της, αφου ξεκιναμε απο την αρχη την αναζητηση νεας λεξης
                 setMadeWord("");
                 setPointsOfWords(WordPoints);
-                setPointsOfTheWord(0);                
+                setPointsOfTheWord(0);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Δεν μπορείς να ελέγξεις τη λέξη, πρέπει το λιγότερο 3 γράμματα να διαλέξεις ", "File error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
+    //μεθοδος για την ανταλλαγη γραμματων
     public void Exchange_Letters(int dimension) {
-        boolean statt = true;
+        boolean statt = true;//για τη while
         Point tempP, tempP2, p1 = null, p2 = null;
-        int x1 = 0, x2 = 0, y2 = 0, y1 = 0;
-        Letter valL = null, valL2 = null;
+        int x1 = 0, x2 = 0, y2 = 0, y1 = 0;//συντεταγμενες για τα 2 γραμματα αναταλλαγης
+        Letter valL = null, valL2 = null;//για τα δυο γραμματα που θα ανταλλαξουμε
         String InputChoiceLine = "", InputChoiceRow = "";
         while (statt == true) {
             do {
@@ -385,6 +399,7 @@ public class GameGraphs extends JFrame {
             } while (Character.isDigit(InputChoiceLine.charAt(0)) != true);
             y1 = Integer.parseInt(InputChoiceLine) - 1;
             x1 = Integer.parseInt(InputChoiceRow) - 1;
+            //εγκυροι αριθμοι, να υπαρχουν στον πινακα δηλαδη η στηλ και η σειρα του γραμματος
             if (x1 < dimension && x1 >= 0 && y1 < dimension && y1 >= 0) {
                 do {
                     InputChoiceLine = JOptionPane.showInputDialog(null, "Δεύτερο Γράμμα: γραμμή: ");
@@ -392,11 +407,14 @@ public class GameGraphs extends JFrame {
                 } while (Character.isDigit(InputChoiceLine.charAt(0)) != true);
                 y2 = Integer.parseInt(InputChoiceLine) - 1;
                 x2 = Integer.parseInt(InputChoiceRow) - 1;
+                //ελεγχος εγκυροτητας στηλης και γραμμης και για το δευτερο γραμμα
                 if (x2 < dimension && x2 >= 0 && y2 < dimension && y2 >= 0) {
+                    //προσαρμοζουμε τις συντεταγμενες σε πραγματικα πιξελς, αναλογως με τον πινακα
                     x1 = x1 * 105 + 5;
                     y1 = y1 * 105 + 5;
                     x2 = x2 * 105 + 5;
                     y2 = y2 * 105 + 5;
+                    //δυο ποιντς δημιουργουμε για τα δυο γραμματα στον πινακα
                     p1 = new Point(x1, y1);
                     p2 = new Point(x2, y2);
                     if (p1.x == p2.x && p1.y == p2.y) {
@@ -413,18 +431,24 @@ public class GameGraphs extends JFrame {
         }
         //αν και οι δύο θέσεις για τα γράμματα είναι όντως στον πίνακα, και θετικές
         if (statt == false) {
+            //ψαχνουμε στην ακολουθη λιστα να βρουμε το πρωτο γραμμα, αναλογα με το ID, δηλαδη το ποιντ του γραμματος
             for (Map.Entry<Point, Letter> entry : CardGraphs.LettersMap.entrySet()) {
                 tempP = entry.getKey();
                 valL = entry.getValue();
+                //αν βρεθουν οι συντεταγμενες του πρωτου δωθεντος γραμματος στην λιστα
                 if (p1.x == tempP.x && p1.y == tempP.y) {
+                    //ψαχνουμε για το αλλο γραμμα τωρα, παλι στη λιστα, παλι με του ID του, δηλαδη του σημειου του
                     for (Map.Entry<Point, Letter> entry2 : CardGraphs.LettersMap.entrySet()) {
                         tempP2 = entry2.getKey();
                         valL2 = entry2.getValue();
+                        //αν βρεθηκαν οι συντεταγμενες και του δευτερου γραμματος στη λιστα
                         if (p2.x == tempP2.x && p2.y == tempP2.y) {
+                            //παρακατω αν βρεθουν τα γραμματα, μεσω των συντεταγμενων στην παρακατω λιστα τοτε θα κανουμε swap μεταξυ τους
                             for (int i = 0; i < letterList.size(); i++) {
                                 if (letterList.get(i).getPoint() == tempP) {
                                     for (int j = 0; j < letterList.size(); j++) {
                                         if (letterList.get(j).getPoint() == tempP2) {
+                                            //ετοιμη συναρτηση για swap δυο Letters
                                             Collections.swap(ManageList.Shuffled_Chars, i, j);
                                         }
                                     }
@@ -434,18 +458,21 @@ public class GameGraphs extends JFrame {
                     }
                 }
             }
+            //ξαναχτιζεται το παραθυρο ατυπα με τα νεα δεδομενα, δηλαδη την ανταλλαγη θεσεων μεταξυ δυο γραμματων
             MakeGameGraphs(dimension, ManageList.Shuffled_Chars);
         }
     }
 
+    //εσωτερικη κλαση οπου υιοθετει τις μεθοδους για την λειτουργια των κουμπιων, χρηση interface
     class ButtonHandler implements ActionListener {
 
+        //αν το ae παρακατω που πατηθει αντιστοιχει στο συγκρεκριμενο κουμπι καλειται η αντιστοιχη λειτουργια
         @Override
         public void actionPerformed(ActionEvent ae) {
-            if (ae.getSource() == bExit) {
+            if (ae.getSource() == bExit) {//κουμπι για εξοδο απο το παιχνιδι
                 System.exit(0);
-            } else if (ae.getSource() == bCheckWord) {
-                if (tempcheck == true) {
+            } else if (ae.getSource() == bCheckWord) {//κουμπι για ελεγχο της λεξεης
+                if (tempcheck == true) {//αν γινεται να ελεγξουμε τη λεξη
                     CheckWord();
                 }
                 tempcheck = false;
@@ -471,7 +498,6 @@ public class GameGraphs extends JFrame {
                     //  setPointsOfTheWord(tempWordPoints);
                 }
             } else if (ae.getSource() == b5) {
-
                 game.User_Menu(1, getGraphics());
                 //  setPointsOfTheWord(tempWordPoints);
 
