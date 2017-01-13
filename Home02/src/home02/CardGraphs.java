@@ -12,8 +12,10 @@ import java.util.HashMap;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
+/*Σε αυτή την κλάση δημιουργούμε τα γραφικά του πίνακα με τις κάρτες και διαχειριζόμαστε τις επιλογές του χρήστη 
+ώστε να γίνουν οι απαραίτητες χρωματικές και λειτουργικές αλλαγές στα γραφικά*/
 public class CardGraphs extends JComponent implements MouseListener {
-
+    
     Game game = new Game();
     GameGraphs gg = new GameGraphs();
     String tempChar;
@@ -35,7 +37,7 @@ public class CardGraphs extends JComponent implements MouseListener {
     private int xCoord, yCoord;
     Point LetterPoint;
     StringBuilder sb;
-
+    /*Setters και Getters για τις private ιδιότητες της κλάσης*/
     public boolean getStatBlackColor() {
         return statBlackColor;
     }
@@ -59,13 +61,11 @@ public class CardGraphs extends JComponent implements MouseListener {
     public void setCharacter(char character) {
         Character = character;
     }
-
+ //Άδειος constructor 
     public CardGraphs() {
     }
-
-//    public CardGraphs(GameGraphs GG){
-//        this.gg=GG;
-//    }
+    /*Ο Constructor μας θέτει τις τιμές στα γραφικά και ζωγραφίζει τα τετράγωνα στις παρακάτω συντενταγμένες
+    που μεταβάλλονται ανάλογα κάθε φορά που δημιουργεί ενα γράμμα*/
     public CardGraphs(Letter letter, int x, int y) {
         this.Cletter = letter;
         this.Character = letter.getCharacter();
@@ -111,13 +111,15 @@ public class CardGraphs extends JComponent implements MouseListener {
     }
 
     @Override
-    public void paint(Graphics g) {
+    public void paint(Graphics g) { /*Η paint μας γεμίζει το χρώμα του τετραγώνου και απο πάνω το γράμμα με την
+        αξία του στα πλάγια.*/
         super.paintComponent(g);
         String LetterS = "" + Character;
         String valueS = "" + Value;
         g.setColor(ColorC);
         g.fillRect(xCoord, yCoord, rectLength, rectLength);
-        for (int i = 0; i < YellowLetterPoints.size(); i++) {
+        for (int i = 0; i < YellowLetterPoints.size(); i++) { /*Αν τα γράμματα περιέχονται μέσα στην λίστα με 
+            τα επιλεγμένα τότε τα ζωγραφίζει κίτρινα.*/
             if (Cletter.getPoint().equals(YellowLetterPoints.get(i))) {
                 g.setColor(Color.yellow);
                 g.fillRect(xCoord, yCoord, rectLength, rectLength);
@@ -137,14 +139,15 @@ public class CardGraphs extends JComponent implements MouseListener {
     public void repaint() {
         revalidate();
     }
-
-    public void Myrepaint(Graphics g, MouseEvent me) {
+    /*Όταν ο χρήστης επιλέγει οτιδήποτε πάνω στον πίνακα γραμμάτων τότε καλείται η Myrepaint η οποία κάνει όλες
+    τις αλλάγες πάνω στον πίνακα και την αλληλεπίδραση του χρήστη.*/
+    public void Myrepaint(Graphics g, MouseEvent me) {  
         Point currentPoint = me.getPoint();
 
         int X = 5, Y = 5;
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                rect2 = new Polygon();
+                rect2 = new Polygon(); 
                 rect2.addPoint(X, Y);
                 rect2.addPoint(X, Y + rectLength);
                 rect2.addPoint(X + rectLength, Y + rectLength);
@@ -180,7 +183,8 @@ public class CardGraphs extends JComponent implements MouseListener {
         revalidate();
         repaint();
     }
-
+    /*Αυτή η συνάρτηση χρησιμοποιείται όταν ο χρήστης θέλει να ξεκινήσει την τωρινή λέξη απο την αρχή 
+    επομένως δηλαδή έχει πατήσει το δεξί κλικ.*/
     public void ClearAllLetters(Graphics g) {
         int X = 5, Y = 5;
         for (int i = 0; i < dimension; i++) {
@@ -207,7 +211,7 @@ public class CardGraphs extends JComponent implements MouseListener {
             X = 5;
             Y += 105;
         }
-        JOptionPane.showMessageDialog(null, "ΞΑΝΑ ΑΠΌ ΤΗΝ ΑΡΧΉ Η ΛΈΞΗ ΛΟΙΠΟΝ");
+        JOptionPane.showMessageDialog(null, "Ξανά απο την αρχή λοιπόν.");
         X = 5;
         Y = 5;
         LastX = 0;
@@ -215,18 +219,18 @@ public class CardGraphs extends JComponent implements MouseListener {
         gg.setCounter(0);
         gg.setWindow(true, null, g);
     }
-
+    /*Η LetterChecks κάνει όλους τους ελέγχους για τα γράμματα ανάλογα με την επιλογή του χρήστη.*/
     public boolean LetterChecks(Graphics g, Letter l, int X, int Y) {
         if (LastX == X && LastY == Y) {//last letter
             int ch = JOptionPane.showConfirmDialog(null, "Θες να ακυρώσεις το τελευταίο γράμμα");
             if (ch == 0) {
-                l.setSituation(false);//available again
-                setStatBlackColor(true);
+                l.setSituation(false);//Ξανακάνει το γράμμα ξανά διαθέσιμο
+                setStatBlackColor(true); 
                 STAT = getStatBlackColor();
-                DrawLetter(g, l, X, Y, STAT);
+                DrawLetter(g, l, X, Y, STAT); //Καλεί την DrawLetter ωστε να ξαναζωγραφίσει το γράμμα
                 gg.setWindow(STAT, l, g);
                 chosenLettersList.remove(chosenLettersList.size() - 1);
-                if (chosenLettersList.size() > 0) {
+                if (chosenLettersList.size() > 0) { 
                     LastX = chosenLettersList.get(chosenLettersList.size() - 1).x;
                     LastY = chosenLettersList.get(chosenLettersList.size() - 1).y;
                 } else { //chosenLettersList.size() == 0
@@ -237,12 +241,12 @@ public class CardGraphs extends JComponent implements MouseListener {
                 }
                 return false;
             }
-        } else if (l.isSituation() == false) { // letter available
+        } else if (l.isSituation() == false) { //Αν το γράμμα είναι διαθέσιμο 
             if ((LastX == 0 && LastY == 0) || (!(Math.abs(LastX - X) > 105) && !(Math.abs(LastY - Y) > 105))) {
-                if (l.getCharacter() == '?') {
+                if (l.getCharacter() == '?') { //Αν είναι balader τότε να ζητάει απο τον χρήστη το γράμμα
                     tempChar = JOptionPane.showInputDialog("Επέλεξε εσύ το γράμμα επιθυμίας σου");
-                    tempChar.toUpperCase();
-                    if (tempChar.length() > 0) {
+                    tempChar.toUpperCase(); 
+                    if (tempChar.length() == 1) { //Έλεγχος για το αν έδωσε 1 γράμμα μόνο 
                         l.setCharacter(tempChar.charAt(0));
                         while (ManageList.GivenValue(l.getCharacter()) == 100) {
                             tempChar = JOptionPane.showInputDialog("Επέλεξε εσύ το γράμμα επιθυμίας σου ΣΩΣΤΑ");                            
@@ -256,7 +260,7 @@ public class CardGraphs extends JComponent implements MouseListener {
                 }
                 LastX = X;
                 LastY = Y;
-                if (l.getColor() == Color.blue) {
+                if (l.getColor() == Color.blue) { //Διπλασιάζει τους πόντους όλης της λέξης αν επιλέξει μπλε γράμμα
                     setDoubleWordValue(true);
                     JOptionPane.showMessageDialog(null, "Γράμμα για διπλασιαμός πόντων στη λέξη");
                 }
@@ -280,7 +284,8 @@ public class CardGraphs extends JComponent implements MouseListener {
         }
         return true; // never runned
     }
-
+/*Η DrawLetter ζωγραφίζει το γράμμα l στις συγκεκριμένες συντεταγμένες x,y 
+    και καλείται κάθε φορα που ζωγραφίζουμε ένα γράμμα*/
     public static void DrawLetter(Graphics g, Letter l, int X, int Y, boolean stat) {
         String LetterPoints = "" + l.getValue();
         String LetterChar = "" + l.getCharacter();
@@ -298,7 +303,9 @@ public class CardGraphs extends JComponent implements MouseListener {
         g.setFont(new Font("Courier", Font.BOLD, 12));
         g.drawString(LetterPoints, 80 + X, 80 + Y);
     }
-
+ /*mouseClicked για κάθε φορά που ο χρήστης κάνει click σε κάρτα να ξανακαλεί την Myrepaint ώστε να ζωγραφίζει
+    απο πάνω τα χρώματα και να κάνει τις απαραίτητες λειτουργίες για την σωστή εκτέλεση του προγράμματος και την 
+    ομαλή λειτουργία του.*/
     @Override
     public void mouseClicked(MouseEvent me) {
         gg.setreadyWindow(true);

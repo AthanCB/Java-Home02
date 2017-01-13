@@ -473,7 +473,7 @@ public class Game extends JFrame {
                 JOptionPane.showMessageDialog(null, "Δεν έχει τέτοια γραμμή ο πίνακας ξαναπροσπάθησε");
             }
         }
-        gg.dispose();
-        gg.MakeGameGraphs(size, ManageList.Shuffled_Chars);
+        gg.dispose(); //Κλείνει το τρεχόν παράθυρο 
+        gg.MakeGameGraphs(size, ManageList.Shuffled_Chars); //ανοίγει το παράθυρο με τα νέα δεδομένα
     }
 }
