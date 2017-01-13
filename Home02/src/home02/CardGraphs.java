@@ -242,8 +242,15 @@ public class CardGraphs extends JComponent implements MouseListener {
             if ((LastX == 0 && LastY == 0) || (!(Math.abs(LastX - X) > 105) && !(Math.abs(LastY - Y) > 105))) {
                 if (l.getCharacter() == '?') {
                     tempChar = JOptionPane.showInputDialog("Επέλεξε εσύ το γράμμα επιθυμίας σου");
+                    tempChar.toUpperCase();
                     if (tempChar.length() > 0) {
                         l.setCharacter(tempChar.charAt(0));
+                        while (ManageList.GivenValue(l.getCharacter()) == 100) {
+                            tempChar = JOptionPane.showInputDialog("Επέλεξε εσύ το γράμμα επιθυμίας σου ΣΩΣΤΑ");                            
+                            tempChar.toUpperCase();
+                            l.setCharacter(tempChar.charAt(0));
+                        }
+                        l.setValue(ManageList.GivenValue(l.getCharacter()));
                     } else {
                         tempChar = JOptionPane.showInputDialog("Επέλεξε ξανά το γράμμα επιθυμίας σου");
                     }
@@ -274,7 +281,7 @@ public class CardGraphs extends JComponent implements MouseListener {
         }
         return true; // never runned
     }
-    
+
     public static void DrawLetter(Graphics g, Letter l, int X, int Y, boolean stat) {
         String LetterPoints = "" + l.getValue();
         String LetterChar = "" + l.getCharacter();

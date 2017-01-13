@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
+import javax.swing.JOptionPane;
 
 public class ManageList {
 
@@ -18,7 +19,7 @@ public class ManageList {
     /* η λίστα WordList κρατάει και αυτή τις λέξεις του αρχείου αλλά κάθε φορά που χρησιμοποιούνται τα γράμματα μίας λέξης 
      στο παιχνίδι τότε στην WordList αφαιρούνται αυτά τα γράμματα, δηλαδή η λέξη
      έτσι ώστε να μην ξαναχρησιμοποιούνται σε κάποιο γύρο στο παιχνίδι μετά*/
-    ArrayList<String> WordList = new ArrayList();
+    static ArrayList<String> WordList = new ArrayList();
 
     /*η TempWordList χρησιμοποιείται για να αποθηκεύσουμε τις λέξεις στον κάθε γύρο.*/
     ArrayList<String> TempWordList = new ArrayList();
@@ -165,7 +166,7 @@ public class ManageList {
     }
 
     //θέτουμε την αξία του γράμματος αναλόγως με τον χαρακτήρα του, εξ ορισμού ξέρουμε τι αξία έχει το κάθε γράμμα
-    public int GivenValue(char inchar) {
+    public static int GivenValue(char inchar) {
         int Value = 0;
         if (inchar == 'Α' || inchar == 'Ε' || inchar == 'Η' || inchar == 'Ι' || inchar == 'Ν' || inchar == 'Ο' || inchar == 'Σ' || inchar == 'Τ') {
             Value = 1;
@@ -182,7 +183,8 @@ public class ManageList {
         } else if (inchar == '?') {
             Value = 0;
         } else {
-            System.out.println("Κάτι πήγε λάθος.");
+            //JOptionPane.showMessageDialog(null,"Κάτι πήγε λάθος.");
+            return 100;
         }
         return Value; //επιστρέφουμε την αξία του γράμματος γιατί την χρειαζόμαστε και σε άλλη μέθοδο
     }

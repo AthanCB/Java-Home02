@@ -154,10 +154,6 @@ public class GameGraphs extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setCounter(0);
-//        if (getreadyWindow() == false) {
-//            WordPoints = 0;
-//            System.out.println("firsttime");
-//        }
         setreadyWindow(true);
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
@@ -193,21 +189,11 @@ public class GameGraphs extends JFrame {
                 setVisible(true);
                 counter++;
                 x += 105;
-                System.out.print(currentLetter.getCharacter() + " ");
+                //System.out.print(currentLetter.getCharacter() + " ");
             }
         }
     }
 
-//  
-//    @Override
-//    public void repaint() {
-//        System.out.println("counter: " + counter);
-//        if (getreadyWindow() == true) {
-//            b1.setBackground(Color.blue);
-//            revalidate();
-//            System.out.println("22222222222222222");
-//        }
-//    }
     public void setWindow(boolean stBC, Letter letter, Graphics g) {
         SwingUtilities.updateComponentTreeUI(this);
         info1 = new JLabel();
@@ -225,8 +211,6 @@ public class GameGraphs extends JFrame {
             remove(info1);
             remove(JMadeWord);
             info1.setVisible(false);
-//            jf.remove(JMadeWord);
-//            jf.remove(JYourPoints);
             if (stBC == true && getCounter() != 0) {//remove last letter
                 setPointsOfTheWord(getPointsOfTheWord() - letter.getValue());
                 sb = new StringBuilder(MadeWord);
@@ -356,14 +340,9 @@ public class GameGraphs extends JFrame {
         add(bExit);
         add(bUsers);
         this.revalidate();
-        //this.repaint();
         SwingUtilities.updateComponentTreeUI(this);
     }
 
-//    @Override
-//    public void paint(Graphics g) {
-//        System.out.println("dddddd");
-//    }    
     public void Instructions() {
         FileWord = "";
         try {
@@ -405,7 +384,7 @@ public class GameGraphs extends JFrame {
                 WordPoints *= 2;
             }
             if (game.SearchWord(MadeWord) == true) {
-                game.ReplaceWords();
+                //game.ReplaceWords();
                 //card.ClearAllLetters(gp);// everytime
                 setMadeWord("");
                 setPointsOfWords(WordPoints);
@@ -473,18 +452,9 @@ public class GameGraphs extends JFrame {
                                         }
                                     }
                                 }
-//                                tempP.x = p1.x;
-//                                p1 = p2;
-//                                p2 = tempP;
-//                                System.out.println(p1 + " " + p2);
-//                                CardGraphs.DrawLetter(g, valL, p1.x, p1.y, true);
-//                                CardGraphs.DrawLetter(g, valL2, p2.x, p2.y, true);
                             }
                         }
                     }
-//                    if ((Pkey.x == tempPoint.x) && (Pkey.y == tempPoint.y)) {
-//                        tempMap.put(Pkey, val);
-//                    }
                 }
             }
             MakeGameGraphs(dimension, ManageList.Shuffled_Chars);
@@ -496,7 +466,6 @@ public class GameGraphs extends JFrame {
         @Override
         public void actionPerformed(ActionEvent ae) {
             if (ae.getSource() == bExit) {
-                //tempWordPoints = WordPoints;
                 System.exit(0);
             } else if (ae.getSource() == bCheckWord) {
                 if (tempcheck == true) {
@@ -505,20 +474,15 @@ public class GameGraphs extends JFrame {
                 tempcheck = false;
             } else if (ae.getSource() == b1) {
                 game.User_Menu(2, getGraphics());
-                dispose();
                 // setPointsOfTheWord(tempWordPoints);
                 //game.RemakeLine(dimension);
 
             } else if (ae.getSource() == b2) {
-
                 game.User_Menu(5, getGraphics());
-                dispose();
                 // setPointsOfTheWord(tempWordPoints);
 
             } else if (ae.getSource() == b3) {
-
                 game.User_Menu(4, getGraphics());
-                dispose();
                 //  setPointsOfTheWord(tempWordPoints);
 
             } else if (ae.getSource() == b4) {
@@ -527,13 +491,11 @@ public class GameGraphs extends JFrame {
                     setMadeWord("");
                     setPointsOfTheWord(0);
                     game.User_Menu(3, getGraphics());
-                    dispose();
                     //  setPointsOfTheWord(tempWordPoints);
                 }
             } else if (ae.getSource() == b5) {
 
                 game.User_Menu(1, getGraphics());
-                dispose();
                 //  setPointsOfTheWord(tempWordPoints);
 
             } else if (ae.getSource() == bUsers) {
