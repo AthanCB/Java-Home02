@@ -64,7 +64,7 @@ public class Game extends JFrame {
 
         gameG = new GameGraphs();
         gameG.setreadyWindow(false);
-        gameG.MakeGameGraphs(size, managefile.Shuffled_Chars, false);
+        gameG.MakeGameGraphs(size, managefile.Shuffled_Chars);
         gameG.setsuccessPoints(50);
         gameG.setPointsOfWords(0);
         gameG.setNumberOfWords(1);
@@ -316,7 +316,7 @@ public class Game extends JFrame {
     public void Rearrangement(int SIZE) {
         tempMap.clear();
         Collections.shuffle(managefile.Shuffled_Chars);
-        gg.MakeGameGraphs(size, ManageList.Shuffled_Chars, true);
+        gg.MakeGameGraphs(size, ManageList.Shuffled_Chars);
     }
 
     //αντικατάσταση γραμμάτων μίας γραμμής που επιλέγει παρακάτω ο χρήστης
@@ -355,7 +355,7 @@ public class Game extends JFrame {
                 }
                 //γεμίζουμε την επιλεγμένη γραμμή με τα νέα γράμματα από την Shuffled_Chars
                 managefile.Selected_Words(size);// για μία γραμμή παίρνουμε μέσω της Selected_Words νέα γράμματα 
-                gameG.MakeGameGraphs(size, managefile.Shuffled_Chars, true);
+                gameG.MakeGameGraphs(size, managefile.Shuffled_Chars);
                 count++;//στην επόμενη θέση/γράμμα της Shuffled_Chars
                 Collections.shuffle(managefile.Shuffled_Chars);
                 statt = false;
@@ -408,7 +408,7 @@ public class Game extends JFrame {
 //            System.out.println();            
 //        }
 //        gg.dispose();
-        gg.MakeGameGraphs(size, ManageList.Shuffled_Chars, true);
+        gg.MakeGameGraphs(size, ManageList.Shuffled_Chars);
     }
     //παρομοίως κάνουμε αναδιάταξη σε μία γραμμή που δίνει ο χρηστης
 
@@ -449,6 +449,6 @@ public class Game extends JFrame {
             }
         }
         gg.dispose();
-        gg.MakeGameGraphs(size, ManageList.Shuffled_Chars, true);
+        gg.MakeGameGraphs(size, ManageList.Shuffled_Chars);
     }
 }

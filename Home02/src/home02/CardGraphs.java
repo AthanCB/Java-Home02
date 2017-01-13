@@ -274,8 +274,7 @@ public class CardGraphs extends JComponent implements MouseListener {
         }
         return true; // never runned
     }
-
-    //STATIC?
+    
     public static void DrawLetter(Graphics g, Letter l, int X, int Y, boolean stat) {
         String LetterPoints = "" + l.getValue();
         String LetterChar = "" + l.getCharacter();
@@ -296,7 +295,6 @@ public class CardGraphs extends JComponent implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent me) {
-        //if(me.getSource()==)
         gg.setreadyWindow(true);
         Myrepaint(getGraphics(), me);
     }

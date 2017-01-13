@@ -27,13 +27,8 @@ public class GameGraphs extends JFrame {
     ArrayList<String> WordsFile = new ArrayList<String>();
     int Points = 0, PointsOfLetter = 0;
     static int WordPoints;
-    static int tempWordPoints;
     static int dimension;
-    JLabel bReplaceLineResults = new JLabel();
-    JLabel bRearrangeLineResults = new JLabel();
-    JLabel bRearrangeRowresults = new JLabel();
-    JLabel bRearrangeResults = new JLabel();
-    JLabel bExchangeLettersResults = new JLabel();
+
     JLabel options = new JLabel();
     JLabel info2;
     JLabel info1;
@@ -64,7 +59,7 @@ public class GameGraphs extends JFrame {
     boolean tempcheck = true;
     private static String MadeWord = "";
     Graphics g;
-    public boolean readyWindow;
+    private boolean readyWindow;
     int LastX = 0, LastY = 0, answer;
     Point LetterPoint;
     StringBuilder sb;
@@ -149,7 +144,7 @@ public class GameGraphs extends JFrame {
     }
 
     @SuppressWarnings("OverridableMethodCallInConstructor")
-    public void MakeGameGraphs(int dimension, ArrayList<Letter> Shuffled_Chars, boolean ready) {
+    public void MakeGameGraphs(int dimension, ArrayList<Letter> Shuffled_Chars) {
         //super("Window");
         setDimension(dimension);
         setBackground(Color.lightGray);
@@ -159,9 +154,11 @@ public class GameGraphs extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setCounter(0);
-        if(getreadyWindow()==true)
-            WordPoints = 0;
-        //setreadyWindow(false);
+//        if (getreadyWindow() == false) {
+//            WordPoints = 0;
+//            System.out.println("firsttime");
+//        }
+        setreadyWindow(true);
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 Letter currentLetter = Shuffled_Chars.get(counter);
@@ -217,17 +214,17 @@ public class GameGraphs extends JFrame {
         info2 = new JLabel();
         JMadeWord = new JLabel();
 
-        if (getCounter() == 0) { // first letter
-            //WordPoints = 0;
-            setPointsOfTheWord(0);
-            setMadeWord("");
-            setPointsOfWords(getPointsOfWords());
+        if (getCounter() == 0 && getreadyWindow() == false) { // first letter
+//            WordPoints = 0;
+//            setPointsOfTheWord(0);
+//            setMadeWord("");
+//            System.out.println("nooooooooo");
+//            //setPointsOfWords(getPointsOfWords());
         } else {
             remove(info2);
             remove(info1);
             remove(JMadeWord);
             info1.setVisible(false);
-
 //            jf.remove(JMadeWord);
 //            jf.remove(JYourPoints);
             if (stBC == true && getCounter() != 0) {//remove last letter
@@ -236,7 +233,6 @@ public class GameGraphs extends JFrame {
                 sb.deleteCharAt(MadeWord.length() - 1);
                 setMadeWord(sb.toString());
             } else {// (stBC == false && counter != 0) 
-                //WordPoints += letter.getValue();
                 setPointsOfTheWord(getPointsOfTheWord() + letter.getValue());
                 MadeWord += letter.getCharacter();
                 setPointsOfWords(WordPoints);
@@ -297,27 +293,26 @@ public class GameGraphs extends JFrame {
         b4.setBounds(getDimension() * 110 + 200, 260, 250, 40);
         b5.setBounds(getDimension() * 110 + 200, 310, 250, 40);
 
-        bReplaceLineResults.setBounds(getDimension() * 110 + 500, 110, 250, 40);
-        bExchangeLettersResults.setBounds(getDimension() * 110 + 500, 160, 250, 40);
-        bRearrangeLineResults.setBounds(getDimension() * 110 + 500, 210, 250, 40);
-        bRearrangeRowresults.setBounds(getDimension() * 110 + 500, 260, 250, 40);
-        bRearrangeResults.setBounds(getDimension() * 110 + 500, 310, 250, 40);
-
-        bRearrangeLineResults.setText("/" + 3);
-        bExchangeLettersResults.setText("/" + 3);
-        bReplaceLineResults.setText("/" + 3);
-        bRearrangeResults.setText("/" + 3);
-        bRearrangeRowresults.setText("/" + 3);
-
+//        bReplaceLineResults.setBounds(getDimension() * 110 + 500, 110, 250, 40);
+//        bExchangeLettersResults.setBounds(getDimension() * 110 + 500, 160, 250, 40);
+//        bRearrangeLineResults.setBounds(getDimension() * 110 + 500, 210, 250, 40);
+//        bRearrangeRowresults.setBounds(getDimension() * 110 + 500, 260, 250, 40);
+//        bRearrangeResults.setBounds(getDimension() * 110 + 500, 310, 250, 40);
+//
+//        bRearrangeLineResults.setText("/" + 3);
+//        bExchangeLettersResults.setText("/" + 3);
+//        bReplaceLineResults.setText("/" + 3);
+//        bRearrangeResults.setText("/" + 3);
+//        bRearrangeRowresults.setText("/" + 3);
         bExit.setForeground(Color.white);
         bCheckWord.setForeground(Color.white);
         bUsers.setForeground(Color.white);
         bGameHelp.setForeground(Color.white);
-        bRearrangeResults.setForeground(Color.black);
-        bRearrangeRowresults.setForeground(Color.black);
-        bReplaceLineResults.setForeground(Color.black);
-        bRearrangeLineResults.setForeground(Color.black);
-        bExchangeLettersResults.setForeground(Color.black);
+//        bRearrangeResults.setForeground(Color.black);
+//        bRearrangeRowresults.setForeground(Color.black);
+//        bReplaceLineResults.setForeground(Color.black);
+//        bRearrangeLineResults.setForeground(Color.black);
+//        bExchangeLettersResults.setForeground(Color.black);
 
         bUsers.setBackground(Color.GRAY);
         bGameHelp.setBackground(Color.GRAY);
@@ -346,11 +341,11 @@ public class GameGraphs extends JFrame {
 //        add(info1);
 //        add(info2);
         add(options);
-        add(bRearrangeLineResults);
-        add(bRearrangeResults);
-        add(bRearrangeRowresults);
-        add(bReplaceLineResults);
-        add(bExchangeLettersResults);
+//        add(bRearrangeLineResults);
+//        add(bRearrangeResults);
+//        add(bRearrangeRowresults);
+//        add(bReplaceLineResults);
+//        add(bExchangeLettersResults);
         add(b1);
         add(b2);
         add(b3);
@@ -414,6 +409,7 @@ public class GameGraphs extends JFrame {
                 //card.ClearAllLetters(gp);// everytime
                 setMadeWord("");
                 setPointsOfWords(WordPoints);
+                setPointsOfTheWord(0);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Δεν μπορείς να ελέγξεις τη λέξη, πρέπει το λιγότερο 3 γράμματα να διαλέξεις ", "File error", JOptionPane.ERROR_MESSAGE);
@@ -491,7 +487,7 @@ public class GameGraphs extends JFrame {
 //                    }
                 }
             }
-            MakeGameGraphs(dimension, ManageList.Shuffled_Chars, true);
+            MakeGameGraphs(dimension, ManageList.Shuffled_Chars);
         }
     }
 
@@ -500,44 +496,46 @@ public class GameGraphs extends JFrame {
         @Override
         public void actionPerformed(ActionEvent ae) {
             if (ae.getSource() == bExit) {
-                tempWordPoints = WordPoints;
+                //tempWordPoints = WordPoints;
                 System.exit(0);
             } else if (ae.getSource() == bCheckWord) {
                 if (tempcheck == true) {
                     CheckWord();
                 }
                 tempcheck = false;
-            } else if (ae.getSource() == b1) {                 
-                    game.User_Menu(2, getGraphics());                    
-                    dispose();
-                    setPointsOfTheWord(tempWordPoints);                    
-                    //game.RemakeLine(dimension);
-                
+            } else if (ae.getSource() == b1) {
+                game.User_Menu(2, getGraphics());
+                dispose();
+                // setPointsOfTheWord(tempWordPoints);
+                //game.RemakeLine(dimension);
+
             } else if (ae.getSource() == b2) {
-                
-                    game.User_Menu(5, getGraphics());
-                    dispose();
-                    setPointsOfTheWord(tempWordPoints);                    
-                
+
+                game.User_Menu(5, getGraphics());
+                dispose();
+                // setPointsOfTheWord(tempWordPoints);
+
             } else if (ae.getSource() == b3) {
-               
-                    game.User_Menu(4, getGraphics());
-                    dispose();
-                    setPointsOfTheWord(tempWordPoints);                    
-                
+
+                game.User_Menu(4, getGraphics());
+                dispose();
+                //  setPointsOfTheWord(tempWordPoints);
+
             } else if (ae.getSource() == b4) {
-                
+                if (JOptionPane.showConfirmDialog(null, "Όλα μηδενίζονται και παίζεις από την αρχή για τη λέξη οκ;") == 0) {
                     c.YellowLetterPoints.clear();
+                    setMadeWord("");
+                    setPointsOfTheWord(0);
                     game.User_Menu(3, getGraphics());
                     dispose();
-                    setPointsOfTheWord(tempWordPoints);                    
-                
+                    //  setPointsOfTheWord(tempWordPoints);
+                }
             } else if (ae.getSource() == b5) {
-                
-                    game.User_Menu(1, getGraphics());
-                    dispose();
-                    setPointsOfTheWord(tempWordPoints);                    
-                
+
+                game.User_Menu(1, getGraphics());
+                dispose();
+                //  setPointsOfTheWord(tempWordPoints);
+
             } else if (ae.getSource() == bUsers) {
                 if (JOptionPane.showConfirmDialog(null, "Επέλεξες να δεις τους χρήστες της εργασίας") == 0) {
                     ReadUsersFile();
